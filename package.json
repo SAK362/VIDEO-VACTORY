@@ -5,7 +5,7 @@
   "description": "CurioSphere: render video 3D x-ray 9:16 dengan Remotion di GitHub Actions",
   "scripts": {
     "studio": "remotion studio index.ts",
-    "prepare": "node prepare.mjs",
+    "siapkan": "node prepare.mjs",
     "render": "remotion render index.ts CurioVideo out/video.mp4 --props=work/props.json --gl=swangle"
   },
   "dependencies": {
