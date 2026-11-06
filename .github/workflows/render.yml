@@ -1,0 +1,149 @@
+name: render
+
+# Dipicu oleh n8n (workflow_dispatch). GitHub tidak menyimpan password Google:
+# file masukan diunduh dari tautan publik Drive, hasil MP4 diunggah ke "sesi unggah"
+# Drive yang dibuat n8n, lalu hasilnya dilaporkan ke webhook n8n.
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: Nomor project, mis. 0056
+        required: true
+      row_no:
+        description: Nomor baris di Sheet (NOMOR PROJECT)
+        required: true
+      lang:
+        description: en atau id
+        required: true
+        default: en
+      folder_id:
+        description: ID folder project di Drive
+        required: true
+      props_id:
+        description: ID file props.json di Drive
+        required: true
+      audio_id:
+        description: ID file voiceover.wav di Drive
+        required: true
+      upload_url:
+        description: URL sesi unggah Drive (dibuat n8n)
+        required: true
+      callback_url:
+        description: URL webhook n8n untuk laporan hasil
+        required: true
+      quality:
+        description: standard (1080x1920) atau fast (720x1280)
+        required: false
+        default: standard
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      PROJECT: ${{ inputs.project }}
+      ROW_NO: ${{ inputs.row_no }}
+      LANG_CODE: ${{ inputs.lang }}
+      FOLDER_ID: ${{ inputs.folder_id }}
+      QUALITY: ${{ inputs.quality }}
+      CALLBACK_URL: ${{ inputs.callback_url }}
+      UPLOAD_URL: ${{ inputs.upload_url }}
+    steps:
+      - name: Sembunyikan URL dari log
+        run: |
+          echo "::add-mask::$UPLOAD_URL"
+          echo "::add-mask::$CALLBACK_URL"
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Pasang pustaka sistem untuk Chrome
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y libnss3 libdbus-1-3 libatk1.0-0 libgbm-dev libxrandr2 libxkbcommon-dev libxfixes3 libxcomposite1 libxdamage1 libatk-bridge2.0-0 libpango-1.0-0 libcairo2 libcups2 libxshmfence1 fonts-noto-color-emoji
+          sudo apt-get install -y libasound2t64 || sudo apt-get install -y libasound2
+
+      - name: Pasang dependensi
+        id: install
+        run: npm install --no-audit --no-fund
+
+      - name: Unduh props dan suara
+        id: prepare
+        env:
+          PROPS_ID: ${{ inputs.props_id }}
+          AUDIO_ID: ${{ inputs.audio_id }}
+        run: node prepare.mjs
+
+      - name: Render video
+        id: render
+        run: |
+          START=$(date +%s)
+          SCALE_ARG=""
+          if [ "$QUALITY" = "fast" ]; then SCALE_ARG="--scale=0.6667"; fi
+          npx remotion render index.ts CurioVideo out/video.mp4 \
+            --props=work/props.json --gl=swangle --concurrency=$(nproc) \
+            --codec=h264 --crf=20 --log=info $SCALE_ARG
+          END=$(date +%s)
+          echo "RENDER_SECONDS=$((END-START))" >> "$GITHUB_ENV"
+          ls -lh out/video.mp4
+
+      - name: Unggah MP4 ke Drive
+        id: upload
+        run: |
+          curl -sS --fail --retry 3 --retry-delay 5 -X PUT \
+            -H "Content-Type: video/mp4" \
+            --data-binary @out/video.mp4 \
+            "$UPLOAD_URL" -o work/upload.json
+          cat work/upload.json
+          FILE_ID=$(jq -r '.id // empty' work/upload.json)
+          if [ -z "$FILE_ID" ]; then echo "Drive tidak mengembalikan ID file"; exit 1; fi
+          echo "VIDEO_ID=$FILE_ID" >> "$GITHUB_ENV"
+
+      - name: Simpan MP4 sebagai artefak cadangan (jika unggah gagal)
+        if: failure() && steps.render.outcome == 'success' && steps.upload.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-${{ inputs.project }}
+          path: out/video.mp4
+          retention-days: 3
+
+      - name: Lapor hasil ke n8n
+        if: always()
+        env:
+          CALLBACK_KEY: ${{ secrets.CALLBACK_KEY }}
+          OUTCOME_INSTALL: ${{ steps.install.outcome }}
+          OUTCOME_PREPARE: ${{ steps.prepare.outcome }}
+          OUTCOME_RENDER: ${{ steps.render.outcome }}
+          OUTCOME_UPLOAD: ${{ steps.upload.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          mkdir -p work
+          if [ "$OUTCOME_UPLOAD" = "success" ]; then
+            STATUS=success
+            MESSAGE="Render dan unggah selesai"
+            VIDEO_URL="https://drive.google.com/file/d/${VIDEO_ID}/view"
+          else
+            STATUS=failure
+            VIDEO_URL=""
+            if [ "$OUTCOME_INSTALL" != "success" ]; then MESSAGE="Gagal memasang dependensi (npm install)"
+            elif [ "$OUTCOME_PREPARE" != "success" ]; then MESSAGE="Gagal mengunduh props/suara dari Drive"
+            elif [ "$OUTCOME_RENDER" != "success" ]; then MESSAGE="Render Remotion gagal, lihat log run"
+            else MESSAGE="Unggah MP4 ke Drive gagal (MP4 disimpan sebagai artefak 3 hari)"; fi
+          fi
+          jq -n \
+            --arg status "$STATUS" --arg project "$PROJECT" --arg row_no "$ROW_NO" \
+            --arg folder_id "$FOLDER_ID" --arg video_url "$VIDEO_URL" \
+            --arg render_seconds "${RENDER_SECONDS:-0}" --arg message "$MESSAGE" --arg run_url "$RUN_URL" \
+            '{status:$status, project:$project, row_no:$row_no, folder_id:$folder_id, video_url:$video_url, render_seconds:$render_seconds, message:$message, run_url:$run_url}' \
+            > work/callback.json
+          cat work/callback.json
+          curl -sS --retry 3 --retry-delay 5 -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-Curio-Key: ${CALLBACK_KEY}" \
+            --data @work/callback.json "$CALLBACK_URL"
