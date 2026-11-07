@@ -25,6 +25,8 @@ export type VideoProps = {
   audioFile: string;
   project?: string;
   style?: 'toon' | 'real';
+  // Waktu [mulai, selesai] (detik) tiap kata naskah dari suara asli; diisi align.py, boleh kosong.
+  wordTimes?: number[][];
 };
 
 export type TimedScene = Scene & {from: number; dur: number};
