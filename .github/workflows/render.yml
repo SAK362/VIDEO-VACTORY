@@ -80,6 +80,21 @@ jobs:
           AUDIO_ID: ${{ inputs.audio_id }}
         run: node prepare.mjs
 
+      - name: Cache model pengenal ucapan
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: whisper-small-v1
+
+      - name: Selaraskan waktu kata dengan suara (opsional, boleh gagal)
+        id: align
+        continue-on-error: true
+        timeout-minutes: 15
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install --quiet faster-whisper
+          .venv/bin/python align.py
+
       - name: Render video
         id: render
         run: |
