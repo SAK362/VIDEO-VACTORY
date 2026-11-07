@@ -2,7 +2,7 @@
 // lalu menghitung durasi suara dan menulis work/props.json untuk Remotion.
 import fs from 'node:fs';
 
-const {PROPS_ID, AUDIO_ID, QUALITY = 'standard', LANG_CODE = 'en', PROJECT = ''} = process.env;
+const {PROPS_ID, AUDIO_ID, QUALITY = 'standard', LANG_CODE = 'en', PROJECT = '', STYLE = ''} = process.env;
 if (!PROPS_ID || !AUDIO_ID) {
   console.error('PROPS_ID dan AUDIO_ID wajib diisi.');
   process.exit(1);
@@ -82,6 +82,7 @@ const out = {
   audioSeconds: Number(seconds.toFixed(2)),
   audioFile: 'voiceover.wav',
   quality: QUALITY,
+  style: STYLE === 'real' || STYLE === 'toon' ? STYLE : props.style === 'real' ? 'real' : 'toon',
 };
 fs.writeFileSync('work/props.json', JSON.stringify(out));
 console.log(`Props siap. Adegan: ${props.scenes.length}, durasi suara: ${seconds.toFixed(1)} detik`);
