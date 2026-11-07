@@ -44,7 +44,7 @@ export const Video: React.FC<VideoProps> = (props) => {
   const {width, height} = useVideoConfig();
 
   const scenes = props.scenes && props.scenes.length ? props.scenes : [FALLBACK_SCENE];
-  const {timed, phrases} = useMemo(() => buildTiming(props.narration, scenes, props.audioSeconds), [props.narration, props.scenes, props.audioSeconds]);
+  const {timed, phrases} = useMemo(() => buildTiming(props.narration, scenes, props.audioSeconds, props.wordTimes), [props.narration, props.scenes, props.audioSeconds, props.wordTimes]);
 
   let idx = timed.findIndex((s) => frame >= s.from && frame < s.from + s.dur);
   if (idx < 0) idx = frame < timed[0].from ? 0 : timed.length - 1;
