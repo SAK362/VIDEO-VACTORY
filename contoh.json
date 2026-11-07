@@ -1,0 +1,112 @@
+{
+ "kit": "kulkas",
+ "lang": "id",
+ "scenes": [
+  {
+   "shot": "kitchen_wide",
+   "kicker": "KULKAS",
+   "heading": "Dinginnya dari mana?",
+   "narration": "Kamu buka kulkas, langsung terasa dingin. Sebenarnya dinginnya datang dari mana?",
+   "keywords": [
+    "mana?"
+   ]
+  },
+  {
+   "shot": "heat_moves",
+   "kicker": "TERNYATA",
+   "heading": "Kulkas memindahkan panas",
+   "narration": "Ternyata, kulkas nggak bikin dingin. Kulkas memindahkan panas dari dalam ke luar.",
+   "keywords": [
+    "memindahkan"
+   ]
+  },
+  {
+   "shot": "fridge_cut",
+   "kicker": "KITA BONGKAR",
+   "heading": "Yuk, kita bongkar!",
+   "narration": "Yuk, kita bongkar! Di dalamnya ada pipa berisi cairan pendingin yang muter terus.",
+   "keywords": [
+    "bongkar!"
+   ]
+  },
+  {
+   "shot": "compressor",
+   "kicker": "LANGKAH 1",
+   "heading": "Kompresor memampatkan gas",
+   "narration": "Di bawah belakang ada kompresor. Ia memampatkan gas pendingin sampai panas.",
+   "keywords": [
+    "Kompresor"
+   ]
+  },
+  {
+   "shot": "condenser",
+   "kicker": "LANGKAH 2",
+   "heading": "Panas dibuang di belakang",
+   "narration": "Gas panas lewat kisi-kisi di belakang kulkas. Panasnya dibuang ke udara dapur.",
+   "keywords": [
+    "dibuang"
+   ]
+  },
+  {
+   "shot": "capillary",
+   "kicker": "LANGKAH 3",
+   "heading": "Pipa kapiler yang sempit",
+   "narration": "Lalu cairannya lewat pipa kapiler yang sempit. Tekanannya turun, jadi dingin banget.",
+   "keywords": [
+    "kapiler"
+   ]
+  },
+  {
+   "shot": "evaporator",
+   "kicker": "LANGKAH 4",
+   "heading": "Menyerap panas makanan",
+   "narration": "Di dalam, pipa dingin ini menyerap panas dari makanan. Lalu gasnya balik lagi ke kompresor.",
+   "keywords": [
+    "Menyerap"
+   ]
+  },
+  {
+   "shot": "sponge_analogy",
+   "kicker": "KAYAK...",
+   "heading": "Kayak spons yang diperas",
+   "narration": "Kayak spons: menyerap di dalam kulkas, lalu diperas di luar.",
+   "keywords": [
+    "spons"
+   ]
+  },
+  {
+   "shot": "wall_danger",
+   "kicker": "BAGIAN TEGANG",
+   "heading": "Kalau kisi tertutup",
+   "narration": "Kalau kisi-kisi di belakang tertutup debu atau mepet tembok, panasnya susah dibuang dan kompresor kerja keras.",
+   "keywords": [
+    "tertutup"
+   ]
+  },
+  {
+   "shot": "data_card",
+   "kicker": "FAKTA",
+   "heading": "Suhu aman di bawah 4°C",
+   "narration": "Supaya makanan aman, suhu kulkas sebaiknya di bawah empat derajat Celsius.",
+   "keywords": [
+    "4°C"
+   ],
+   "card": {
+    "label": "SUHU AMAN KULKAS (FDA)",
+    "value": "≤ 4 °C",
+    "source": "Sumber: FDA, dikutip Mr. Appliance"
+   }
+  },
+  {
+   "shot": "outro_wide",
+   "kicker": "JADI...",
+   "heading": "Pemindah panas",
+   "narration": "Jadi kulkas itu pemindah panas, bukan pembuat dingin. Mau dibongkar apa lagi? Tulis di komentar!",
+   "keywords": [
+    "Pemindah"
+   ]
+  }
+ ],
+ "narration": "Kamu buka kulkas, langsung terasa dingin. Sebenarnya dinginnya datang dari mana? Ternyata, kulkas nggak bikin dingin. Kulkas memindahkan panas dari dalam ke luar. Yuk, kita bongkar! Di dalamnya ada pipa berisi cairan pendingin yang muter terus. Di bawah belakang ada kompresor. Ia memampatkan gas pendingin sampai panas. Gas panas lewat kisi-kisi di belakang kulkas. Panasnya dibuang ke udara dapur. Lalu cairannya lewat pipa kapiler yang sempit. Tekanannya turun, jadi dingin banget. Di dalam, pipa dingin ini menyerap panas dari makanan. Lalu gasnya balik lagi ke kompresor. Kayak spons: menyerap di dalam kulkas, lalu diperas di luar. Kalau kisi-kisi di belakang tertutup debu atau mepet tembok, panasnya susah dibuang dan kompresor kerja keras. Supaya makanan aman, suhu kulkas sebaiknya di bawah empat derajat Celsius. Jadi kulkas itu pemindah panas, bukan pembuat dingin. Mau dibongkar apa lagi? Tulis di komentar!",
+ "audioSeconds": 55.2
+}
