@@ -24,8 +24,9 @@ export type VideoProps = {
   audioSeconds: number;
   audioFile: string;
   project?: string;
+  style?: 'toon' | 'real';
 };
 
 export type TimedScene = Scene & {from: number; dur: number};
 export type Token = {text: string; hi: boolean};
-export type Phrase = {tokens: Token[]; from: number; to: number};
+export type Phrase = {tokens: Token[]; from: number; to: number; wordFrames: number[]};
