@@ -22,21 +22,21 @@ export const LabelBlock: React.FC<{label?: string; heading?: string; localFrame:
     <div
       style={{
         position: 'absolute',
-        left: 70,
-        right: 70,
-        top: 210,
+        left: 60,
+        right: 60,
+        top: 170,
         opacity: k,
         transform: `translateY(${interpolate(k, [0, 1], [30, 0])}px)`,
         fontFamily: FONT,
       }}
     >
       {label ? (
-        <div style={{color: C.cyan, fontSize: 36, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', textShadow: '0 3px 12px rgba(11,31,58,0.9)'}}>
+        <div style={{color: C.cyan, fontSize: 26, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', textShadow: '0 3px 12px rgba(11,31,58,0.9)'}}>
           {label}
         </div>
       ) : null}
       {heading ? (
-        <div style={{color: C.ivory, fontSize: 80, fontWeight: 800, lineHeight: 1.08, marginTop: 10, textShadow: '0 4px 0 rgba(11,31,58,0.9), 0 0 24px rgba(11,31,58,0.9)'}}>
+        <div style={{color: C.ivory, fontSize: 54, fontWeight: 800, lineHeight: 1.1, marginTop: 6, textShadow: '0 4px 0 rgba(11,31,58,0.9), 0 0 24px rgba(11,31,58,0.9)'}}>
           <Tokens tokens={tokenize(heading)} />
         </div>
       ) : null}
@@ -56,27 +56,27 @@ export const Callouts: React.FC<{callouts?: Callout[]; localFrame: number}> = ({
             key={i}
             style={{
               position: 'absolute',
-              top: 600 + i * 190,
-              [left ? 'left' : 'right']: 50,
-              maxWidth: 520,
-              padding: '16px 28px',
-              borderRadius: 26,
+              top: 470 + i * 150,
+              [left ? 'left' : 'right']: 40,
+              maxWidth: 400,
+              padding: '10px 20px',
+              borderRadius: 20,
               background: 'rgba(11,31,58,0.86)',
-              border: `3px solid ${C.cyan}`,
-              boxShadow: `0 0 24px rgba(34,195,240,0.45)`,
+              border: `2px solid ${C.cyan}`,
+              boxShadow: `0 0 16px rgba(34,195,240,0.4)`,
               color: C.ivory,
               fontFamily: FONT,
               fontWeight: 800,
-              fontSize: 42,
+              fontSize: 28,
               opacity: k,
               transform: `translateX(${interpolate(k, [0, 1], [left ? -60 : 60, 0])}px) scale(${interpolate(k, [0, 1], [0.9, 1])})`,
             }}
           >
             <span style={{color: C.gold}}>● </span>
             {c.text}
-            <svg width="140" height="14" style={{position: 'absolute', top: '50%', [left ? 'left' : 'right']: '100%', marginTop: -7, overflow: 'visible'}}>
-              <line x1={left ? 0 : 140} y1="7" x2={left ? 140 * k : 140 - 140 * k} y2="7" stroke={C.cyan} strokeWidth="4" strokeLinecap="round" />
-              <circle cx={left ? 140 * k : 140 - 140 * k} cy="7" r="9" fill={C.gold} stroke={C.navy} strokeWidth="3" />
+            <svg width="100" height="14" style={{position: 'absolute', top: '50%', [left ? 'left' : 'right']: '100%', marginTop: -7, overflow: 'visible'}}>
+              <line x1={left ? 0 : 100} y1="7" x2={left ? 100 * k : 100 - 100 * k} y2="7" stroke={C.cyan} strokeWidth="4" strokeLinecap="round" />
+              <circle cx={left ? 100 * k : 100 - 100 * k} cy="7" r="7" fill={C.gold} stroke={C.navy} strokeWidth="3" />
             </svg>
           </div>
         );
@@ -92,11 +92,11 @@ export const DataCardView: React.FC<{card?: DataCard; localFrame: number}> = ({c
     <div
       style={{
         position: 'absolute',
-        left: 130,
-        right: 130,
-        top: 640,
-        padding: '36px 30px',
-        borderRadius: 40,
+        left: 200,
+        right: 200,
+        top: 470,
+        padding: '22px 22px',
+        borderRadius: 28,
         background: 'rgba(11,31,58,0.9)',
         border: `4px solid ${C.cyan}`,
         boxShadow: '0 0 50px rgba(34,195,240,0.5)',
@@ -106,8 +106,8 @@ export const DataCardView: React.FC<{card?: DataCard; localFrame: number}> = ({c
         transform: `scale(${interpolate(k, [0, 1], [0.7, 1])})`,
       }}
     >
-      <div style={{color: C.gold, fontSize: 150, fontWeight: 800, lineHeight: 1}}>{card.value}</div>
-      <div style={{color: C.ivory, fontSize: 48, fontWeight: 700, marginTop: 14}}>{card.caption}</div>
+      <div style={{color: C.gold, fontSize: 92, fontWeight: 800, lineHeight: 1}}>{card.value}</div>
+      <div style={{color: C.ivory, fontSize: 30, fontWeight: 700, marginTop: 10}}>{card.caption}</div>
     </div>
   );
 };
@@ -123,7 +123,7 @@ export const DangerOverlay: React.FC<{frame: number}> = ({frame}) => (
   />
 );
 
-const HATCH = `repeating-linear-gradient(135deg, ${C.gold} 0px, ${C.gold} 9px, #C98A00 9px, #C98A00 13px)`;
+const HATCH = `repeating-linear-gradient(135deg, ${C.gold} 0px, ${C.gold} 7px, #C98A00 7px, #C98A00 10px)`;
 
 // Subtitle: kata yang sedang diucapkan diberi blok emas berarsir; kata yang sudah lewat putih, yang belum redup.
 export const Subtitles: React.FC<{phrases: Phrase[]; frame: number}> = ({phrases, frame}) => {
@@ -133,22 +133,22 @@ export const Subtitles: React.FC<{phrases: Phrase[]; frame: number}> = ({phrases
   let cur = 0;
   for (let i = 0; i < ph.wordFrames.length; i++) if (frame >= ph.wordFrames[i]) cur = i;
   return (
-    <div style={{position: 'absolute', left: 50, right: 50, top: 1130, height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+    <div style={{position: 'absolute', left: 70, right: 70, top: 1380, height: 170, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       <div
         style={{
-          padding: '16px 26px',
-          borderRadius: 34,
+          padding: '10px 18px',
+          borderRadius: 24,
           background: 'rgba(8,24,46,0.72)',
-          border: '3px solid rgba(34,195,240,0.35)',
+          border: '2px solid rgba(34,195,240,0.35)',
           fontFamily: FONT,
           fontWeight: 800,
-          fontSize: 70,
+          fontSize: 46,
           lineHeight: 1.2,
           textAlign: 'center',
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          gap: '2px 10px',
+          gap: '2px 6px',
           transform: `scale(${interpolate(k, [0, 1], [0.93, 1])})`,
         }}
       >
@@ -159,12 +159,12 @@ export const Subtitles: React.FC<{phrases: Phrase[]; frame: number}> = ({phrases
             <span
               key={i}
               style={{
-                padding: '0 14px',
-                borderRadius: 14,
+                padding: '0 10px',
+                borderRadius: 10,
                 background: active ? HATCH : 'transparent',
                 color: active ? C.navy : past ? (tk.hi ? C.gold : C.ivory) : tk.hi ? 'rgba(245,182,35,0.55)' : 'rgba(247,243,234,0.5)',
                 textShadow: active ? 'none' : '0 3px 0 rgba(8,24,46,0.9)',
-                boxShadow: active ? '0 0 0 3px #7A4E00, 0 6px 0 rgba(0,0,0,0.35)' : 'none',
+                boxShadow: active ? '0 0 0 2px #7A4E00, 0 4px 0 rgba(0,0,0,0.35)' : 'none',
                 transform: active ? 'scale(1.06)' : 'none',
               }}
             >
@@ -181,19 +181,19 @@ export const Watermark: React.FC = () => (
   <div
     style={{
       position: 'absolute',
-      right: 50,
-      top: 1700,
+      right: 40,
+      top: 1760,
       display: 'flex',
       alignItems: 'center',
       gap: 12,
       opacity: 0.8,
       fontFamily: FONT,
       fontWeight: 800,
-      fontSize: 34,
+      fontSize: 24,
       color: C.ivory,
     }}
   >
-    <svg width="44" height="44" viewBox="0 0 44 44">
+    <svg width="30" height="30" viewBox="0 0 44 44">
       <circle cx="20" cy="20" r="14" fill="none" stroke={C.cyan} strokeWidth="4" />
       <path d="M6 20 H34 M20 6 Q28 20 20 34 Q12 20 20 6" fill="none" stroke={C.cyan} strokeWidth="2.5" />
       <line x1="30" y1="30" x2="40" y2="40" stroke={C.gold} strokeWidth="5" strokeLinecap="round" />

@@ -43,9 +43,22 @@ function pumpModel(): Model {
     const a = (i / 6) * PI * 2;
     fins.push({kind: 'box', pos: [Math.cos(a) * 0.55, Math.sin(a) * 0.55, 0], rot: [0, 0, a], size: [0.7, 0.12, 0.5], color: '#FFCF5A'});
   }
+  // Sirip pendingin motor dan baut rumah pompa agar bentuknya terbaca sebagai pompa.
+  const motorFins: Prim[] = [];
+  for (let i = 0; i < 5; i++) motorFins.push({kind: 'cyl', pos: [0, 0, -0.95 - i * 0.25], rot: [PI / 2, 0, 0], size: [0.86, 0.86, 0.07], color: '#3F6A9C'});
+  const bolts: Prim[] = [];
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * PI * 2;
+    bolts.push({kind: 'cyl', pos: [Math.cos(a) * 1.12, Math.sin(a) * 1.12, 0.48], rot: [PI / 2, 0, 0], size: [0.07, 0.07, 0.08], color: '#C0D4E8'});
+  }
   return {
     parts: [
-      {id: 'housing', shell: true, ex: [0, 0.8, 0], prims: [{kind: 'cyl', pos: [0, 0, 0], rot: [PI / 2, 0, 0], size: [1.25, 1.25, 0.9], color: '#3B6EA5'}]},
+      {
+        id: 'housing',
+        shell: true,
+        ex: [0, 0.8, 0],
+        prims: [{kind: 'cyl', pos: [0, 0, 0], rot: [PI / 2, 0, 0], size: [1.25, 1.25, 0.9], color: '#3B6EA5'}, ...bolts],
+      },
       {
         id: 'impeller',
         shell: false,
@@ -54,13 +67,60 @@ function pumpModel(): Model {
         spinAxis: 'z',
         prims: [{kind: 'cyl', pos: [0, 0, 0], rot: [PI / 2, 0, 0], size: [0.28, 0.28, 0.55], color: C.gold}, ...fins],
       },
-      {id: 'inlet', shell: true, ex: [0, 0, 1.2], prims: [{kind: 'cyl', pos: [0, 0, 1.5], rot: [PI / 2, 0, 0], size: [0.38, 0.38, 1.6], color: '#5B8FC7'}]},
-      {id: 'outlet', shell: true, ex: [0, 1.0, 0], prims: [{kind: 'cyl', pos: [0, 1.75, 0], size: [0.38, 0.38, 1.5], color: '#5B8FC7'}]},
-      {id: 'motor', shell: true, ex: [0, 0, -1.3], prims: [{kind: 'cyl', pos: [0, 0, -1.5], rot: [PI / 2, 0, 0], size: [0.75, 0.75, 1.5], color: '#2A4A73'}]},
+      {
+        id: 'inlet',
+        shell: true,
+        ex: [0, 0, 0.6],
+        prims: [
+          {kind: 'cyl', pos: [0, 0, 1.92], rot: [PI / 2, 0, 0], size: [0.3, 0.3, 2.95], color: '#5B8FC7'},
+          {kind: 'cyl', pos: [0, 0, 0.62], rot: [PI / 2, 0, 0], size: [0.42, 0.42, 0.14], color: '#2A4A73'},
+        ],
+      },
+      {
+        id: 'suction_pipe',
+        shell: false,
+        ex: [0, 0, 0],
+        prims: [
+          {kind: 'sphere', pos: [0, 0, 3.4], size: [0.36], color: '#5B8FC7'},
+          {kind: 'cyl', pos: [0, -1.05, 3.4], size: [0.3, 0.3, 2.1], color: '#5B8FC7'},
+          {kind: 'cyl', pos: [0, -2.15, 3.4], size: [0.42, 0.34, 0.26], color: C.gold},
+        ],
+      },
+      {
+        id: 'outlet',
+        shell: true,
+        ex: [0, 1.0, 0],
+        prims: [
+          {kind: 'cyl', pos: [0, 1.75, 0], size: [0.32, 0.32, 1.5], color: '#5B8FC7'},
+          {kind: 'cyl', pos: [0, 1.15, 0], size: [0.44, 0.44, 0.14], color: '#2A4A73'},
+          {kind: 'cyl', pos: [0.48, 1.85, 0], rot: [0, 0, PI / 2], size: [0.07, 0.07, 0.3], color: '#C0D4E8'},
+          {kind: 'cyl', pos: [0.7, 1.85, 0], rot: [0, 0, PI / 2], size: [0.24, 0.24, 0.1], color: '#F7F3EA'},
+        ],
+      },
+      {
+        id: 'motor',
+        shell: true,
+        ex: [0, 0, -1.3],
+        prims: [
+          {kind: 'cyl', pos: [0, 0, -1.5], rot: [PI / 2, 0, 0], size: [0.75, 0.75, 1.5], color: '#2A4A73'},
+          ...motorFins,
+          {kind: 'cyl', pos: [0, 0, -2.3], rot: [PI / 2, 0, 0], size: [0.6, 0.7, 0.14], color: '#1B3A63'},
+          {kind: 'box', pos: [0, 0.82, -1.5], size: [0.5, 0.18, 0.6], color: '#16365F'},
+        ],
+      },
       {id: 'shaft', shell: false, ex: [0, 0, -0.7], prims: [{kind: 'cyl', pos: [0, 0, -0.7], rot: [PI / 2, 0, 0], size: [0.12, 0.12, 1.2], color: '#C0D4E8'}]},
-      {id: 'base', shell: false, ex: [0, -0.6, 0], prims: [{kind: 'box', pos: [0, -1.35, 0], size: [3.2, 0.2, 3.8], color: '#1B3A63'}]},
+      {
+        id: 'base',
+        shell: false,
+        ex: [0, -0.6, 0],
+        prims: [
+          {kind: 'box', pos: [0, -1.35, -0.5], size: [2.2, 0.2, 3.6], color: '#1B3A63'},
+          {kind: 'box', pos: [0, -1.05, 0], size: [0.9, 0.4, 0.5], color: '#16365F'},
+          {kind: 'box', pos: [0, -1.0, -1.5], size: [0.9, 0.3, 0.5], color: '#16365F'},
+        ],
+      },
     ],
-    path: [[0, 0, 3.0], [0, 0, 0.4], [0, 0.2, 0], [0, 1.2, 0], [0, 3.0, 0]],
+    path: [[0, -2.15, 3.4], [0, 0, 3.4], [0, 0, 0.4], [0, 0.2, 0], [0, 1.2, 0], [0, 3.0, 0]],
   };
 }
 
@@ -181,56 +241,64 @@ function makeToonGradient(): THREE.DataTexture {
 const CameraRig: React.FC<{cam: string; p: number; t: number}> = ({cam, p, t}) => {
   const {camera} = useThree();
   let x = 0;
-  let y = 1.7;
-  let z = 6.6;
+  let y = 4.4;
+  let z = 11.4;
+  let ly = -0.7; // tinggi titik yang dilihat kamera
   switch (cam) {
     case 'dolly_in':
-      z = 8.6 - 3.4 * p;
-      x = Math.sin(p * 1.2) * 1.2;
+      z = 13.2 - 3.0 * p;
+      y = 4.8 - 0.8 * p;
+      x = Math.sin(p * 1.2) * 1.6;
       break;
     case 'dolly_out':
-      z = 5.2 + 3.2 * p;
+      z = 9.6 + 3.0 * p;
+      y = 3.8 + 0.8 * p;
       break;
     case 'orbit_slow': {
-      const a = -0.55 + 1.1 * p;
-      x = Math.sin(a) * 6.8;
-      z = Math.cos(a) * 6.8;
-      y = 1.9;
+      const a = -0.5 + 1.0 * p;
+      x = Math.sin(a) * 11.4;
+      z = Math.cos(a) * 11.4;
+      y = 4.4;
       break;
     }
     case 'orbit_close': {
-      const a = -0.9 + 1.8 * p;
-      x = Math.sin(a) * 4.8;
-      z = Math.cos(a) * 4.8;
-      y = 1.3;
+      const a = -0.2 + 0.9 * p;
+      x = Math.sin(a) * 8.0;
+      z = Math.cos(a) * 8.0;
+      y = 2.8;
+      ly = -0.2;
       break;
     }
     case 'cutaway_orbit': {
-      const a = 0.35 + 0.75 * p; // kamera di sisi +x agar bagian dalam yang terbuka terlihat
-      x = Math.sin(a) * 5.6;
-      z = Math.cos(a) * 5.6;
-      y = 1.6 - 0.3 * p;
+      const a = 0.5 + 0.35 * p; // kamera di sisi +x, menghadap bagian dalam yang terbuka
+      x = Math.sin(a) * 8.6;
+      z = Math.cos(a) * 8.6;
+      y = 3.2 - 0.4 * p;
+      ly = -0.2;
       break;
     }
     case 'pan_down':
-      y = 3.4 - 2.1 * p;
-      z = 6.2;
+      y = 5.6 - 2.6 * p;
+      z = 11.0;
+      ly = 0.6 - 1.8 * p;
       break;
     case 'pan_up':
-      y = 0.5 + 2.2 * p;
-      z = 6.2;
+      y = 3.0 + 2.6 * p;
+      z = 11.0;
+      ly = -1.4 + 1.8 * p;
       break;
     case 'top_down':
-      y = 6.8;
-      z = 2.4 + 0.8 * p;
+      y = 12.0;
+      z = 4.4 + 1.0 * p;
+      ly = -0.8;
       break;
     default:
-      x = Math.sin(t * 0.6) * 0.5;
-      y = 1.7 + Math.sin(t * 0.5) * 0.15;
-      z = 6.6;
+      x = Math.sin(t * 0.6) * 0.8;
+      y = 4.4 + Math.sin(t * 0.5) * 0.2;
+      z = 11.4;
   }
   camera.position.set(x, y, z);
-  camera.lookAt(0, 0.3, 0);
+  camera.lookAt(0, ly, 0);
   camera.updateProjectionMatrix();
   return null;
 };
@@ -319,6 +387,10 @@ type StageProps = {
   cut: number; // 0..1 seberapa terbuka adegan bedah
 };
 
+// Model diputar menyamping (3/4) dan digeser sedikit ke kiri agar pipa hisap muat di layar tegak.
+const YAW = 1.15;
+const SHIFT_X = -0.6;
+
 const easeInOut = (x: number) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
 
 export const Stage3D: React.FC<StageProps> = ({scene, frame, localFrame, style, cut}) => {
@@ -338,7 +410,7 @@ export const Stage3D: React.FC<StageProps> = ({scene, frame, localFrame, style, 
 
   // Bidang potong: makin besar cut, makin banyak bagian casing (sisi +x) yang terpotong hingga separuh.
   const plane = useMemo(() => new THREE.Plane(new THREE.Vector3(-1, 0, 0), 99), []);
-  plane.constant = 3 - 3.05 * easeInOut(cut);
+  plane.constant = 3 - (3 - SHIFT_X + 0.05) * easeInOut(cut);
   const explode = 0.35 * easeInOut(cut); // casing bergeser sedikit saat dibedah
 
   const ground = style === 'toon';
@@ -351,7 +423,7 @@ export const Stage3D: React.FC<StageProps> = ({scene, frame, localFrame, style, 
 
   return (
     <>
-      <fog attach="fog" args={[style === 'real' ? '#050E1C' : '#0F3B63', 12, 26]} />
+      <fog attach="fog" args={[style === 'real' ? '#050E1C' : '#0F3B63', 16, 32]} />
       <CameraRig cam={scene.camera || 'static_drift'} p={p} t={ts} />
       <ambientLight intensity={style === 'real' ? 0.5 : 0.85} color="#CFE8FF" />
       <directionalLight position={[4, 6, 5]} intensity={style === 'real' ? 1.6 : 1.2} />
@@ -360,15 +432,15 @@ export const Stage3D: React.FC<StageProps> = ({scene, frame, localFrame, style, 
       {danger ? <pointLight position={[0, 2, 3]} intensity={2.2 * (0.6 + 0.4 * Math.sin(t * 10))} color={C.red} /> : null}
 
       {ground ? (
-        <group>
+        <group position={[SHIFT_X, 0, 0]} rotation={[0, YAW, 0]}>
           {layers.map((l, i) => (
             <group key={i}>
               <mesh position={[0, l.y, 0]}>
-                <boxGeometry args={[7.4, l.h, 6.4]} />
+                <boxGeometry args={[6.4, l.h, 6.4]} />
                 <meshToonMaterial color={l.c} gradientMap={gradient} />
               </mesh>
               <mesh position={[0, l.y, 0]} scale={[1.01, 1.02, 1.01]}>
-                <boxGeometry args={[7.4, l.h, 6.4]} />
+                <boxGeometry args={[6.4, l.h, 6.4]} />
                 <meshBasicMaterial color={OUTLINE} side={THREE.BackSide} />
               </mesh>
             </group>
@@ -384,13 +456,13 @@ export const Stage3D: React.FC<StageProps> = ({scene, frame, localFrame, style, 
             <torusGeometry args={[3.5, 0.04, 8, 96]} />
             <meshBasicMaterial color={C.glow} />
           </mesh>
-          <group position={[0, -3.0, 0]} scale={[popIn, -popIn, popIn]}>
+          <group position={[SHIFT_X, -3.0, 0]} scale={[popIn, -popIn, popIn]} rotation={[0, YAW, 0]}>
             <ModelView model={model} style={style} ts={ts} t={t} focus={focus} explode={explode} plane={plane} ghost gradient={gradient} />
           </group>
         </group>
       )}
 
-      <group scale={[popIn, popIn, popIn]} rotation={[0, Math.sin(ts * 0.4) * 0.25, 0]}>
+      <group position={[SHIFT_X, 0, 0]} scale={[popIn, popIn, popIn]} rotation={[0, YAW + Math.sin(ts * 0.4) * 0.12, 0]}>
         <ModelView model={model} style={style} ts={ts} t={t} focus={focus} explode={explode} plane={plane} gradient={gradient} />
 
         {flow
@@ -409,7 +481,7 @@ export const Stage3D: React.FC<StageProps> = ({scene, frame, localFrame, style, 
       </group>
 
       {/* partikel melayang agar adegan terasa hidup */}
-      {Array.from({length: 18}).map((_, i) => {
+      {Array.from({length: 10}).map((_, i) => {
         const sx = ((hashString('s' + i) % 1000) / 1000 - 0.5) * 8;
         const sz = ((hashString('z' + i) % 1000) / 1000 - 0.5) * 5 - 0.5;
         const y = -1.2 + (((ts * 0.25 + (hashString('y' + i) % 1000) / 1000) % 1) * 5);

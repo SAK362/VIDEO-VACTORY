@@ -61,7 +61,7 @@ export const Video: React.FC<VideoProps> = (props) => {
     <AbsoluteFill style={{background: style === 'real' ? REAL_BG : TOON_BG, fontFamily: FONT}}>
       <Audio src={staticFile(props.audioFile || 'voiceover.wav')} />
 
-      <ThreeCanvas width={width} height={height} camera={{fov: 38, position: [0, 1.7, 6.6]}} gl={{alpha: true}} style={{position: 'absolute', inset: 0}}>
+      <ThreeCanvas width={width} height={height} camera={{fov: 50, position: [0, 4.4, 11.4]}} gl={{alpha: true}} style={{position: 'absolute', inset: 0}}>
         <Stage3D scene={{...scene, camera: isCut ? 'cutaway_orbit' : scene.camera}} frame={frame} localFrame={localFrame} style={style} cut={cut} />
       </ThreeCanvas>
 
@@ -72,8 +72,8 @@ export const Video: React.FC<VideoProps> = (props) => {
       {scene.type === 'data_card' || scene.data_card ? <DataCardView card={scene.data_card} localFrame={localFrame} /> : null}
 
       {scene.curio ? (
-        <div style={{position: 'absolute', left: 40, top: 1370}}>
-          <Curio pose={scene.curio} frame={frame} localFrame={localFrame} width={260} />
+        <div style={{position: 'absolute', left: 36, top: 1560}}>
+          <Curio pose={scene.curio} frame={frame} localFrame={localFrame} width={170} />
         </div>
       ) : null}
 
