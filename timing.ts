@@ -69,7 +69,16 @@ export function buildTiming(narration: string, scenes: Scene[], audioSeconds: nu
     let tt = sStart[i];
     chunks.forEach((c, k) => {
       const d = (dur * lens[k]) / lsum;
-      phrases.push({tokens: c, from: Math.round(tt * FPS), to: Math.round((tt + d) * FPS)});
+      // Waktu tiap kata dibagi sebanding panjang hurufnya (kata panjang = lebih lama diucapkan).
+      const wl = c.map((x) => x.text.length + 1.5);
+      const wsum2 = wl.reduce((a, b) => a + b, 0);
+      const wordFrames: number[] = [];
+      let wt = tt;
+      for (let q = 0; q < c.length; q++) {
+        wordFrames.push(Math.round(wt * FPS));
+        wt += (d * wl[q]) / wsum2;
+      }
+      phrases.push({tokens: c, from: Math.round(tt * FPS), to: Math.round((tt + d) * FPS), wordFrames});
       tt += d;
     });
   });
