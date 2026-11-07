@@ -1,6 +1,6 @@
 # VIDEO-VACTORY (CurioSphere Video Factory)
 
-Repo ini merender video explainer 3D low-poly "x-ray" (9:16) dengan Remotion di GitHub Actions (gratis untuk repo publik).
+Repo ini merender video explainer 3D low-poly "cutaway" (9:16) dengan Remotion di GitHub Actions (gratis untuk repo publik).
 Dipicu otomatis oleh n8n (workflow "FULL OTOMATIS CURIOSPHERE"). Kamu tidak perlu menjalankan apa pun secara manual.
 
 ## Alur
