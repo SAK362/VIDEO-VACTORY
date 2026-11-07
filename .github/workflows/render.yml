@@ -35,6 +35,17 @@ jobs:
           echo "::add-mask::$UPLOAD_URL"
           echo "::add-mask::$CALLBACK_URL"
       - uses: actions/checkout@v4
+      - name: Susun folder studio (aman untuk unggahan datar maupun berfolder)
+        run: |
+          mkdir -p studio/kits studio/assets studio/data
+          mv_if() { if [ -f "$1" ]; then mv "$1" "$2"/; fi; }
+          for f in core.py render.py; do mv_if "$f" studio; done
+          for f in pompa.py eskalator.py lift.py petir.py kulkas.py; do mv_if "$f" studio/kits; done
+          for f in DejaVuSans-Bold.ttf DejaVuSansMono.ttf curio.png; do mv_if "$f" studio/assets; done
+          for f in pump_world.json petir_world.json; do mv_if "$f" studio/data; done
+          rm -f "__init__.py" "__init__ (1).py"
+          touch studio/__init__.py studio/kits/__init__.py
+          find studio -type f | sort
       - uses: actions/setup-node@v4
         with: {node-version: 20}
       - uses: actions/setup-python@v5
@@ -82,6 +93,17 @@ jobs:
         chunk: [0, 1, 2, 3]
     steps:
       - uses: actions/checkout@v4
+      - name: Susun folder studio (aman untuk unggahan datar maupun berfolder)
+        run: |
+          mkdir -p studio/kits studio/assets studio/data
+          mv_if() { if [ -f "$1" ]; then mv "$1" "$2"/; fi; }
+          for f in core.py render.py; do mv_if "$f" studio; done
+          for f in pompa.py eskalator.py lift.py petir.py kulkas.py; do mv_if "$f" studio/kits; done
+          for f in DejaVuSans-Bold.ttf DejaVuSansMono.ttf curio.png; do mv_if "$f" studio/assets; done
+          for f in pump_world.json petir_world.json; do mv_if "$f" studio/data; done
+          rm -f "__init__.py" "__init__ (1).py"
+          touch studio/__init__.py studio/kits/__init__.py
+          find studio -type f | sort
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - uses: actions/download-artifact@v4
