@@ -74,6 +74,10 @@ export const Callouts: React.FC<{callouts?: Callout[]; localFrame: number}> = ({
           >
             <span style={{color: C.gold}}>● </span>
             {c.text}
+            <svg width="140" height="14" style={{position: 'absolute', top: '50%', [left ? 'left' : 'right']: '100%', marginTop: -7, overflow: 'visible'}}>
+              <line x1={left ? 0 : 140} y1="7" x2={left ? 140 * k : 140 - 140 * k} y2="7" stroke={C.cyan} strokeWidth="4" strokeLinecap="round" />
+              <circle cx={left ? 140 * k : 140 - 140 * k} cy="7" r="9" fill={C.gold} stroke={C.navy} strokeWidth="3" />
+            </svg>
           </div>
         );
       })}
@@ -108,36 +112,6 @@ export const DataCardView: React.FC<{card?: DataCard; localFrame: number}> = ({c
   );
 };
 
-export const ScanOverlay: React.FC<{p: number; lang: string}> = ({p, lang}) => {
-  const y = interpolate(p, [0.1, 0.8], [330, 1180], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  const pct = Math.round(interpolate(p, [0.1, 0.8], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}));
-  const flash = interpolate(p, [0.8, 0.86, 0.96], [0, 0.55, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  return (
-    <>
-      <div style={{position: 'absolute', left: 0, right: 0, top: y, height: 8, background: C.glow, boxShadow: `0 0 40px 14px ${C.cyan}`}} />
-      <div style={{position: 'absolute', left: 0, right: 0, top: y - 160, height: 160, background: `linear-gradient(to bottom, rgba(34,195,240,0), rgba(34,195,240,0.28))`}} />
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 1180,
-          textAlign: 'center',
-          color: C.glow,
-          fontFamily: FONT,
-          fontWeight: 800,
-          fontSize: 44,
-          letterSpacing: '0.2em',
-          textShadow: '0 0 18px rgba(34,195,240,0.9)',
-        }}
-      >
-        {lang === 'id' ? 'PINDAI X-RAY' : 'X-RAY SCAN'} {pct}%
-      </div>
-      <div style={{position: 'absolute', inset: 0, background: '#fff', opacity: flash}} />
-    </>
-  );
-};
-
 export const DangerOverlay: React.FC<{frame: number}> = ({frame}) => (
   <div
     style={{
@@ -149,27 +123,55 @@ export const DangerOverlay: React.FC<{frame: number}> = ({frame}) => (
   />
 );
 
+const HATCH = `repeating-linear-gradient(135deg, ${C.gold} 0px, ${C.gold} 9px, #C98A00 9px, #C98A00 13px)`;
+
+// Subtitle: kata yang sedang diucapkan diberi blok emas berarsir; kata yang sudah lewat putih, yang belum redup.
 export const Subtitles: React.FC<{phrases: Phrase[]; frame: number}> = ({phrases, frame}) => {
   const ph = phrases.find((x) => frame >= x.from && frame < x.to + 2);
   if (!ph) return null;
   const k = spring({frame: frame - ph.from, fps: FPS, config: {damping: 18, stiffness: 220}});
+  let cur = 0;
+  for (let i = 0; i < ph.wordFrames.length; i++) if (frame >= ph.wordFrames[i]) cur = i;
   return (
-    <div style={{position: 'absolute', left: 50, right: 50, top: 1140, height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+    <div style={{position: 'absolute', left: 50, right: 50, top: 1130, height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       <div
         style={{
-          padding: '14px 30px',
-          borderRadius: 30,
-          background: 'rgba(11,31,58,0.62)',
+          padding: '16px 26px',
+          borderRadius: 34,
+          background: 'rgba(8,24,46,0.72)',
+          border: '3px solid rgba(34,195,240,0.35)',
           fontFamily: FONT,
           fontWeight: 800,
-          fontSize: 68,
-          lineHeight: 1.12,
+          fontSize: 70,
+          lineHeight: 1.2,
           textAlign: 'center',
-          textShadow: '0 4px 0 rgba(11,31,58,0.95), 0 0 16px rgba(11,31,58,0.95)',
-          transform: `scale(${interpolate(k, [0, 1], [0.92, 1])})`,
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '2px 10px',
+          transform: `scale(${interpolate(k, [0, 1], [0.93, 1])})`,
         }}
       >
-        <Tokens tokens={ph.tokens} />
+        {ph.tokens.map((tk, i) => {
+          const active = i === cur;
+          const past = i < cur;
+          return (
+            <span
+              key={i}
+              style={{
+                padding: '0 14px',
+                borderRadius: 14,
+                background: active ? HATCH : 'transparent',
+                color: active ? C.navy : past ? (tk.hi ? C.gold : C.ivory) : tk.hi ? 'rgba(245,182,35,0.55)' : 'rgba(247,243,234,0.5)',
+                textShadow: active ? 'none' : '0 3px 0 rgba(8,24,46,0.9)',
+                boxShadow: active ? '0 0 0 3px #7A4E00, 0 6px 0 rgba(0,0,0,0.35)' : 'none',
+                transform: active ? 'scale(1.06)' : 'none',
+              }}
+            >
+              {tk.text}
+            </span>
+          );
+        })}
       </div>
     </div>
   );
