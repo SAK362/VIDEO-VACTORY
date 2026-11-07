@@ -11,13 +11,14 @@ const defaultProps: VideoProps = {
   lang: 'en',
   audioSeconds: 20,
   audioFile: 'voiceover.wav',
+  style: 'toon',
   narration:
     'You press the tap and water just *comes out*. But how? Turns out, a hidden *impeller* is spinning fast. It throws water outward, and pressure pushes it up the pipe.',
   scenes: [
     {type: 'establish', label: 'EVERYDAY MYSTERY', heading: 'How does a *water pump* work?', set: 'pump', camera: 'dolly_in', curio: 'hook_confused'},
-    {type: 'xray_scan', label: 'X-RAY', heading: 'Let us *look inside*', set: 'pump', camera: 'orbit_slow', curio: 'goggles_down'},
+    {type: 'cutaway', label: 'INSIDE', heading: 'Let us *look inside*', set: 'pump', camera: 'cutaway_orbit', curio: 'point_right', callouts: [{text: 'Impeller'}, {text: 'Shaft'}]},
     {type: 'step', label: 'STEP 1', heading: 'The *impeller* spins', set: 'pump', focus: 'impeller', camera: 'orbit_close', flow: 'water', callouts: [{text: 'Impeller'}]},
-    {type: 'outro_loop', label: 'YOUR TURN', heading: 'What should we *x-ray* next?', set: 'pump', camera: 'dolly_out', curio: 'goggles_up_wave'},
+    {type: 'outro_loop', label: 'YOUR TURN', heading: 'What should we *open up* next?', set: 'pump', camera: 'dolly_out', curio: 'goggles_up_wave'},
   ],
 };
 
