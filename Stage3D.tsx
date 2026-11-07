@@ -2,6 +2,7 @@ import React, {useMemo} from 'react';
 import {useThree} from '@react-three/fiber';
 import * as THREE from 'three';
 import {C, FPS} from './theme';
+import type {VideoProps} from './types';
 import type {TimedScene} from './types';
 
 type Vec = [number, number, number];
@@ -15,7 +16,7 @@ type Prim = {
 type Part = {
   id: string;
   prims: Prim[];
-  shell: boolean; // bagian luar yang menjadi tembus pandang saat mode x-ray
+  shell: boolean; // bagian casing luar yang ikut terpotong pada adegan bedah
   ex: Vec; // arah geser saat "exploded"
   origin?: Vec;
   spin?: number;
@@ -149,18 +150,33 @@ function onPath(path: Vec[], s: number): Vec {
   return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
 }
 
-const Geo: React.FC<{p: Prim}> = ({p}) => {
+
+type StyleName = NonNullable<VideoProps['style']>;
+const OUTLINE = '#06142A';
+
+const Geo: React.FC<{p: Prim; style: StyleName}> = ({p, style}) => {
+  const seg = style === 'real' ? 40 : 20;
   switch (p.kind) {
     case 'box':
       return <boxGeometry args={[p.size[0], p.size[1], p.size[2]]} />;
     case 'cyl':
-      return <cylinderGeometry args={[p.size[0], p.size[1], p.size[2], 10]} />;
+      return <cylinderGeometry args={[p.size[0], p.size[1], p.size[2], seg]} />;
     case 'sphere':
-      return <icosahedronGeometry args={[p.size[0], 1]} />;
+      return <icosahedronGeometry args={[p.size[0], style === 'real' ? 3 : 1]} />;
     default:
       return <coneGeometry args={[p.size[0], p.size[1], p.size[2] || 8]} />;
   }
 };
+
+// Gradien 3 tingkat untuk bayangan ala kartun.
+function makeToonGradient(): THREE.DataTexture {
+  const data = new Uint8Array([70, 70, 70, 255, 165, 165, 165, 255, 255, 255, 255, 255]);
+  const tex = new THREE.DataTexture(data, 3, 1, THREE.RGBAFormat);
+  tex.minFilter = THREE.NearestFilter;
+  tex.magFilter = THREE.NearestFilter;
+  tex.needsUpdate = true;
+  return tex;
+}
 
 const CameraRig: React.FC<{cam: string; p: number; t: number}> = ({cam, p, t}) => {
   const {camera} = useThree();
@@ -170,6 +186,7 @@ const CameraRig: React.FC<{cam: string; p: number; t: number}> = ({cam, p, t}) =
   switch (cam) {
     case 'dolly_in':
       z = 8.6 - 3.4 * p;
+      x = Math.sin(p * 1.2) * 1.2;
       break;
     case 'dolly_out':
       z = 5.2 + 3.2 * p;
@@ -188,6 +205,13 @@ const CameraRig: React.FC<{cam: string; p: number; t: number}> = ({cam, p, t}) =
       y = 1.3;
       break;
     }
+    case 'cutaway_orbit': {
+      const a = 0.35 + 0.75 * p; // kamera di sisi +x agar bagian dalam yang terbuka terlihat
+      x = Math.sin(a) * 5.6;
+      z = Math.cos(a) * 5.6;
+      y = 1.6 - 0.3 * p;
+      break;
+    }
     case 'pan_down':
       y = 3.4 - 2.1 * p;
       z = 6.2;
@@ -201,111 +225,201 @@ const CameraRig: React.FC<{cam: string; p: number; t: number}> = ({cam, p, t}) =
       z = 2.4 + 0.8 * p;
       break;
     default:
-      x = Math.sin(t * 0.6) * 0.4;
-      y = 1.7 + Math.sin(t * 0.5) * 0.12;
+      x = Math.sin(t * 0.6) * 0.5;
+      y = 1.7 + Math.sin(t * 0.5) * 0.15;
       z = 6.6;
   }
   camera.position.set(x, y, z);
-  camera.lookAt(0, 0.6, 0);
+  camera.lookAt(0, 0.3, 0);
   camera.updateProjectionMatrix();
   return null;
+};
+
+type ModelViewProps = {
+  model: Model;
+  style: StyleName;
+  ts: number; // waktu (detik) untuk animasi
+  t: number;
+  focus: string;
+  explode: number;
+  plane: THREE.Plane;
+  ghost?: boolean;
+  gradient: THREE.DataTexture;
+};
+
+const ModelView: React.FC<ModelViewProps> = ({model, style, ts, t, focus, explode, plane, ghost, gradient}) => {
+  const pulse = 0.5 + 0.5 * Math.sin(t * 7);
+  return (
+    <>
+      {model.parts.map((part) => {
+        const origin = part.origin || [0, 0, 0];
+        const pos: Vec = [
+          origin[0] + part.ex[0] * explode,
+          origin[1] + part.ex[1] * explode + (part.bob ? Math.sin(ts * 6 + (part.phase || 0)) * part.bob : 0),
+          origin[2] + part.ex[2] * explode,
+        ];
+        const rot: Vec = [0, 0, 0];
+        if (part.spin) rot[part.spinAxis === 'x' ? 0 : part.spinAxis === 'y' ? 1 : 2] = ts * part.spin;
+        const isFocus = focus.length > 0 && part.id.toLowerCase().includes(focus);
+        const clip = part.shell ? [plane] : null;
+        const emissive = isFocus ? C.gold : '#000000';
+        const emissiveIntensity = isFocus ? 0.35 + 0.45 * pulse : 0;
+        return (
+          <group key={part.id} position={pos} rotation={rot}>
+            {part.prims.map((pr, i) => {
+              const p3: Vec = [pr.pos[0] - origin[0], pr.pos[1] - origin[1], pr.pos[2] - origin[2]];
+              return (
+                <React.Fragment key={i}>
+                  <mesh position={p3} rotation={pr.rot || [0, 0, 0]}>
+                    <Geo p={pr} style={style} />
+                    {style === 'toon' ? (
+                      <meshToonMaterial
+                        color={pr.color}
+                        gradientMap={gradient}
+                        side={THREE.DoubleSide}
+                        clippingPlanes={clip as any}
+                        emissive={emissive}
+                        emissiveIntensity={emissiveIntensity}
+                      />
+                    ) : (
+                      <meshStandardMaterial
+                        color={pr.color}
+                        metalness={0.45}
+                        roughness={0.28}
+                        side={THREE.DoubleSide}
+                        clippingPlanes={clip as any}
+                        emissive={emissive}
+                        emissiveIntensity={emissiveIntensity}
+                        transparent={!!ghost}
+                        opacity={ghost ? 0.22 : 1}
+                      />
+                    )}
+                  </mesh>
+                  {style === 'toon' ? (
+                    <mesh position={p3} rotation={pr.rot || [0, 0, 0]} scale={[1.055, 1.055, 1.055]}>
+                      <Geo p={pr} style={style} />
+                      <meshBasicMaterial color={OUTLINE} side={THREE.BackSide} clippingPlanes={clip as any} />
+                    </mesh>
+                  ) : null}
+                </React.Fragment>
+              );
+            })}
+          </group>
+        );
+      })}
+    </>
+  );
 };
 
 type StageProps = {
   scene: TimedScene;
   frame: number; // frame global
   localFrame: number; // frame di dalam adegan
-  xray: number; // 0..1 seberapa kuat mode x-ray
+  style: StyleName;
+  cut: number; // 0..1 seberapa terbuka adegan bedah
 };
 
-export const Stage3D: React.FC<StageProps> = ({scene, frame, localFrame, xray}) => {
+const easeInOut = (x: number) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
+
+export const Stage3D: React.FC<StageProps> = ({scene, frame, localFrame, style, cut}) => {
+  const {gl} = useThree();
+  gl.localClippingEnabled = true;
+
   const model = useMemo(() => modelFor(scene.set), [scene.set]);
+  const gradient = useMemo(() => makeToonGradient(), []);
   const t = frame / FPS;
   const p = Math.min(1, Math.max(0, localFrame / Math.max(1, scene.dur)));
   const slow = scene.type === 'slowmo' ? 0.3 : 1;
   const ts = t * slow;
-  const explode = scene.type === 'exploded' ? Math.min(1, Math.max(0, (p - 0.1) / 0.35)) * (p > 0.85 ? Math.max(0, (1 - p) / 0.15) : 1) : 0;
   const popIn = 0.88 + 0.12 * Math.min(1, localFrame / 10);
   const focus = String(scene.focus || '').toLowerCase();
   const flow = scene.flow && FLOW_COLORS[scene.flow] ? scene.flow : null;
   const danger = scene.type === 'danger';
-  const cyan = new THREE.Color(C.cyan);
 
-  const scanY = -1.4 + 4.6 * Math.min(1, Math.max(0, (p - 0.1) / 0.7));
+  // Bidang potong: makin besar cut, makin banyak bagian casing (sisi +x) yang terpotong hingga separuh.
+  const plane = useMemo(() => new THREE.Plane(new THREE.Vector3(-1, 0, 0), 99), []);
+  plane.constant = 3 - 3.05 * easeInOut(cut);
+  const explode = 0.35 * easeInOut(cut); // casing bergeser sedikit saat dibedah
+
+  const ground = style === 'toon';
+  const layers: {y: number; h: number; c: string}[] = [
+    {y: -1.525, h: 0.15, c: '#63C467'},
+    {y: -1.775, h: 0.35, c: '#8F5E3F'},
+    {y: -2.1, h: 0.3, c: '#2FA9DA'},
+    {y: -2.4, h: 0.3, c: '#5E6978'},
+  ];
 
   return (
     <>
-      <color attach="background" args={[C.navy]} />
-      <fog attach="fog" args={[C.navy, 10, 22]} />
+      <fog attach="fog" args={[style === 'real' ? '#050E1C' : '#0F3B63', 12, 26]} />
       <CameraRig cam={scene.camera || 'static_drift'} p={p} t={ts} />
-      <ambientLight intensity={0.6} color="#CFE8FF" />
-      <directionalLight position={[4, 6, 5]} intensity={1.1} />
-      <pointLight position={[-3, 2, 3]} intensity={1.3 + xray * 1.2} color={C.cyan} />
+      <ambientLight intensity={style === 'real' ? 0.5 : 0.85} color="#CFE8FF" />
+      <directionalLight position={[4, 6, 5]} intensity={style === 'real' ? 1.6 : 1.2} />
+      <pointLight position={[-3, 2, 3]} intensity={1.4} color={C.cyan} />
+      <pointLight position={[3, 3, -2]} intensity={0.9} color={C.gold} />
       {danger ? <pointLight position={[0, 2, 3]} intensity={2.2 * (0.6 + 0.4 * Math.sin(t * 10))} color={C.red} /> : null}
-      <gridHelper args={[14, 28, C.cyan, '#1B3A63']} position={[0, -1.55, 0]} />
 
-      <group scale={[popIn, popIn, popIn]} rotation={[0, Math.sin(ts * 0.4) * 0.3, 0]}>
-        {model.parts.map((part) => {
-          const origin = part.origin || [0, 0, 0];
-          const pos: Vec = [
-            origin[0] + part.ex[0] * explode,
-            origin[1] + part.ex[1] * explode + (part.bob ? Math.sin(ts * 6 + (part.phase || 0)) * part.bob : 0),
-            origin[2] + part.ex[2] * explode,
-          ];
-          const rot: Vec = [0, 0, 0];
-          if (part.spin) rot[part.spinAxis === 'x' ? 0 : part.spinAxis === 'y' ? 1 : 2] = ts * part.spin;
-          const isFocus = focus.length > 0 && part.id.toLowerCase().includes(focus);
-          const pulse = 0.5 + 0.5 * Math.sin(t * 7);
-          return (
-            <group key={part.id} position={pos} rotation={rot}>
-              {part.prims.map((pr, i) => {
-                const shellX = part.shell ? xray : 0;
-                const color = new THREE.Color(pr.color).lerp(cyan, shellX * 0.45);
-                const opacity = part.shell ? 1 - 0.83 * xray : 1;
-                const emissive = isFocus ? C.gold : part.shell ? C.cyan : '#1d6e8f';
-                const emissiveIntensity = isFocus ? 0.5 + 0.6 * pulse : part.shell ? 0.25 * xray : 0.18 + 0.3 * xray;
-                return (
-                  <mesh key={i} position={[pr.pos[0] - origin[0], pr.pos[1] - origin[1], pr.pos[2] - origin[2]]} rotation={pr.rot || [0, 0, 0]}>
-                    <Geo p={pr} />
-                    <meshStandardMaterial
-                      color={color}
-                      flatShading
-                      metalness={0.15}
-                      roughness={0.7}
-                      transparent={opacity < 0.999}
-                      opacity={isFocus ? Math.max(opacity, 0.5) : opacity}
-                      depthWrite={opacity > 0.6}
-                      emissive={emissive}
-                      emissiveIntensity={emissiveIntensity}
-                    />
-                  </mesh>
-                );
-              })}
+      {ground ? (
+        <group>
+          {layers.map((l, i) => (
+            <group key={i}>
+              <mesh position={[0, l.y, 0]}>
+                <boxGeometry args={[7.4, l.h, 6.4]} />
+                <meshToonMaterial color={l.c} gradientMap={gradient} />
+              </mesh>
+              <mesh position={[0, l.y, 0]} scale={[1.01, 1.02, 1.01]}>
+                <boxGeometry args={[7.4, l.h, 6.4]} />
+                <meshBasicMaterial color={OUTLINE} side={THREE.BackSide} />
+              </mesh>
             </group>
-          );
-        })}
+          ))}
+        </group>
+      ) : (
+        <group>
+          <mesh position={[0, -1.5, 0]}>
+            <cylinderGeometry args={[3.6, 3.6, 0.1, 64]} />
+            <meshStandardMaterial color="#0A1A2E" metalness={0.6} roughness={0.25} transparent opacity={0.82} />
+          </mesh>
+          <mesh position={[0, -1.43, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <torusGeometry args={[3.5, 0.04, 8, 96]} />
+            <meshBasicMaterial color={C.glow} />
+          </mesh>
+          <group position={[0, -3.0, 0]} scale={[popIn, -popIn, popIn]}>
+            <ModelView model={model} style={style} ts={ts} t={t} focus={focus} explode={explode} plane={plane} ghost gradient={gradient} />
+          </group>
+        </group>
+      )}
+
+      <group scale={[popIn, popIn, popIn]} rotation={[0, Math.sin(ts * 0.4) * 0.25, 0]}>
+        <ModelView model={model} style={style} ts={ts} t={t} focus={focus} explode={explode} plane={plane} gradient={gradient} />
 
         {flow
-          ? Array.from({length: 14}).map((_, i) => {
-              const s = (ts * 0.32 + i / 14) % 1;
+          ? Array.from({length: 16}).map((_, i) => {
+              const s = (ts * 0.32 + i / 16) % 1;
               const [x, y, z] = onPath(model.path, s);
               const jitter = flow === 'electricity' ? Math.sin(ts * 40 + i * 3) * 0.06 : 0;
               return (
                 <mesh key={i} position={[x + jitter, y, z]}>
-                  <icosahedronGeometry args={[0.1, 0]} />
+                  <icosahedronGeometry args={[0.11, 0]} />
                   <meshBasicMaterial color={FLOW_COLORS[flow as string]} />
                 </mesh>
               );
             })
           : null}
-
-        {scene.type === 'xray_scan' ? (
-          <mesh position={[0, scanY, 0]}>
-            <boxGeometry args={[7, 0.04, 7]} />
-            <meshBasicMaterial color={C.glow} transparent opacity={0.55} />
-          </mesh>
-        ) : null}
       </group>
+
+      {/* partikel melayang agar adegan terasa hidup */}
+      {Array.from({length: 18}).map((_, i) => {
+        const sx = ((hashString('s' + i) % 1000) / 1000 - 0.5) * 8;
+        const sz = ((hashString('z' + i) % 1000) / 1000 - 0.5) * 5 - 0.5;
+        const y = -1.2 + (((ts * 0.25 + (hashString('y' + i) % 1000) / 1000) % 1) * 5);
+        return (
+          <mesh key={i} position={[sx + Math.sin(ts + i) * 0.15, y, sz]}>
+            <icosahedronGeometry args={[0.04 + (i % 3) * 0.02, 0]} />
+            <meshBasicMaterial color={i % 4 === 0 ? C.gold : C.glow} transparent opacity={0.7} />
+          </mesh>
+        );
+      })}
     </>
   );
 };
