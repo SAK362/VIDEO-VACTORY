@@ -108,6 +108,13 @@ jobs:
         with: {python-version: '3.11'}
       - uses: actions/download-artifact@v4
         with: {name: work, path: .}
+      - name: Pasang ffmpeg bila belum ada
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
       - name: Render potongan ${{ matrix.chunk }}
         run: |
           pip install --quiet numpy pillow
@@ -137,6 +144,14 @@ jobs:
       - uses: actions/download-artifact@v4
         if: needs.render.result == 'success'
         with: {path: parts, merge-multiple: true}
+      - name: Pasang ffmpeg bila belum ada
+        if: needs.render.result == 'success'
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
       - name: Gabung potongan + suara
         id: concat
         if: needs.render.result == 'success'
