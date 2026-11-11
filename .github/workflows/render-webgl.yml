@@ -47,12 +47,21 @@ jobs:
         run: node prepare.mjs
       - name: Rapikan suara (jeda panjang, -14 LUFS)
         run: |
-          pip install --quiet numpy scipy
+          pip install --quiet numpy
           python webgl/clean_audio.py
+      - name: Cache model pengenal ucapan
+        uses: actions/cache@v4
+        with: {path: ~/.cache/huggingface, key: whisper-medium-v1}
+      - name: Selaraskan waktu kata dengan suara (Whisper)
+        timeout-minutes: 15
+        env: {PROPS_FILE: work/props.json, WAV_FILE: public/voiceover.wav}
+        run: |
+          pip install --quiet faster-whisper
+          python webgl/align_whisper.py
       - name: Buat timing.js
         run: |
-          pip install --quiet numpy scipy
-          python webgl/align_envelope.py || { echo "::warning::align_envelope gagal, memakai waktu perkiraan"; python webgl/make_timing.py; }
+          pip install --quiet numpy
+          python webgl/make_timing.py
           cp curio.png webgl/curio.png
           pip install --quiet playwright
           python webgl/render_webgl.py meta

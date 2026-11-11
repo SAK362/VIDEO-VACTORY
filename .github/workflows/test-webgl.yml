@@ -37,26 +37,31 @@ jobs:
           cp webgl/test/voiceover.wav public/voiceover.wav
       - name: Rapikan suara (jeda panjang, -14 LUFS)
         run: |
-          pip install --quiet numpy scipy
+          pip install --quiet numpy
           python webgl/clean_audio.py
+      - name: Cache model pengenal ucapan
+        uses: actions/cache@v4
+        with: {path: ~/.cache/huggingface, key: whisper-medium-v1}
+      - name: Selaraskan waktu kata dengan suara (Whisper)
+        timeout-minutes: 15
+        env: {PROPS_FILE: work/props.json, WAV_FILE: public/voiceover.wav}
+        run: |
+          pip install --quiet faster-whisper
+          python webgl/align_whisper.py
       - name: Buat timing.js
         run: |
-          pip install --quiet numpy scipy
-          python webgl/align_envelope.py || { echo "::warning::align_envelope gagal, memakai waktu perkiraan"; python webgl/make_timing.py; }
+          pip install --quiet numpy
+          python webgl/make_timing.py
           cp curio.png webgl/curio.png
           pip install --quiet playwright
           python webgl/render_webgl.py meta
-      - name: Bandingkan waktu kata Whisper vs algoritma lama
+      - name: Cetak waktu kata
         run: |
           python3 - <<'PY'
-          import json, re, statistics as st
-          a = json.loads(re.search(r'=(.*);\s*$', open('webgl/timing.js', encoding='utf-8').read(), re.S).group(1))['words']
-          b = json.load(open('webgl/test/timing_local.json'))['words']
-          d = [abs(x['start'] - y['start']) for x, y in zip(a, b)]
-          print('kata', len(d), 'median %.3f  rata2 %.3f  p90 %.3f  maks %.3f' % (st.median(d), st.mean(d), sorted(d)[int(len(d) * .9)], max(d)))
-          print('selisih > 0.15 dtk:', sum(1 for v in d if v > .15), ' > 0.3 dtk:', sum(1 for v in d if v > .3))
-          for x, y in zip(a, b):
-              if abs(x['start'] - y['start']) > 0.25: print('  %-14s whisper %.2f  lama %.2f' % (x['w'], x['start'], y['start']))
+          import json, re
+          d = json.loads(re.search(r'=(.*);\s*$', open('webgl/timing.js', encoding='utf-8').read(), re.S).group(1))
+          print('WT', json.dumps([[w['start'], w['end']] for w in d['words']]))
+          for si, sp in enumerate(d['sent_spans']): print('SENT', si + 1, sp)
           PY
       - uses: actions/upload-artifact@v4
         with:

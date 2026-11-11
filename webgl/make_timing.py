@@ -22,6 +22,22 @@ def main():
     if isinstance(wt, list) and len(wt) == len(words):
         for i, w in enumerate(words):
             w['start'] = float(wt[i][0]); w['end'] = float(wt[i][1])
+        # Whisper sering meregangkan kata ke dalam jeda: geser awal kata ke akhir jeda, akhir kata ke awal jeda.
+        n10 = int(SR * 0.01); m10 = len(y) // n10
+        r10 = np.sqrt((y[:m10 * n10].reshape(m10, n10) ** 2).mean(axis=1) + 1e-12); sil = r10 < 10 ** (-35 / 20)
+        def silence_at(t):
+            i = int(t / 0.01)
+            if i < 0 or i >= m10 or not sil[i]: return None
+            a = i
+            while a > 0 and sil[a - 1]: a -= 1
+            b = i
+            while b < m10 and sil[b]: b += 1
+            return (a * 0.01, b * 0.01) if (b - a) >= 12 else None
+        for w in words:
+            sg = silence_at(w['start'])
+            if sg and sg[1] < w['end'] - 0.05: w['start'] = sg[1]
+            sg = silence_at(w['end'])
+            if sg and sg[0] > w['start'] + 0.05: w['end'] = sg[0]
         for i in range(len(words) - 1):  # akhir kata tidak melewati awal kata berikut
             words[i]['end'] = max(words[i]['start'] + 0.04, min(words[i]['end'], words[i + 1]['start'] - 0.01))
         mode = 'suara'
