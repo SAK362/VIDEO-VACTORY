@@ -55,6 +55,18 @@ jobs:
           cp curio.png webgl/curio.png
           pip install --quiet playwright
           python webgl/render_webgl.py meta
+      - name: Bandingkan waktu kata Whisper vs algoritma lama
+        run: |
+          python3 - <<'PY'
+          import json, re, statistics as st
+          a = json.loads(re.search(r'=(.*);\s*$', open('webgl/timing.js', encoding='utf-8').read(), re.S).group(1))['words']
+          b = json.load(open('webgl/test/timing_local.json'))['words']
+          d = [abs(x['start'] - y['start']) for x, y in zip(a, b)]
+          print('kata', len(d), 'median %.3f  rata2 %.3f  p90 %.3f  maks %.3f' % (st.median(d), st.mean(d), sorted(d)[int(len(d) * .9)], max(d)))
+          print('selisih > 0.15 dtk:', sum(1 for v in d if v > .15), ' > 0.3 dtk:', sum(1 for v in d if v > .3))
+          for x, y in zip(a, b):
+              if abs(x['start'] - y['start']) > 0.25: print('  %-14s whisper %.2f  lama %.2f' % (x['w'], x['start'], y['start']))
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: work
@@ -100,6 +112,8 @@ jobs:
     needs: render
     runs-on: ubuntu-latest
     steps:
+      - name: Pasang ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
       - uses: actions/download-artifact@v4
         with: {path: parts, merge-multiple: true}
       - name: Gabung
@@ -108,5 +122,6 @@ jobs:
           ffmpeg -v error -y -f concat -safe 0 -i list.txt -c copy silent.mp4
           ffmpeg -v error -y -i silent.mp4 -i parts/public/voiceover.wav -c:v copy -c:a aac -b:a 192k video.mp4
           ls -lh video.mp4
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,duration -of csv video.mp4
       - uses: actions/upload-artifact@v4
         with: {name: video-test, path: video.mp4, retention-days: 3}
