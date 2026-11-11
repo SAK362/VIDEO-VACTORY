@@ -64,12 +64,21 @@ jobs:
           python webgl/make_timing.py
           cp curio.png webgl/curio.png
           pip install --quiet playwright
-          python webgl/render_webgl.py meta
+      - name: Rencanakan adegan 3D (AI) dan periksa
+        env: {ANTHROPIC_API_KEY: '${{ secrets.ANTHROPIC_API_KEY }}'}
+        run: |
+          python webgl/plan_scenes.py
+          [ -f webgl/spec.json ] && python webgl/validate_spec.py webgl/spec.json || true
+      - name: Hitung frame
+        run: python webgl/render_webgl.py meta
       - uses: actions/upload-artifact@v4
         with:
           name: work
           path: |
             webgl/timing.js
+            webgl/spec.js
+            webgl/spec.json
+            webgl/engine.txt
             webgl/curio.png
             public/voiceover.wav
           retention-days: 1
