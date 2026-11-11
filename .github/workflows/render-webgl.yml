@@ -47,12 +47,12 @@ jobs:
         run: node prepare.mjs
       - name: Rapikan suara (jeda panjang, -14 LUFS)
         run: |
-          pip install --quiet numpy
+          pip install --quiet numpy scipy
           python webgl/clean_audio.py
       - name: Buat timing.js
         run: |
-          pip install --quiet numpy
-          python webgl/align_envelope.py || python webgl/make_timing.py
+          pip install --quiet numpy scipy
+          python webgl/align_envelope.py || { echo "::warning::align_envelope gagal, memakai waktu perkiraan"; python webgl/make_timing.py; }
           cp curio.png webgl/curio.png
           pip install --quiet playwright
           python webgl/render_webgl.py meta
