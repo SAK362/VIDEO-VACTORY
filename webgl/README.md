@@ -3,7 +3,8 @@
 Render 1080x1920 @ 30 fps di GitHub Actions (Chrome headless + SwiftShader). Tanpa token Claude.
 
 - `engine.html` : mesin 3D + overlay (panel judul, subtitle arsir per kata, label, Curio berbicara, FAKTA UNIK).
-- `make_timing.py` : props.json (wordTimes Whisper) + suara -> `timing.js` (waktu kata, mulut Curio).
+- `align_envelope.py` : waktu kata dari jeda bicara (utama; tanpa Whisper, diuji lebih akurat pada suara uji) -> `timing.js` + mulut Curio.
+- `make_timing.py` : cadangan bila `align_envelope.py` gagal (wordTimes Whisper atau perkiraan).
 - `clean_audio.py` : jeda > 0,7 dtk -> 0,55 dtk, loudnorm -14 LUFS.
 - `render_webgl.py` : `meta | chunk i n out.mp4 | still T`.
 - `diesel_props.json` : contoh props topik 0008 (satu adegan = satu kalimat).
