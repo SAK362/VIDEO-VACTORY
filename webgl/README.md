@@ -13,3 +13,9 @@ Render 1080x1920 @ 30 fps di GitHub Actions (Chrome headless + SwiftShader). Tan
 Batas Phase 1: urutan shot/kamera di `engine.html` (SHOTS) masih khusus topik diesel (14 kalimat).
 Phase 2: pustaka objek + spesifikasi adegan JSON agar topik apa pun otomatis.
 Uji lokal: salin `curio.png` ke folder ini, siapkan `work/props.json` + `public/voiceover.wav`, jalankan `make_timing.py`, lalu `render_webgl.py still 20`.
+
+## Phase 2 — semua topik (data-driven)
+- `engine/` = mesin universal: `core.js` (GL), `lib.js` (25 komponen 3D + primitif), `director.js` (membaca `spec.js`).
+- `plan_scenes.py` = perencana AI (secret `ANTHROPIC_API_KEY`); tanpa kunci → spec cadangan generik. `SPEC.md` = prompt/format, `validate_spec.py` = pemeriksa.
+- `examples/*.json` = contoh spec (kulkas, panel surya, roda gigi/sel). `make_spec.py examples/x.json` → `spec.js`.
+- Isi `props.json` dengan `"spec": {...}` untuk melewati AI, atau `"engine":"diesel"` untuk mesin lama (`engine_diesel.html`).
