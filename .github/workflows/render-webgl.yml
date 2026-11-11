@@ -31,6 +31,9 @@ jobs:
           echo "::add-mask::$UPLOAD_URL"
           echo "::add-mask::$CALLBACK_URL"
       - uses: actions/checkout@v4
+      - name: Pasang ffmpeg bila belum ada
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
       - uses: actions/setup-node@v4
         with: {node-version: 20}
       - uses: actions/setup-python@v5
