@@ -1,6 +1,6 @@
 """Perencana adegan AI: naskah (timing.js) -> spec.json -> spec.js.
   python webgl/plan_scenes.py [--title "Judul"] [--out webgl/spec.js]
-Butuh env ANTHROPIC_API_KEY (secret repo). Tanpa kunci / gagal 3x -> spec cadangan generik (tetap bisa dirender).
+Butuh env GEMINI_API_KEY (gratis, diutamakan) atau ANTHROPIC_API_KEY (secret repo). Tanpa kunci / gagal 3x -> spec cadangan generik (tetap bisa dirender).
 Bila work/props.json sudah punya "spec" -> dipakai langsung, tanpa AI."""
 import json, os, re, sys, urllib.request, urllib.error
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
@@ -33,6 +33,14 @@ def fix_cover(d, n):
 
 
 def ask(system, user):
+    if os.environ.get('GEMINI_API_KEY'):
+        model = os.environ.get('GEMINI_MODEL') or 'gemini-3.5-flash-lite'
+        body = json.dumps({'systemInstruction': {'parts': [{'text': system}]}, 'contents': [{'role': 'user', 'parts': [{'text': user}]}],
+                           'generationConfig': {'temperature': 0.4, 'responseMimeType': 'application/json', 'maxOutputTokens': 16000}}).encode()
+        rq = urllib.request.Request('https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent' % model, body,
+                                    {'x-goog-api-key': os.environ['GEMINI_API_KEY'], 'content-type': 'application/json'})
+        with urllib.request.urlopen(rq, timeout=300) as r: out = json.load(r)
+        return ''.join(pt.get('text', '') for pt in out['candidates'][0]['content']['parts'])
     key = os.environ['ANTHROPIC_API_KEY']
     body = json.dumps({'model': MODEL, 'max_tokens': 16000, 'system': system, 'messages': [{'role': 'user', 'content': user}]}).encode()
     rq = urllib.request.Request('https://api.anthropic.com/v1/messages', body, {'x-api-key': key, 'anthropic-version': '2023-06-01', 'content-type': 'application/json'})
@@ -73,7 +81,7 @@ def main():
             if p.get('spec'): d = p['spec']; print('spec dari props.json'); return emit(d, out)
             break
     sents = load_sents(); n = len(sents); d = None
-    if os.environ.get('ANTHROPIC_API_KEY'):
+    if os.environ.get('GEMINI_API_KEY') or os.environ.get('ANTHROPIC_API_KEY'):
         system = open(os.path.join(HERE, 'SPEC.md'), encoding='utf-8').read().replace('@@COMP@@', comp_doc())
         user = 'Judul: %s\nJumlah kalimat: %d\nNaskah:\n%s\n\nBuat spec JSON.' % (title, n, '\n'.join('%d: %s' % (i, s) for i, s in enumerate(sents)))
         for attempt in range(3):
@@ -85,7 +93,7 @@ def main():
             except Exception as ex:
                 print('::warning::perencana AI gagal:', ex); d = None
     else:
-        print('::warning::ANTHROPIC_API_KEY tidak ada -> spec cadangan generik')
+        print('::warning::GEMINI_API_KEY/ANTHROPIC_API_KEY tidak ada -> spec cadangan generik')
     if d is None: print('::warning::memakai spec cadangan generik'); d = fallback(sents, title)
     emit(d, out)
 

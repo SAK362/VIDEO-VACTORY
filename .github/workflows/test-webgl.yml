@@ -55,7 +55,7 @@ jobs:
           cp curio.png webgl/curio.png
           pip install --quiet playwright
       - name: Rencanakan adegan 3D (AI) dan periksa
-        env: {ANTHROPIC_API_KEY: '${{ secrets.ANTHROPIC_API_KEY }}'}
+        env: {GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}', ANTHROPIC_API_KEY: '${{ secrets.ANTHROPIC_API_KEY }}'}
         run: |
           python webgl/plan_scenes.py
           [ -f webgl/spec.json ] && python webgl/validate_spec.py webgl/spec.json || true
