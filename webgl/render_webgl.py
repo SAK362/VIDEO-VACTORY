@@ -12,12 +12,18 @@ def total_frames():
     return int(round((d['dur'] + 0.8) * FPS))
 
 
+def ENGINE_FILE():
+    if os.environ.get('ENGINE'): return os.environ['ENGINE']
+    f = os.path.join(HERE, 'engine.txt')
+    return open(f).read().strip() if os.path.exists(f) else 'engine.html'
+
+
 def page(p):
     exe = os.environ.get('CHROME_PATH', '/usr/bin/google-chrome')
     b = p.chromium.launch(executable_path=exe, args=['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--allow-file-access-from-files', '--no-sandbox'])
     pg = b.new_page(viewport={'width': 1080, 'height': 1920})
-    pg.on('pageerror', lambda e: print('PAGEERR', e))
-    pg.goto('file://' + os.path.join(HERE, 'engine.html')); pg.wait_for_function('window.READY===true', timeout=60000)
+    pg.on('pageerror', lambda e: print('PAGEERR', e)); pg.on('console', lambda m: print('CONSOLE', m.text) if 'WARN' in m.text else None)
+    pg.goto('file://' + os.path.join(HERE, ENGINE_FILE())); pg.wait_for_function('window.READY===true', timeout=60000)
     return b, pg
 
 

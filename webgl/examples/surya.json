@@ -1,0 +1,19 @@
+{"title":"Panel surya","scenes":[
+{"sent":[0,2],"env":"outdoor","kicker":"PANEL SURYA","heading":"Cahaya *jadi listrik*","objs":[
+ {"t":"house","p":[0,0,-6],"size":[8,4,6],"col":"#e8d5b0"},
+ {"t":"solar","p":[0,4.6,-5],"n":3},
+ {"t":"sun","p":[10,18,-20],"rad":2},
+ {"t":"tree","p":[-9,0,-2],"h":5},{"t":"tree","p":[9,0,-1],"h":4},
+ {"t":"person","p":[5,0,2]}],
+ "cam":{"c":[0,3,-4],"r":22,"a":[-35,15],"h":[5,8]}},
+{"sent":[3,8],"env":"stage","kicker":"BEDAH","heading":"Isi *panel* surya","objs":[
+ {"t":"solar","id":"p","p":[0,1.5,0],"n":2},
+ {"t":"battery","id":"b","p":[5,0.8,0],"n":3,"lvl":0.7},
+ {"t":"bulb","id":"l","p":[8,2.4,0],"on":true},
+ {"t":"pipe","pts":[[2,1.5,0],[4,1.2,0]],"r":0.07,"c":"#e07a10","fc":"#ffe07a"},
+ {"t":"pipe","pts":[[6,1.2,0],[8,1.4,0]],"r":0.07,"c":"#e07a10","fc":"#ffe07a"}],
+ "labels":[{"at":"p","text":"sel surya"},{"at":"b","text":"baterai"},{"at":"l","text":"lampu"}],"tag":"ILUSTRASI DISEDERHANAKAN"},
+{"sent":[9,13],"env":"night","kicker":"JADI...","heading":"Malam pun *tetap menyala*","legend":[{"text":"sel surya"},{"text":"baterai"},{"text":"lampu"}],"objs":[
+ {"t":"house","p":[0,0,0],"size":[8,4,6],"col":"#e8d5b0"},{"t":"bulb","p":[0,3,2.5],"on":true},{"t":"cloud","p":[-6,12,-6]}],
+ "ajak":"Follow & tulis topik berikutnya di komentar"}
+]}
