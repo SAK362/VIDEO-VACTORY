@@ -1,0 +1,352 @@
+{
+ "title": "Kapal Pinisi",
+ "scenes": [
+  {
+   "sent": [
+    0,
+    2
+   ],
+   "env": "sea",
+   "kicker": "KAPAL PINISI",
+   "heading": "Kapal layar *tanpa gambar*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     4,
+     0
+    ],
+    "r": 44,
+    "a": [
+     24,
+     12
+    ],
+    "h": [
+     3,
+     5
+    ],
+    "fov": 48
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    3,
+    5
+   ],
+   "env": "sea",
+   "kicker": "TANA BERU",
+   "heading": "Dibuat *turun-temurun*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "build": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     3,
+     0
+    ],
+    "r": 36,
+    "a": [
+     26,
+     16
+    ],
+    "h": [
+     2,
+     4
+    ],
+    "fov": 48
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    6,
+    6
+   ],
+   "env": "sea",
+   "kicker": "LANGKAH 1",
+   "heading": "Mulai dari *lunas*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "build": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     2,
+     0
+    ],
+    "r": 30,
+    "a": [
+     26,
+     16
+    ],
+    "h": [
+     2,
+     3
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "p.keel",
+     "text": "lunas"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    7,
+    7
+   ],
+   "env": "sea",
+   "kicker": "LANGKAH 2",
+   "heading": "Lalu *gading* sebagai rangka",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "build": 2
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     2.5,
+     0
+    ],
+    "r": 30,
+    "a": [
+     30,
+     24
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "p.rib",
+     "text": "gading (rangka)"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    8,
+    9
+   ],
+   "env": "sea",
+   "kicker": "LANGKAH 3",
+   "heading": "*Papan kayu* membentuk lambung",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "build": 3
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     2.5,
+     0
+    ],
+    "r": 30,
+    "a": [
+     30,
+     22
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "p.plank",
+     "text": "papan lambung"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    10,
+    12
+   ],
+   "env": "sea",
+   "kicker": "SAMBUNGAN",
+   "heading": "*Pasak kayu*, bukan paku",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "build": 4
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     2.3,
+     2
+    ],
+    "r": 20,
+    "a": [
+     24,
+     18
+    ],
+    "h": [
+     1,
+     2
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "p.pasak",
+     "text": "pasak kayu"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    13,
+    14
+   ],
+   "env": "sea",
+   "kicker": "LAYAR",
+   "heading": "Dua tiang, *tujuh layar*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "build": 6
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     5,
+     0
+    ],
+    "r": 44,
+    "a": [
+     28,
+     14
+    ],
+    "h": [
+     4,
+     6
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "p.mast",
+     "text": "tiang layar"
+    },
+    {
+     "at": "p.sail",
+     "text": "layar"
+    }
+   ],
+   "card": {
+    "big": "7 layar",
+    "small": "3 depan · 2 tengah · 2 belakang"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    15,
+    17
+   ],
+   "env": "sea",
+   "kicker": "WARISAN",
+   "heading": "Diakui *UNESCO*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "build": 6
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     4,
+     0
+    ],
+    "r": 46,
+    "a": [
+     -26,
+     -14
+    ],
+    "h": [
+     3,
+     5
+    ],
+    "fov": 48
+   },
+   "card": {
+    "big": "2017",
+    "small": "warisan budaya dunia UNESCO"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    18,
+    19
+   ],
+   "env": "sea",
+   "kicker": "JADI...",
+   "heading": "Mengarungi *lautan*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "build": 6
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     4,
+     0
+    ],
+    "r": 50,
+    "a": [
+     -20,
+     -8
+    ],
+    "h": [
+     3,
+     5
+    ],
+    "fov": 48
+   },
+   "ajak": "Follow & tulis topik berikutnya di komentar"
+  }
+ ]
+}

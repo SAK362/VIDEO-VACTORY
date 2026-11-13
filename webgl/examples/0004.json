@@ -1,0 +1,373 @@
+{
+ "title": "Candi Borobudur",
+ "scenes": [
+  {
+   "sent": [
+    0,
+    2
+   ],
+   "env": "outdoor",
+   "kicker": "CANDI BOROBUDUR",
+   "heading": "Seribu tahun *diguyur hujan*",
+   "objs": [
+    {
+     "t": "borobudur",
+     "id": "b",
+     "rain": 1,
+     "flow": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     8,
+     0
+    ],
+    "r": 95,
+    "a": [
+     35,
+     25
+    ],
+    "h": [
+     10,
+     14
+    ],
+    "fov": 48
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    3,
+    4
+   ],
+   "env": "studio",
+   "kicker": "BUKIT ALAMI",
+   "heading": "Candi *membungkus* bukit",
+   "objs": [
+    {
+     "t": "boro_drain",
+     "id": "d"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     3,
+     0
+    ],
+    "r": 30,
+    "a": [
+     8,
+     14
+    ],
+    "h": [
+     2,
+     3
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "d.core",
+     "text": "bukit alami"
+    },
+    {
+     "at": "d.stone",
+     "text": "batu andesit"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    5,
+    6
+   ],
+   "env": "outdoor",
+   "kicker": "BATU",
+   "heading": "Batu *mengunci*, tanpa semen",
+   "objs": [
+    {
+     "t": "borobudur",
+     "id": "b"
+    }
+   ],
+   "cam": {
+    "c": [
+     8,
+     6,
+     8
+    ],
+    "r": 34,
+    "a": [
+     40,
+     20
+    ],
+    "h": [
+     2,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "b.tier",
+     "text": "batu saling mengunci"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    7,
+    8
+   ],
+   "env": "outdoor",
+   "kicker": "MASALAH",
+   "heading": "Hujan *merembes* ke sela batu",
+   "objs": [
+    {
+     "t": "borobudur",
+     "id": "b",
+     "rain": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     8,
+     0
+    ],
+    "r": 80,
+    "a": [
+     -30,
+     -20
+    ],
+    "h": [
+     8,
+     10
+    ],
+    "fov": 48
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    9,
+    11
+   ],
+   "env": "outdoor",
+   "kicker": "PANCURAN",
+   "heading": "*Seratus* pancuran makara",
+   "objs": [
+    {
+     "t": "borobudur",
+     "id": "b",
+     "rain": 1,
+     "flow": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     10,
+     6,
+     10
+    ],
+    "r": 44,
+    "a": [
+     45,
+     25
+    ],
+    "h": [
+     4,
+     6
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "b.spout",
+     "text": "pancuran makara"
+    }
+   ],
+   "card": {
+    "big": "100",
+    "small": "pancuran air"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    12,
+    13
+   ],
+   "env": "studio",
+   "kicker": "ALIRAN AIR",
+   "heading": "Air *mengalir keluar*",
+   "objs": [
+    {
+     "t": "boro_drain",
+     "id": "d"
+    }
+   ],
+   "cam": {
+    "c": [
+     2,
+     3,
+     0
+    ],
+    "r": 26,
+    "a": [
+     10,
+     24
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "d.rain",
+     "text": "air hujan"
+    },
+    {
+     "at": "d.pipe",
+     "text": "saluran"
+    },
+    {
+     "at": "d.spout",
+     "text": "pancuran"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    14,
+    15
+   ],
+   "env": "studio",
+   "kicker": "MASALAH LAMA",
+   "heading": "Air meresap, *dinding bergeser*",
+   "objs": [
+    {
+     "t": "boro_drain",
+     "id": "d"
+    }
+   ],
+   "cam": {
+    "c": [
+     -3,
+     2.5,
+     0
+    ],
+    "r": 24,
+    "a": [
+     -12,
+     -24
+    ],
+    "h": [
+     2,
+     3
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "d.core",
+     "text": "tanah isian jenuh air"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    16,
+    17
+   ],
+   "env": "studio",
+   "kicker": "PEMUGARAN",
+   "heading": "Beton, pipa, *lapisan kedap*",
+   "objs": [
+    {
+     "t": "boro_drain",
+     "id": "d"
+    }
+   ],
+   "cam": {
+    "c": [
+     2,
+     3.5,
+     0
+    ],
+    "r": 24,
+    "a": [
+     14,
+     26
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "d.slab",
+     "text": "lantai beton"
+    },
+    {
+     "at": "d.seal",
+     "text": "lapisan kedap air"
+    },
+    {
+     "at": "d.filter",
+     "text": "lapisan penyaring"
+    },
+    {
+     "at": "d.pipe",
+     "text": "pipa"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    18,
+    19
+   ],
+   "env": "outdoor",
+   "kicker": "JADI...",
+   "heading": "Kokoh di tengah *hujan*",
+   "objs": [
+    {
+     "t": "borobudur",
+     "id": "b",
+     "rain": 1,
+     "flow": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     8,
+     0
+    ],
+    "r": 95,
+    "a": [
+     -30,
+     -18
+    ],
+    "h": [
+     10,
+     8
+    ],
+    "fov": 48
+   },
+   "ajak": "Follow & tulis topik berikutnya di komentar"
+  }
+ ]
+}
