@@ -128,11 +128,11 @@ class Show:
             pd.line([(0, y), (W, y)], fill=(237, 235, 221, int(max(0, al))))
         im.paste(pan, (0, 0), pan); d = ImageDraw.Draw(im, "RGBA")
         lab = "  ".join(" ".join(w) for w in s.label.upper().split(" "))
-        d.text((W / 2, 82), lab, font=P.font(25, True), fill=(86, 101, 94), anchor="ms")
+        d.text((W / 2, 140), lab, font=P.font(25, True), fill=(86, 101, 94), anchor="ms")
         s.heading_draw(d, s.heading[i])
-        # watermark NUSAKARA kanan bawah
+        # watermark NUSAKARA tengah atas
         f = P.font(36); a, b = "NUSA", "KARA"; wa = d.textlength(a, font=f); wb = d.textlength(b, font=f)
-        ph = 76; pw = wa + wb + 80; x0 = W - 36 - pw; y0 = 1806
+        ph = 76; pw = wa + wb + 80; x0 = (W - pw) / 2; y0 = 22
         d.rounded_rectangle([x0, y0, x0 + pw, y0 + ph], radius=38, fill=(21, 34, 31, 240))
         d.text((x0 + 28, y0 + ph / 2 + 2), a, font=f, fill=(255, 255, 255), anchor="lm")
         d.rounded_rectangle([x0 + 28 + wa - 6 + 6, y0 + 12, x0 + 28 + wa + 6 + wb + 18, y0 + ph - 12], radius=11, fill=(127, 224, 194))
@@ -146,7 +146,7 @@ class Show:
             clean = tk.strip("*"); w = d.textlength(clean, font=ft); add = (0 if (re.fullmatch(r"[^\w]+", clean) and lines[-1]) else (sp if lines[-1] else 0)) + w
             if wcur + add > 940 and lines[-1]: lines.append([tk]); wcur = w
             else: lines[-1].append(tk); wcur += add
-        lines = lines[:2]; y = 190 if len(lines) == 1 else 160
+        lines = lines[:2]; y = 222 if len(lines) == 1 else 212
         for ln in lines:
             ws = [d.textlength(t.strip("*"), font=ft) for t in ln]; pn = [1 if (k and re.fullmatch(r"[^\w]+", t.strip("*"))) else 0 for k, t in enumerate(ln)]; tw = sum(ws) + sp * (len(ln) - 1 - sum(pn)); x = W / 2 - tw / 2
             for t, w, q in zip(ln, ws, pn):
