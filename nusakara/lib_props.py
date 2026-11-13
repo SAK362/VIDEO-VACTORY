@@ -224,17 +224,23 @@ for _n in ("pantai_air_manis_pagi", "pantai_air_manis_siang"): LATAR[_n] = lambd
 LATAR["pantai_air_manis_senja"] = lambda d, p, pal, w: _base(d, p, pal)
 LATAR["tepi_pantai_siang"] = lambda d, p, pal, w: _base(d, p, pal, house=False, palms=False)
 LATAR["pantai_senja_ibu"] = lambda d, p, pal, w: _base(d, p, pal, house=True)
-LATAR["laut_menuju_pantai"] = lambda d, p, pal, w: (_base(d, p, pal, ground=False, house=False, palms=False), d.rectangle([0, 1099, W, H], fill=pal["sea2"]), B.palm(p, 920, 760, 120, -10))
+def _laut(d, p, pal, w):
+    _base(d, p, pal, ground=False, house=False, palms=False)
+    if B.near_ok(): d.rectangle([0, 1099, W, H], fill=pal["sea2"])
+    B.palm(p, 920, 760, 120, -10)
+LATAR["laut_menuju_pantai"] = _laut
 LATAR["kampung_nelayan_pagi"] = lambda d, p, pal, w: (_base(d, p, pal, house=False), B.hut(p, 380, 1045, 260), B.hut(p, -60, 1095, 420), B.hut(p, 700, 1085, 380))
 def _halaman(d, p, pal, w):
     B.sky(d, pal); B.sun(p, pal); B.clouds(p, pal, 2); B.hills(p, pal)
-    d.polygon([(0, 760), (W, 760), (W, H), (0, H)], fill=mix(pal["gr"], (110, 150, 80), .45))
+    if B.near_ok(): d.polygon([(0, 722), (W, 722), (W, H), (0, H)], fill=mix(pal["gr"], (110, 150, 80), .45))
     B.palm(p, 90, 1000, 420, 24); B.palm(p, 1000, 1010, 340, -28)
     B.hut(p, 470, 985, 360)
-    for x in range(0, 1100, 70): p.line([x, 1020, x, 1120], (110, 72, 46), 9)
-    p.line([0, 1050, W, 1050], (110, 72, 46), 9); p.line([0, 1095, W, 1095], (110, 72, 46), 9)
+    if B.near_ok():
+        for x in range(0, 1100, 70): p.line([x, 1020, x, 1120], (110, 72, 46), 9)
+        p.line([0, 1050, W, 1050], (110, 72, 46), 9); p.line([0, 1095, W, 1095], (110, 72, 46), 9)
 LATAR["rumah_gubuk_halaman"] = _halaman
 def _town(p):
+    if not B.far_ok(): return
     for x in range(-30, 1100, 140):
         top = 540 + (x * 37) % 120; c = mix((150, 120, 100), (190, 160, 130), (x % 3) / 3.0)
         p.rect([x, top, x + 130, 745], fill=c, out=INK, w=3)
@@ -247,8 +253,9 @@ for _n in ("dermaga_siang", "dermaga_senja", "dermaga_kampung", "dermaga_kampung
 def _dari_geladak(d, p, pal, w):
     B.sky(d, pal); (B.stars(d) if pal["dark"] > .3 else None); B.sun(p, pal); B.clouds(p, pal, 2); B.hills(p, pal); B.sea(d, pal, 720, 930)
     B.planks(p, 930, 1085, col=(124, 82, 54))
-    p.rect([-20, 850, 1100, 872], fill=(96, 62, 42))
-    for x in range(30, 1100, 140): p.rect([x, 872, x + 16, 940], fill=(96, 62, 42))
+    if B.near_ok():
+        p.rect([-20, 850, 1100, 872], fill=(96, 62, 42))
+        for x in range(30, 1100, 140): p.rect([x, 872, x + 16, 940], fill=(96, 62, 42))
     B.pier(p, pal, 1100)
 LATAR["dermaga_dari_geladak"] = _dari_geladak
 LATAR["pelabuhan_kota_seberang"] = lambda d, p, pal, w: (_base(d, p, pal, ground=False, house=False, palms=False), _town(p), B.sea(d, pal, 740, 1095), B.pier(p, pal))
@@ -256,6 +263,7 @@ def _deck(d, p, pal, w):
     B.sky(d, pal); (B.stars(d) if pal["dark"] > .3 else None); B.sun(p, pal); B.clouds(p, pal, 2); B.sea(d, pal, 700, 1070); B.deck(p, pal)
 LATAR["geladak_kapal_megah"] = _deck
 def _storm(d, p, pal, w):
+    if not B.near_ok(): return
     st = (30, 34, 56); sb = (70, 76, 108)
     for y in range(0, 760): d.line([(0, y), (W, y)], fill=mix(st, sb, (y / 760.0) ** 1.4))
     for y in range(720, 1400): d.line([(0, y), (W, y)], fill=mix((24, 44, 72), (14, 28, 50), (y - 720) / 680.0))
@@ -266,6 +274,37 @@ def _storm(d, p, pal, w):
 LATAR["laut_badai"] = _storm
 LATAR["peta_sumbar_pin"] = lambda d, p, pal, w: B.map_bg(d, p, "sumbar")
 LATAR["peta_nusantara_penutup"] = lambda d, p, pal, w: B.map_bg(d, p, "nusantara")
+
+
+def _render_bg(name, waktu, ss, mode, rgba):
+    B.MODE = mode
+    try:
+        pal = B.PAL.get(waktu, B.PAL["siang"])
+        im = Image.new("RGBA" if rgba else "RGB", (W * ss, H * ss), (0, 0, 0, 0) if rgba else (0, 0, 0))
+        d = _ScaledDraw(ImageDraw.Draw(im), ss); p = Pen(im, ss)
+        fn = LATAR.get(name)
+        if fn is None: print("WARN latar tak dikenal:", name); fn = LATAR["pantai_air_manis_siang"]
+        fn(d, p, pal, waktu)
+    finally:
+        B.MODE = "all"
+    return im, pal
+
+
+def build_bg2(name, waktu, ss=2):
+    """Dua lapisan untuk paralaks 2.5D: far (RGB) dan near (RGBA transparan di atas horizon)."""
+    far, pal = _render_bg(name, waktu, ss, "far", False)
+    near, _ = _render_bg(name, waktu, ss, "near", True)
+    # kabut udara di kaki langit (lapisan jauh)
+    hz = 720 * ss; band = 200 * ss
+    g = Image.linear_gradient("L").resize((far.width, band)).point(lambda v: int(v * 0.5))
+    haze = Image.new("RGBA", (far.width, band), tuple(mix(pal["sb"], (255, 250, 240), .5)) + (0,)); haze.putalpha(g)
+    far = far.convert("RGBA"); far.alpha_composite(haze, (0, hz - band)); far = far.convert("RGB")
+    if pal["dark"]:
+        a = int(255 * pal["dark"])
+        far = Image.alpha_composite(far.convert("RGBA"), Image.new("RGBA", far.size, (10, 20, 60, a))).convert("RGB")
+        ov = Image.new("RGBA", near.size, (10, 20, 60, 255)); ov.putalpha(near.getchannel("A").point(lambda v: int(v * pal["dark"])))
+        near = Image.alpha_composite(near, ov)
+    return far, near
 
 
 def build_bg(name, waktu, ss=2):
