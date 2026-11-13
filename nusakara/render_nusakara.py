@@ -14,8 +14,8 @@ import lib_props as P
 HERE = os.path.dirname(os.path.abspath(__file__))
 FPS = 30
 PROPS = os.environ.get("PROPS_FILE", "work/props.json")
-SPOS = {"kiri": 250, "tengah": 440, "kanan": 620, "bawah": 330, "atas": 600}
-CAM = {"tutup": 1.32, "sedang": 1.14, "lebar": 1.0}
+SPOS = {"kiri": 250, "tengah": 540, "kanan": 830, "bawah": 440, "atas": 640}
+CAM = {"tutup": 1.45, "sedang": 1.28, "lebar": 1.12}
 TEAL = (31, 122, 99); MINT = (150, 226, 196)
 
 
@@ -60,7 +60,7 @@ class Show:
     # ---------- kamera ----------
     def camera(s, sc, tl, dur):
         z0 = CAM.get(sc.get("kamera", "sedang"), 1.14); g = sc.get("gerak", "diam_merayap"); k = min(1.0, tl / max(dur, 0.5))
-        k = k * k * (3 - 2 * k); cx, cy = 540.0, 840.0
+        k = k * k * (3 - 2 * k); cx = 540.0; cy = 840.0 + 65.0 / z0
         if g == "dorong_masuk": z = z0 * (1 + 0.12 * k)
         elif g == "geser_kanan": z = z0 * 1.05; cx = 540 + (-30 + 60 * k) * (1 if z0 > 1.02 else 0.4)
         else: z = z0 * (1 + 0.03 * k)
@@ -91,7 +91,7 @@ class Show:
             pos = tk.get("posisi", "tengah"); x = SPOS.get(pos, 540); fy = 1130; bh = 330; pose = tk.get("pose", "berdiri")
             if pos == "bawah": bh = 370; fy = 1190
             if pos == "atas": bh = 290; fy = 1010
-            fc = 1 if x < 440 else -1
+            fc = 1 if x < 540 else -1
             if n == 1 and pos == "tengah": fc = 1
             if pose in ("berjalan", "naik_kapal"): x += -90 + min(tl, 4) * 45
             if pose == "berlari": x += -150 + min(tl, 3) * 120; fc = 1
@@ -110,7 +110,7 @@ class Show:
         # Pak Nusa (maskot): tanpa kamera
         U = layer(2); pu = Pen(U, 2)
         mi = min(f, len(s.mouth) - 1); mv = s.mouth[mi] if s.mouth else 0.0
-        C.pak_nusa(pu, 790, 1425, 290, mouth=mv, t=T, wave=(T < 3.0 or i == len(s.sc) - 1), shock=("sting_tegang" in sc.get("sfx", [])), point=True)
+        C.pak_nusa(pu, 128, 1896, 290, mouth=mv, t=T, wave=(T < 3.0 or i == len(s.sc) - 1), shock=("sting_tegang" in sc.get("sfx", [])), point=True)
         base = Image.alpha_composite(base, U.resize((W, H), Image.LANCZOS))
         im = base.convert("RGB"); s.ui(im, i, T, sc)
         # transisi
@@ -121,36 +121,39 @@ class Show:
 
     # ---------- UI 2D ----------
     def ui(s, im, i, T, sc):
-        d = ImageDraw.Draw(im, "RGBA")
-        # panel judul krem (di bawah y=190 aman), memudar
-        pan = Image.new("RGBA", (W, 380), (0, 0, 0, 0)); pd = ImageDraw.Draw(pan)
-        for y in range(380): pd.line([(0, y), (W, y)], fill=(237, 235, 221, int(228 * (1 - (y / 380.0) ** 2.0))))
-        im.paste(pan, (0, 190), pan); d = ImageDraw.Draw(im, "RGBA")
-        # watermark
-        f = P.font(32); a, b = "NUSA", "KARA"; wa = d.textlength(a, font=f); wb = d.textlength(b, font=f)
-        tw = wa + wb + 34; x0 = (W - tw - 44) / 2 - 20; y0 = 232
-        d.rounded_rectangle([x0, y0, x0 + tw + 44, y0 + 60], radius=30, fill=(30, 38, 36)); d.text((x0 + 22, y0 + 8), a, font=f, fill=(255, 255, 255))
-        d.rounded_rectangle([x0 + 22 + wa + 6, y0 + 8, x0 + 22 + wa + 6 + wb + 16, y0 + 52], radius=10, fill=MINT); d.text((x0 + 22 + wa + 14, y0 + 8), b, font=f, fill=(24, 52, 44))
-        # label + judul
-        lab = " ".join(s.label.upper().replace("·", " · ")) if False else "   ".join(" ".join(w) for w in s.label.upper().split(" "))
-        d.text((60, 318), lab, font=P.font(21, True), fill=(84, 92, 86))
+        # layout mengikuti FAKTA UNIK: panel judul atas, watermark kanan bawah, subtitle tengah-bawah, maskot kiri bawah
+        pan = Image.new("RGBA", (W, 340), (0, 0, 0, 0)); pd = ImageDraw.Draw(pan)
+        for y in range(340):
+            t = y / 340.0; al = 247 - (247 - 217) * (t / 0.72) if t < 0.72 else 217 * (1 - (t - 0.72) / 0.28)
+            pd.line([(0, y), (W, y)], fill=(237, 235, 221, int(max(0, al))))
+        im.paste(pan, (0, 0), pan); d = ImageDraw.Draw(im, "RGBA")
+        lab = "  ".join(" ".join(w) for w in s.label.upper().split(" "))
+        d.text((W / 2, 82), lab, font=P.font(25, True), fill=(86, 101, 94), anchor="ms")
         s.heading_draw(d, s.heading[i])
-        # subtitle
+        # watermark NUSAKARA kanan bawah
+        f = P.font(36); a, b = "NUSA", "KARA"; wa = d.textlength(a, font=f); wb = d.textlength(b, font=f)
+        ph = 76; pw = wa + wb + 80; x0 = W - 36 - pw; y0 = 1806
+        d.rounded_rectangle([x0, y0, x0 + pw, y0 + ph], radius=38, fill=(21, 34, 31, 240))
+        d.text((x0 + 28, y0 + ph / 2 + 2), a, font=f, fill=(255, 255, 255), anchor="lm")
+        d.rounded_rectangle([x0 + 28 + wa - 6 + 6, y0 + 12, x0 + 28 + wa + 6 + wb + 18, y0 + ph - 12], radius=11, fill=(127, 224, 194))
+        d.text((x0 + 28 + wa + 15, y0 + ph / 2 + 2), b, font=f, fill=(21, 34, 31), anchor="lm")
         s.subtitle(im, i, T)
 
     def heading_draw(s, d, text):
         if not text: return
-        ft = P.font(58); toks = re.findall(r"\*[^*]+\*|[^\s*]+", text); lines = [[]]; wcur = 0
+        ft = P.font(58); toks = re.findall(r"\*[^*]+\*|[^\s*]+", text); sp = d.textlength(" ", font=ft); lines = [[]]; wcur = 0
         for tk in toks:
-            clean = tk.strip("*"); w = d.textlength(clean + " ", font=ft)
-            if wcur + w > 840 and lines[-1]: lines.append([]); wcur = 0
-            lines[-1].append(tk); wcur += w
-        for li, ln in enumerate(lines[:2]):
-            x = 60
-            for tk in ln:
-                kw = tk.startswith("*"); clean = tk.strip("*")
-                if re.fullmatch(r"[^\w]+", clean): x -= d.textlength(" ", font=ft)
-                d.text((x, 352 + li * 68), clean, font=ft, fill=TEAL if kw else (36, 44, 42)); x += d.textlength(clean + " ", font=ft)
+            clean = tk.strip("*"); w = d.textlength(clean, font=ft); add = (0 if (re.fullmatch(r"[^\w]+", clean) and lines[-1]) else (sp if lines[-1] else 0)) + w
+            if wcur + add > 940 and lines[-1]: lines.append([tk]); wcur = w
+            else: lines[-1].append(tk); wcur += add
+        lines = lines[:2]; y = 190 if len(lines) == 1 else 160
+        for ln in lines:
+            ws = [d.textlength(t.strip("*"), font=ft) for t in ln]; pn = [1 if (k and re.fullmatch(r"[^\w]+", t.strip("*"))) else 0 for k, t in enumerate(ln)]; tw = sum(ws) + sp * (len(ln) - 1 - sum(pn)); x = W / 2 - tw / 2
+            for t, w, q in zip(ln, ws, pn):
+                clean = t.strip("*"); kw = t.startswith("*")
+                if q: x -= sp
+                d.text((x, y), clean, font=ft, fill=TEAL if kw else (20, 24, 27), anchor="ls"); x += w + sp
+            y += 74
 
     def subtitle(s, im, i, T):
         phr = s.phr[i]
@@ -160,33 +163,32 @@ class Show:
             nxt = phr[k + 1][0]["start"] if k + 1 < len(phr) else 1e9
             if ph[0]["start"] - 0.05 <= T < min(nxt - 0.03, ph[-1]["end"] + 0.7) or (ph[0]["start"] - 0.05 <= T and nxt > T and T < ph[-1]["end"] + 0.7): cur = ph
         if cur is None: return
-        f = P.font(44); d = ImageDraw.Draw(im, "RGBA"); sp = 12; maxw = 520
+        f = P.font(50); d = ImageDraw.Draw(im, "RGBA"); sp = d.textlength(" ", font=f); maxw = 800
         lines = [[]]; wc = 0
         for w in cur:
-            ww = d.textlength(w["w"], font=f)
-            if wc + ww > maxw and lines[-1]: lines.append([]); wc = 0
-            lines[-1].append(w); wc += ww + sp
-        lines = lines[:2]; cxs = 350
+            ww = d.textlength(w["w"], font=f); add = (sp if lines[-1] else 0) + ww
+            if wc + add > maxw and lines[-1]: lines.append([w]); wc = ww
+            else: lines[-1].append(w); wc += add
+        lines = lines[:2]
         wid = [sum(d.textlength(w["w"], font=f) for w in ln) + sp * (len(ln) - 1) for ln in lines]
-        bw = max(wid) + 60; hh = 70 * len(lines) + 20; by0 = 1422 - hh
+        LH = 72; bw = max(wid) + 70; bh = len(lines) * LH + 30; cxs = W / 2; cys = 1522; by0 = cys - bh / 2
         cap = Image.new("RGBA", im.size, (0, 0, 0, 0)); cd = ImageDraw.Draw(cap)
-        cd.rounded_rectangle([cxs - bw / 2, by0, cxs + bw / 2, by0 + hh], radius=28, fill=(30, 58, 52, 230)); im.paste(cap, (0, 0), cap)
-        d = ImageDraw.Draw(im, "RGBA")
+        cd.rounded_rectangle([cxs - bw / 2, by0, cxs + bw / 2, by0 + bh], radius=30, fill=(30, 58, 52, 237)); im.paste(cap, (0, 0), cap)
         active = None
         for w in cur:
             if w["start"] - 0.06 <= T: active = w
         for li, ln in enumerate(lines):
-            x = cxs - wid[li] / 2.0; y = by0 + 12 + li * 70
+            x = cxs - wid[li] / 2.0; yc = by0 + 15 + li * LH + LH / 2
             for w in ln:
                 ww = d.textlength(w["w"], font=f)
-                if w is active: s.batik(im, x - 8, y + 4, ww + 16, 56)
-                d = ImageDraw.Draw(im, "RGBA"); d.text((x, y), w["w"], font=f, fill=(255, 255, 255)); x += ww + sp
+                if w is active: s.batik(im, x - 10, yc - 36, ww + 20, 70)
+                d = ImageDraw.Draw(im, "RGBA"); d.text((x, yc), w["w"], font=f, fill=(255, 255, 255), anchor="lm"); x += ww + sp
 
     def batik(s, im, x, y, w, h):
         w = int(w); h = int(h); tile = Image.new("RGBA", (w, h), (0, 0, 0, 0)); td = ImageDraw.Draw(tile)
         td.rounded_rectangle([0, 0, w - 1, h - 1], radius=12, fill=MINT + (70,)); c = 14
         for ci in range(-1, w // c + 2):
-            for ri in range(-1, 5):
+            for ri in range(-1, 7):
                 px = ci * c + (c / 2 if ri % 2 else 0); py = ri * c * 0.9 + 4
                 for ex, ey in ((-4, 0), (4, 0), (0, -4), (0, 4)): td.ellipse([px + ex - 5, py + ey - 5, px + ex + 5, py + ey + 5], outline=MINT + (170,), width=1)
         mask = Image.new("L", (w, h), 0); ImageDraw.Draw(mask).rounded_rectangle([0, 0, w - 1, h - 1], radius=12, fill=255)

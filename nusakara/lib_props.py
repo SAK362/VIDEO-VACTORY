@@ -118,8 +118,8 @@ def kapal_batu(p, t, c):
     p.poly([700, 1150, 720, 1090, 800, 1060, 880, 1080, 960, 1040, 1010, 1100, 1000, 1150], fill=(120, 118, 126), out=INK, w=4)
     p.poly([760, 1060, 780, 960, 800, 1060], fill=(110, 108, 116), out=INK, w=3)
 def plakat(p, t, c):
-    p.rect([230, 1000, 270, 1230], fill=(110, 72, 46), out=INK, w=3); p.rect([70, 850, 430, 1010], fill=(236, 214, 160), out=INK, w=4, r=10)
-    text(p, 250, 902, "LEGENDA", 40, (84, 50, 34)); text(p, 250, 962, "CERITA RAKYAT", 28, (84, 50, 34))
+    p.rect([300, 1000, 340, 1230], fill=(110, 72, 46), out=INK, w=3); p.rect([140, 850, 500, 1010], fill=(236, 214, 160), out=INK, w=4, r=10)
+    text(p, 320, 902, "LEGENDA", 40, (84, 50, 34)); text(p, 320, 962, "CERITA RAKYAT", 28, (84, 50, 34))
 def pin_tanya(p, t, c):
     for i, (x, y) in enumerate(((330, 820), (700, 900), (840, 640), (260, 1130))):
         s = 1 + 0.12 * math.sin(t * 4 + i)
@@ -228,7 +228,7 @@ def _pier(d, p, pal, w):
 for _n in ("dermaga_siang", "dermaga_senja", "dermaga_kampung", "dermaga_kampung_ramai", "dermaga_dari_geladak"): LATAR[_n] = _pier
 LATAR["pelabuhan_kota_seberang"] = lambda d, p, pal, w: (_base(d, p, pal, ground=False, house=False, palms=False), [p.rect([x, 560 + (x * 37) % 120, x + 130, 740], fill=mix((150, 120, 100), (190, 160, 130), (x % 3) / 3.0), out=INK, w=3) for x in range(-30, 1100, 140)], B.sea(d, pal, 740, 1110), B.pier(p, pal))
 def _deck(d, p, pal, w):
-    B.sky(d, pal); (B.stars(d) if pal["dark"] > .3 else None); B.sun(p, pal); B.clouds(p, pal, 2); B.sea(d, pal, 700, 940); B.deck(p, pal)
+    B.sky(d, pal); (B.stars(d) if pal["dark"] > .3 else None); B.sun(p, pal); B.clouds(p, pal, 2); B.sea(d, pal, 700, 1070); B.deck(p, pal)
 LATAR["geladak_kapal_megah"] = _deck
 def _storm(d, p, pal, w):
     st = (30, 34, 56); sb = (70, 76, 108)
