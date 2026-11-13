@@ -2,11 +2,12 @@
 import json, os, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRIM = {'box', 'cyl', 'sph', 'link', 'path', 'flow', 'group'}
-ENVS = {'outdoor', 'rail', 'road', 'room', 'stage', 'studio', 'sea', 'space', 'night'}
+ENVS = {'outdoor', 'rail', 'road', 'room', 'stage', 'studio', 'sea', 'space', 'night', 'underground'}
 
 
 def comps():
-    return set(re.findall(r"^reg\('([a-z_]+)'", open(os.path.join(HERE, 'engine', 'lib.js'), encoding='utf-8').read(), re.M))
+    import glob
+    return set(n for f in glob.glob(os.path.join(HERE, 'engine', 'lib*.js')) for n in re.findall(r"^reg\('([a-z_]+)'", open(f, encoding='utf-8').read(), re.M))
 
 
 def check(d, nsent=None):

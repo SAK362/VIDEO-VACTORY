@@ -1,0 +1,516 @@
+{
+ "title": "Mesin Bor Terowongan",
+ "scenes": [
+  {
+   "sent": [
+    0,
+    1
+   ],
+   "env": "underground",
+   "kicker": "MESIN BOR TEROWONGAN",
+   "heading": "Tembus *gunung batu* tanpa ledakan",
+   "objs": [
+    {
+     "t": "rockmass",
+     "id": "rm",
+     "nobb": true,
+     "mountain": true
+    },
+    {
+     "t": "tbm",
+     "id": "m"
+    }
+   ],
+   "cam": {
+    "c": [
+     -4,
+     1,
+     -1
+    ],
+    "r": 34,
+    "a": [
+     38,
+     22
+    ],
+    "h": [
+     5,
+     8
+    ],
+    "fov": 48
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    2,
+    4
+   ],
+   "env": "underground",
+   "kicker": "BEDAH",
+   "heading": "Bedah mesin *bor terowongan*",
+   "objs": [
+    {
+     "t": "rockmass",
+     "id": "rm",
+     "nobb": true
+    },
+    {
+     "t": "tbm",
+     "id": "m"
+    }
+   ],
+   "cam": {
+    "c": [
+     -4.5,
+     -0.5,
+     0
+    ],
+    "r": 24,
+    "a": [
+     34,
+     24
+    ],
+    "h": [
+     5,
+     7
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "m.face",
+     "text": "kepala pemotong"
+    },
+    {
+     "at": "m.motor",
+     "text": "motor penggerak"
+    },
+    {
+     "at": "m.jack",
+     "text": "dongkrak hidrolik"
+    },
+    {
+     "at": "m.arm",
+     "text": "lengan erector"
+    },
+    {
+     "at": "m.belt",
+     "text": "ban berjalan"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    5,
+    6
+   ],
+   "env": "underground",
+   "kicker": "KEPALA POTONG",
+   "heading": "Penuh *cakram baja* di depan",
+   "objs": [
+    {
+     "t": "tbm_head",
+     "id": "h",
+     "w": 0.5,
+     "p": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     0.3,
+     0,
+     0
+    ],
+    "r": 15,
+    "a": [
+     58,
+     80
+    ],
+    "h": [
+     2.5,
+     1.5
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "h.disc",
+     "text": "disc cutter"
+    },
+    {
+     "at": "h.rim",
+     "text": "kepala pemotong"
+    }
+   ],
+   "card": {
+    "big": "43 cm",
+    "small": "diameter cakram"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    7,
+    9
+   ],
+   "env": "underground",
+   "kicker": "LANGKAH 1",
+   "heading": "Batu *dipecah*, bukan digerus",
+   "objs": [
+    {
+     "t": "cut_demo",
+     "id": "d",
+     "p": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     0.4,
+     0
+    ],
+    "r": 12,
+    "a": [
+     68,
+     52
+    ],
+    "h": [
+     4.5,
+     5.5
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "d.disc",
+     "text": "disc cutter menggelinding"
+    },
+    {
+     "at": "d.groove",
+     "text": "dua alur"
+    },
+    {
+     "at": "d.chip",
+     "text": "serpihan terlepas"
+    },
+    {
+     "at": "d.force",
+     "text": "gaya tekan"
+    }
+   ],
+   "tag": "DI VIDEO DIPERLAMBAT · ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    10,
+    11
+   ],
+   "env": "underground",
+   "kicker": "LANGKAH 2",
+   "heading": "Serpihan *diangkut* ban berjalan",
+   "objs": [
+    {
+     "t": "rockmass",
+     "id": "rm",
+     "nobb": true
+    },
+    {
+     "t": "tbm",
+     "id": "m"
+    },
+    {
+     "t": "flow",
+     "pts": [
+      [
+       0.35,
+       -1.9,
+       0.25
+      ],
+      [
+       -1.4,
+       -2.2,
+       0.0
+      ]
+     ],
+     "n": 7,
+     "r": 0.17,
+     "c": "#a29b8d",
+     "w": 0.8,
+     "nobb": true
+    }
+   ],
+   "cam": {
+    "c": [
+     -4.5,
+     -1.5,
+     0
+    ],
+    "r": 15,
+    "a": [
+     30,
+     40
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "m.belt",
+     "text": "ban berjalan"
+    },
+    {
+     "at": "m.face",
+     "text": "celah serpihan"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    12,
+    13
+   ],
+   "env": "underground",
+   "kicker": "LANGKAH 3",
+   "heading": "*Dongkrak* mendorong maju",
+   "objs": [
+    {
+     "t": "rockmass",
+     "id": "rm",
+     "nobb": true
+    },
+    {
+     "t": "tbm",
+     "id": "m"
+    }
+   ],
+   "cam": {
+    "c": [
+     -7.5,
+     0,
+     0
+    ],
+    "r": 14,
+    "a": [
+     28,
+     40
+    ],
+    "h": [
+     3.5,
+     4.5
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "m.jack",
+     "text": "dongkrak hidrolik"
+    },
+    {
+     "at": "m.ring",
+     "text": "cincin beton"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    14,
+    14
+   ],
+   "env": "underground",
+   "kicker": "LANGKAH 4",
+   "heading": "Robot *memasang* segmen beton",
+   "objs": [
+    {
+     "t": "ring_build",
+     "id": "rb",
+     "p": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     -0.5,
+     0,
+     0
+    ],
+    "r": 11,
+    "a": [
+     -45,
+     -62
+    ],
+    "h": [
+     2.5,
+     2.5
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "rb.placing",
+     "text": "segmen baru"
+    },
+    {
+     "at": "rb.arm",
+     "text": "lengan erector"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    15,
+    15
+   ],
+   "env": "underground",
+   "kicker": "LANGKAH 5",
+   "heading": "Satu cincin, *banyak segmen*",
+   "objs": [
+    {
+     "t": "seg_ring",
+     "id": "sr",
+     "ex": [
+      0.6,
+      2.6
+     ],
+     "p": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     0,
+     0
+    ],
+    "r": 14,
+    "a": [
+     -35,
+     -52
+    ],
+    "h": [
+     3.5,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "sr.seg",
+     "text": "segmen beton"
+    },
+    {
+     "at": "sr.key",
+     "text": "segmen kunci"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    16,
+    17
+   ],
+   "env": "underground",
+   "kicker": "LANGKAH 6",
+   "heading": "Celah *diisi* perekat cair",
+   "objs": [
+    {
+     "t": "rockmass",
+     "id": "rm",
+     "nobb": true
+    },
+    {
+     "t": "tbm",
+     "id": "m"
+    }
+   ],
+   "cam": {
+    "c": [
+     -10,
+     0,
+     0
+    ],
+    "r": 15,
+    "a": [
+     -30,
+     -55
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "m.grout",
+     "text": "grout (perekat cair)"
+    },
+    {
+     "at": "m.ring",
+     "text": "cincin beton"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    18,
+    18
+   ],
+   "env": "underground",
+   "kicker": "JADI...",
+   "heading": "Cincin demi cincin, *terowongan jadi*",
+   "objs": [
+    {
+     "t": "rockmass",
+     "id": "rm",
+     "nobb": true,
+     "mountain": true
+    },
+    {
+     "t": "tbm",
+     "id": "m"
+    }
+   ],
+   "cam": {
+    "c": [
+     -4,
+     1,
+     -1
+    ],
+    "r": 34,
+    "a": [
+     22,
+     40
+    ],
+    "h": [
+     8,
+     5
+    ],
+    "fov": 48
+   },
+   "ajak": "Follow & tulis topik berikutnya di komentar"
+  }
+ ]
+}

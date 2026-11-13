@@ -33,6 +33,7 @@ const ENV = {
   studio: {sky: ['#e8eef2', '#f6f3ea'], clouds: false, fog: [0.93, 0.95, 0.95], fn: 60, ff: 260, shadowY: 0, build() { flat('#e9eceb'); }},
   sea: {sky: ['#7fb2e0', '#e6f2f7'], fog: [0.8, 0.9, 0.95], fn: 30, ff: 200, shadowY: null, build() { box(0, -0.4, 0, 600, 0.8, 600, '#3d86b8', {ns: 1}); for (let i = 0; i < 40; i++) { const R = rng(i + 3); box(-60 + R() * 120, 0.02 + 0.03 * Math.sin(TT * 1.3 + i), -40 + R() * 90, 3 + R() * 4, 0.04, 0.3, '#cfe8f5', {ns: 1}); } }},
   space: {sky: ['#05060f', '#1a1f3a'], clouds: false, stars: true, fog: [0.03, 0.04, 0.08], fn: 500, ff: 900, shadowY: null, build() {}},
+  underground: {sky: ['#1f1b18', '#4a3f35'], clouds: false, fog: [0.19, 0.16, 0.13], fn: 40, ff: 160, shadowY: null, build() {}},
   night: {sky: ['#0b1230', '#2a3a66'], clouds: false, stars: true, fog: [0.12, 0.16, 0.3], fn: 40, ff: 200, shadowY: 0, build() { flat('#2e4a3a'); }}
 };
 function bgFor(env) {

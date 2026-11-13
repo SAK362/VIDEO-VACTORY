@@ -17,7 +17,8 @@ def load_sents():
 
 
 def comp_doc():
-    src = open(os.path.join(HERE, 'engine', 'lib.js'), encoding='utf-8').read()
+    import glob
+    src = '\n'.join(open(f, encoding='utf-8').read() for f in sorted(glob.glob(os.path.join(HERE, 'engine', 'lib*.js'))))
     return '\n'.join('- `%s`: %s' % (a, b) for a, b in re.findall(r"^reg\('([a-z_]+)', '([^']*)'", src, re.M))
 
 
