@@ -142,3 +142,16 @@ def map_bg(d, p, kind):
                     [180, 860, 330, 880, 300, 1040, 160, 1000], [640, 380, 900, 360, 980, 520, 760, 560],
                     [260, 1180, 520, 1160, 560, 1280, 330, 1320], [700, 1120, 960, 1100, 1000, 1240, 760, 1260]):
             blob(p, pts, land)
+
+
+# ---- mode lapisan (2.5D): "all" = satu gambar, "far" = langit/bukit/matahari/awan, "near" = laut/darat/rumah/dermaga ----
+MODE = "all"
+def _wrap(name, modes):
+    fn = globals()[name]
+    def w(*a, **k):
+        if MODE in modes: return fn(*a, **k)
+    w.__name__ = name; globals()[name] = w
+for _n in ("sky", "stars", "sun", "clouds", "hills"): _wrap(_n, ("all", "far"))
+for _n in ("sea", "beach", "palm", "gonjong", "hut", "pier", "deck", "planks", "map_bg"): _wrap(_n, ("all", "near"))
+def near_ok(): return MODE != "far"
+def far_ok(): return MODE != "near"
