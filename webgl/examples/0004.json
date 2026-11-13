@@ -82,7 +82,7 @@
   {
    "sent": [
     5,
-    6
+    5
    ],
    "env": "candi",
    "kicker": "BATU",
@@ -124,6 +124,53 @@
   },
   {
    "sent": [
+    6,
+    6
+   ],
+   "env": "studio",
+   "kicker": "SAMBUNGAN",
+   "heading": "Tonjolan, lekukan, *ekor burung*",
+   "objs": [
+    {
+     "t": "batu_kunci",
+     "id": "k"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     2.5,
+     0
+    ],
+    "r": 26,
+    "a": [
+     12,
+     24
+    ],
+    "h": [
+     6,
+     7
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "k.knob",
+     "text": "tonjolan"
+    },
+    {
+     "at": "k.lekuk",
+     "text": "lekukan"
+    },
+    {
+     "at": "k.ekor",
+     "text": "ekor burung"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
     7,
     8
    ],
@@ -159,7 +206,7 @@
   {
    "sent": [
     9,
-    11
+    10
    ],
    "env": "candi",
    "kicker": "PANCURAN",
@@ -203,8 +250,51 @@
   },
   {
    "sent": [
+    11,
+    11
+   ],
+   "env": "studio",
+   "kicker": "MAKARA",
+   "heading": "Diukir berbentuk *makara*",
+   "objs": [
+    {
+     "t": "makara",
+     "id": "m"
+    }
+   ],
+   "cam": {
+    "c": [
+     1.8,
+     2.4,
+     0
+    ],
+    "r": 17,
+    "a": [
+     -12,
+     4
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "m.makara",
+     "text": "kepala makara"
+    },
+    {
+     "at": "m.air",
+     "text": "air keluar dari mulut"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
     12,
-    13
+    12
    ],
    "env": "studio",
    "kicker": "ALIRAN AIR",
@@ -250,51 +340,131 @@
   },
   {
    "sent": [
-    14,
-    15
+    13,
+    13
    ],
-   "env": "studio",
-   "kicker": "MASALAH LAMA",
-   "heading": "Air meresap, *dinding bergeser*",
+   "env": "candi",
+   "kicker": "ALIRAN AIR",
+   "heading": "Air *tidak menumpuk*",
    "objs": [
     {
-     "t": "boro_drain",
-     "id": "d"
+     "t": "borobudur",
+     "id": "b",
+     "rain": 1,
+     "flow": 1
     }
    ],
    "cam": {
     "c": [
-     -3,
-     2.5,
+     40,
+     8,
+     40
+    ],
+    "r": 70,
+    "a": [
+     40,
+     28
+    ],
+    "h": [
+     8,
+     12
+    ],
+    "fov": 48
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    14,
+    14
+   ],
+   "env": "studio",
+   "kicker": "MASALAH LAMA",
+   "heading": "Tanah jenuh air *mendorong dinding*",
+   "objs": [
+    {
+     "t": "tanah_isian",
+     "id": "ti"
+    }
+   ],
+   "cam": {
+    "c": [
+     2,
+     3,
      0
     ],
     "r": 24,
     "a": [
-     -12,
-     -24
+     14,
+     26
     ],
     "h": [
-     2,
-     3
+     3,
+     4
     ],
     "fov": 48
    },
    "labels": [
     {
-     "at": "d.core",
+     "at": "ti.tanah",
      "text": "tanah isian jenuh air"
+    },
+    {
+     "at": "ti.dinding",
+     "text": "dinding miring"
+    },
+    {
+     "at": "ti.retak",
+     "text": "retak"
     }
    ],
    "tag": "ILUSTRASI DISEDERHANAKAN"
   },
   {
    "sent": [
+    15,
+    15
+   ],
+   "env": "candi",
+   "kicker": "PEMUGARAN",
+   "heading": "Pemugaran *bersama UNESCO*",
+   "objs": [
+    {
+     "t": "borobudur",
+     "id": "b"
+    }
+   ],
+   "cam": {
+    "c": [
+     30,
+     16,
+     30
+    ],
+    "r": 86,
+    "a": [
+     40,
+     26
+    ],
+    "h": [
+     12,
+     18
+    ],
+    "fov": 48
+   },
+   "card": {
+    "big": "1970-an–1980-an",
+    "small": "pemugaran besar bersama UNESCO"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
     16,
-    17
+    16
    ],
    "env": "studio",
    "kicker": "PEMUGARAN",
-   "heading": "Beton, pipa, *lapisan kedap*",
+   "heading": "Lantai *beton* tiap teras",
    "objs": [
     {
      "t": "boro_drain",
@@ -324,16 +494,55 @@
      "text": "lantai beton"
     },
     {
+     "at": "d.stone",
+     "text": "batu andesit"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    17,
+    17
+   ],
+   "env": "studio",
+   "kicker": "PEMUGARAN",
+   "heading": "Pipa, lapisan *kedap* dan penyaring",
+   "objs": [
+    {
+     "t": "boro_drain",
+     "id": "d"
+    }
+   ],
+   "cam": {
+    "c": [
+     2,
+     3.0,
+     0
+    ],
+    "r": 22,
+    "a": [
+     -12,
+     6
+    ],
+    "h": [
+     2,
+     3
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "d.pipe",
+     "text": "pipa"
+    },
+    {
      "at": "d.seal",
      "text": "lapisan kedap air"
     },
     {
      "at": "d.filter",
      "text": "lapisan penyaring"
-    },
-    {
-     "at": "d.pipe",
-     "text": "pipa"
     }
    ],
    "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"

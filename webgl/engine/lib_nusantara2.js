@@ -227,12 +227,12 @@ reg('pinisi', 'kapal pinisi Bulukumba (lambung palari bergaya Tana Beru): lunas,
     const can = '#f2ebd8', can2 = '#e8dfc6', sc = (t) => 1 - (1 - sf) * (1 - t);
     [[mfx, mfh, 0.05, 0], [mmx, mmh, -0.05, 2]].forEach(([x, h, z, ph]) => {
       const yb = deckY + 0.9, yg = deckY + h * 0.5, Lb = 5.6 * sf, gx = x - 4.2 * sf, gy = yg + 2.3 * sf; // layar gaff berdiri
-      polyStrips([[x - 0.15, yb], [x - Lb, yb], [x - Lb, gy - 0.2], [x - 0.15, yg + 0.1]], 24, z + 0.3, can, {alt: can2, belly: 0.5 * sf, ph, flut: 0.05});
+      polyStrips([[x - 0.15, yb], [x - Lb, yb], [x - Lb, gy - 0.2], [x - 0.15, yg + 0.1]], 60, z + 0.3, can, {alt: can2, belly: 0.5 * sf, ph, flut: 0.05});
       link([x, yg + 0.1, z + 0.25], [gx - 0.2, gy, z + 0.25], 0.07, '#4a2f1c', {seg: 5}); link([x, yb, z + 0.25], [x - Lb, yb, z + 0.25], 0.07, '#4a2f1c', {seg: 5}); // gaff & boom
-      const ty = deckY + h * 0.97; polyStrips([[x - 0.15, yg + 0.35], [x - 3.6 * sf, gy + 0.2], [x - 0.15, ty]], 10, z + 0.3, can, {alt: can2, belly: 0.4 * sf, ph: ph + 1, flut: 0.08}); // topsail
+      const ty = deckY + h * 0.97; polyStrips([[x - 0.15, yg + 0.35], [x - 3.6 * sf, gy + 0.2], [x - 0.15, ty]], 30, z + 0.3, can, {alt: can2, belly: 0.4 * sf, ph: ph + 1, flut: 0.08}); // topsail
     });
     for (let k = 0; k < 3; k++) { const hx = mfx + 0.1, hy = deckY + mfh * (0.93 - k * 0.1), tx = lerpv(bsT[0], bsE[0], 0.45 + k * 0.28), ty2 = lerpv(bsT[1], bsE[1], 0.45 + k * 0.28), cx = mfx + 0.7 + k * 0.2, cy = deckY + 3.4 + k * 1.2;
-      polyStrips([[hx, hy], [tx, ty2 + 0.1], [cx + 0.5, cy]], 9, 0.08, can2, {alt: can, belly: 0.55 * sf, ph: k * 1.7, flut: 0.12}); if (k === 1) anc('jib', [(hx + tx) / 2, (hy + ty2) / 2, 0.3]); }
+      polyStrips([[hx, hy], [tx, ty2 + 0.1], [cx + 0.5, cy]], 32, 0.08, can2, {alt: can, belly: 0.55 * sf, ph: k * 1.7, flut: 0.12}); if (k === 1) anc('jib', [(hx + tx) / 2, (hy + ty2) / 2, 0.3]); }
     anc('sail', [mmx - 2.8, deckY + 4.3, 0.5]);
     for (const [x, h, c] of [[mfx, mfh, '#c93a2e'], [mmx, mmh, '#1f4aa0']]) polyStrips([[x, deckY + h], [x - 1.6, deckY + h - 0.15 + Math.sin(TT * 4) * 0.1], [x, deckY + h - 0.5]], 6, 0.1, c, {flut: 0.25}); // bendera
   }

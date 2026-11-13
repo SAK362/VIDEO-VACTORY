@@ -4,7 +4,7 @@
   {
    "sent": [
     0,
-    2
+    1
    ],
    "env": "sea",
    "kicker": "KAPAL PINISI",
@@ -36,33 +36,47 @@
   },
   {
    "sent": [
-    3,
-    5
+    2,
+    2
    ],
-   "env": "sea",
-   "kicker": "TANA BERU",
-   "heading": "Dibuat *turun-temurun*",
+   "env": "pantai",
+   "kicker": "BEDAH",
+   "heading": "Kita *bedah* cara membuatnya",
    "objs": [
     {
      "t": "pinisi",
      "id": "p",
-     "build": 1
+     "p": [
+      0,
+      0.05,
+      0
+     ],
+     "build": 3.6
+    },
+    {
+     "t": "galangan",
+     "id": "gl",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
     }
    ],
    "cam": {
     "c": [
      0,
      3,
-     0
+     2
     ],
-    "r": 38,
+    "r": 52,
     "a": [
-     26,
-     16
+     20,
+     32
     ],
     "h": [
-     2,
-     4
+     6,
+     8
     ],
     "fov": 48
    },
@@ -70,17 +84,191 @@
   },
   {
    "sent": [
+    3,
+    3
+   ],
+   "env": "pantai",
+   "kicker": "TANA BERU",
+   "heading": "Pusatnya di *Tana Beru*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "p": [
+      0,
+      0.05,
+      0
+     ],
+     "build": 3
+    },
+    {
+     "t": "galangan",
+     "id": "gl",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     3,
+     2
+    ],
+    "r": 58,
+    "a": [
+     -20,
+     -8
+    ],
+    "h": [
+     6,
+     8
+    ],
+    "fov": 48
+   },
+   "card": {
+    "big": "Tana Beru",
+    "small": "Bulukumba, Sulawesi Selatan"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    4,
+    4
+   ],
+   "env": "pantai",
+   "kicker": "TURUN-TEMURUN",
+   "heading": "Tanpa *cetak biru*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "p": [
+      0,
+      0.05,
+      0
+     ],
+     "build": 3
+    },
+    {
+     "t": "galangan",
+     "id": "gl",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     2,
+     2,
+     3
+    ],
+    "r": 30,
+    "a": [
+     20,
+     36
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "gl.tukang",
+     "text": "pengrajin bekerja tanpa gambar"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    5,
+    5
+   ],
+   "env": "pantai",
+   "kicker": "PANRITA LOPI",
+   "heading": "Dipimpin *panrita lopi*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "p": [
+      0,
+      0.05,
+      0
+     ],
+     "build": 3
+    },
+    {
+     "t": "galangan",
+     "id": "gl",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     -4,
+     2.4,
+     6
+    ],
+    "r": 24,
+    "a": [
+     -10,
+     6
+    ],
+    "h": [
+     2,
+     3
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "gl.panrita",
+     "text": "panrita lopi (ahli kapal)"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
     6,
     6
    ],
-   "env": "sea",
+   "env": "pantai",
    "kicker": "LANGKAH 1",
    "heading": "Mulai dari *lunas*",
    "objs": [
     {
      "t": "pinisi",
      "id": "p",
+     "p": [
+      0,
+      0.05,
+      0
+     ],
      "build": 1
+    },
+    {
+     "t": "galangan",
+     "id": "gl",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
     }
    ],
    "cam": {
@@ -113,14 +301,28 @@
     7,
     7
    ],
-   "env": "sea",
+   "env": "pantai",
    "kicker": "LANGKAH 2",
    "heading": "Lalu *gading* sebagai rangka",
    "objs": [
     {
      "t": "pinisi",
      "id": "p",
+     "p": [
+      0,
+      0.05,
+      0
+     ],
      "build": 2
+    },
+    {
+     "t": "galangan",
+     "id": "gl",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
     }
    ],
    "cam": {
@@ -151,16 +353,30 @@
   {
    "sent": [
     8,
-    9
+    8
    ],
-   "env": "sea",
+   "env": "pantai",
    "kicker": "LANGKAH 3",
    "heading": "*Papan kayu* membentuk lambung",
    "objs": [
     {
      "t": "pinisi",
      "id": "p",
+     "p": [
+      0,
+      0.05,
+      0
+     ],
      "build": 3
+    },
+    {
+     "t": "galangan",
+     "id": "gl",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
     }
    ],
    "cam": {
@@ -190,17 +406,78 @@
   },
   {
    "sent": [
-    10,
-    12
+    9,
+    9
    ],
-   "env": "sea",
+   "env": "pantai",
+   "kicker": "KAYU",
+   "heading": "Besi dan bitti, *mudah dilengkungkan*",
+   "objs": [
+    {
+     "t": "kayu_lengkung",
+     "id": "y"
+    }
+   ],
+   "cam": {
+    "c": [
+     -1,
+     1.5,
+     0
+    ],
+    "r": 36,
+    "a": [
+     20,
+     32
+    ],
+    "h": [
+     11,
+     13
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "y.besi",
+     "text": "kayu besi"
+    },
+    {
+     "at": "y.bitti",
+     "text": "kayu bitti"
+    },
+    {
+     "at": "y.lengkung",
+     "text": "papan dilengkungkan"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    10,
+    10
+   ],
+   "env": "pantai",
    "kicker": "SAMBUNGAN",
    "heading": "*Pasak kayu*, bukan paku",
    "objs": [
     {
      "t": "pinisi",
      "id": "p",
+     "p": [
+      0,
+      0.05,
+      0
+     ],
      "build": 4
+    },
+    {
+     "t": "galangan",
+     "id": "gl",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
     }
    ],
    "cam": {
@@ -230,7 +507,144 @@
   },
   {
    "sent": [
+    11,
+    11
+   ],
+   "env": "studio",
+   "kicker": "DEMPUL",
+   "heading": "Sela papan *didempul*",
+   "objs": [
+    {
+     "t": "dempul",
+     "id": "dm"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     2.2,
+     0
+    ],
+    "r": 34,
+    "a": [
+     10,
+     20
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "dm.celah",
+     "text": "sela belum didempul"
+    },
+    {
+     "at": "dm.dempul",
+     "text": "dempul"
+    },
+    {
+     "at": "dm.palu",
+     "text": "pahat & palu"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    12,
+    12
+   ],
+   "env": "studio",
+   "kicker": "PANISI",
+   "heading": "*Panisi* berarti menyisipkan",
+   "objs": [
+    {
+     "t": "dempul",
+     "id": "dm"
+    }
+   ],
+   "cam": {
+    "c": [
+     -2,
+     1.0,
+     0
+    ],
+    "r": 22,
+    "a": [
+     16,
+     26
+    ],
+    "h": [
+     2,
+     3
+    ],
+    "fov": 48
+   },
+   "card": {
+    "big": "panisi",
+    "small": "menyisipkan (bahasa Bugis)"
+   },
+   "labels": [
+    {
+     "at": "dm.dempul",
+     "text": "serat disisipkan"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
     13,
+    13
+   ],
+   "env": "pantai",
+   "kicker": "LUNAS",
+   "heading": "Lunas dipotong *menghadap timur laut*",
+   "objs": [
+    {
+     "t": "kompas_lunas",
+     "id": "c"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     0.5,
+     0
+    ],
+    "r": 24,
+    "a": [
+     20,
+     34
+    ],
+    "h": [
+     8,
+     10
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "c.timurlaut",
+     "text": "timur laut"
+    },
+    {
+     "at": "c.utara",
+     "text": "utara"
+    },
+    {
+     "at": "c.lunas",
+     "text": "lunas"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    14,
     14
    ],
    "env": "sea",
@@ -283,10 +697,133 @@
   {
    "sent": [
     15,
+    15
+   ],
+   "env": "pantai",
+   "kicker": "MACCERA LOPI",
+   "heading": "Upacara *maccera lopi*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "p": [
+      0,
+      0.05,
+      0
+     ],
+     "build": 3
+    },
+    {
+     "t": "upacara_lopi",
+     "id": "u",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     3,
+     6
+    ],
+    "r": 46,
+    "a": [
+     -24,
+     -10
+    ],
+    "h": [
+     5,
+     7
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "u.pemimpin",
+     "text": "pemimpin upacara"
+    },
+    {
+     "at": "u.sesaji",
+     "text": "sesaji"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    16,
+    16
+   ],
+   "env": "pantai",
+   "kicker": "WAKTU",
+   "heading": "Satu sampai *dua tahun*",
+   "objs": [
+    {
+     "t": "pinisi",
+     "id": "p",
+     "p": [
+      0,
+      0.05,
+      0
+     ],
+     "build": [
+      0,
+      4.2
+     ]
+    },
+    {
+     "t": "galangan",
+     "id": "gl",
+     "p": [
+      0,
+      -0.95,
+      0
+     ]
+    },
+    {
+     "t": "jam",
+     "id": "j",
+     "p": [
+      -22,
+      9,
+      -12
+     ],
+     "sz": 4
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     3,
+     2
+    ],
+    "r": 60,
+    "a": [
+     24,
+     36
+    ],
+    "h": [
+     8,
+     10
+    ],
+    "fov": 48
+   },
+   "card": {
+    "big": "1–2 tahun",
+    "small": "waktu membuat satu kapal"
+   },
+   "tag": "DIPERCEPAT · ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    17,
     17
    ],
    "env": "sea",
-   "kicker": "WARISAN",
+   "kicker": "UNESCO",
    "heading": "Diakui *UNESCO*",
    "objs": [
     {
@@ -313,7 +850,7 @@
     "fov": 48
    },
    "card": {
-    "big": "2017",
+    "big": "7 Des 2017",
     "small": "warisan budaya dunia UNESCO"
    },
    "tag": "ILUSTRASI DISEDERHANAKAN"
