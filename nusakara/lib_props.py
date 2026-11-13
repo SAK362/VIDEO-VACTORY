@@ -32,13 +32,16 @@ def ship(p, x, y, w, t=0.0, gold=False, rock=0.0, parts=0.0):
 
 # --------------- PROPS (p, t, c) ---------------
 def batu(p, t, c):
-    cx, y = 430, 1150
+    cx, y, k = 700, 1150, 1.3
+    X = lambda v: cx + (v - 430) * k
+    Y = lambda v: y + (v - 1150) * k
     gray = (130, 128, 136)
-    p.poly([cx - 190, y, cx - 170, y - 70, cx - 90, y - 120, cx - 20, y - 190, cx + 60, y - 200, cx + 110, y - 150, cx + 90, y - 90, cx + 160, y - 60, cx + 200, y], fill=gray, out=INK, w=4)
-    p.ell([cx + 20, y - 262, cx + 110, y - 180], fill=(144, 142, 150), out=INK, w=4)           # kepala bersujud
-    p.poly([cx - 20, y - 190, cx + 40, y - 150, cx + 120, y - 150, cx + 90, y - 100], fill=(112, 110, 120))
-    p.line([cx - 150, y - 60, cx - 60, y - 100], (160, 158, 166), 5); p.line([cx + 40, y - 190, cx + 98, y - 160], (160, 158, 166), 5)
-    p.ell([cx - 230, y - 6, cx + 230, y + 22], fill=(120, 100, 76))
+    P = lambda pts: [q for i in range(0, len(pts), 2) for q in (X(pts[i]), Y(pts[i + 1]))]
+    p.ell([X(190), Y(1150 - 12), X(670), Y(1150 + 26)], fill=(0, 0, 0, 40))
+    p.poly(P([240, 1150, 260, 1080, 340, 1030, 410, 960, 490, 950, 540, 1000, 520, 1060, 590, 1090, 630, 1150]), fill=gray, out=INK, w=4)
+    p.ell([X(450), Y(888), X(540), Y(970)], fill=(144, 142, 150), out=INK, w=4)
+    p.poly(P([410, 960, 470, 1000, 550, 1000, 520, 1050]), fill=(112, 110, 120))
+    p.line([X(280), Y(1090), X(370), Y(1050)], (160, 158, 166), 5); p.line([X(470), Y(960), X(528), Y(990)], (160, 158, 166), 5)
 
 
 def pin(p, t, c):
@@ -50,29 +53,30 @@ def pin(p, t, c):
     text(p, 420, y - 20, "PADANG", 36, (60, 30, 30), "lm")
 
 
-def rumah_gubuk(p, t, c): B.hut(p, 600, 1150, 300)
+def rumah_gubuk(p, t, c): pass
 def perahu(p, t, c):
-    x, y = 150, 1050 + math.sin(t * 1.4) * 4
-    p.poly([x, y, x + 240, y, x + 200, y + 50, x + 40, y + 50], fill=(150, 100, 60), out=INK, w=3)
-    p.line([x + 120, y, x + 120, y - 130], (90, 58, 40), 5)
-    p.poly([x + 124, y - 126, x + 200, y - 30, x + 124, y - 20], fill=(250, 240, 220), out=INK, w=3)
+    u = 1.7; x, y = 60, 955 + math.sin(t * 1.4) * 4
+    p.poly([x, y, x + 240 * u, y, x + 200 * u, y + 50 * u, x + 40 * u, y + 50 * u], fill=(150, 100, 60), out=INK, w=3)
+    p.line([x + 120 * u, y, x + 120 * u, y - 130 * u], (90, 58, 40), 6)
+    p.poly([x + 124 * u, y - 126 * u, x + 200 * u, y - 30 * u, x + 124 * u, y - 20 * u], fill=(250, 240, 220), out=INK, w=3)
+    p.ell([x - 10, y + 50 * u - 8, x + 240 * u + 10, y + 50 * u + 14], fill=(255, 255, 255, 70))
 
 
 def jala(p, t, c):
-    for i in range(8): p.line([700 + i * 36, 860, 690 + i * 38, 1090], (90, 90, 80), 2)
-    for j in range(7): p.line([690, 880 + j * 32, 1000, 880 + j * 32], (90, 90, 80), 2)
-    p.line([690, 860, 1000, 860], (110, 74, 44), 7); p.line([690, 860, 690, 1150], (110, 74, 44), 7); p.line([1000, 860, 1000, 1150], (110, 74, 44), 7)
+    for i in range(8): p.line([700 + i * 36, 900, 690 + i * 38, 1070], (90, 90, 80), 2)
+    for j in range(6): p.line([690, 910 + j * 28, 1000, 910 + j * 28], (90, 90, 80), 2)
+    p.line([690, 890, 1000, 890], (110, 74, 44), 7); p.line([690, 890, 690, 1085], (110, 74, 44), 7); p.line([1000, 890, 1000, 1085], (110, 74, 44), 7)
 
 
 def ikan_jemur(p, t, c):
-    p.line([100, 1000, 400, 1000], (110, 74, 44), 8); p.line([110, 1000, 110, 1170], (110, 74, 44), 8); p.line([390, 1000, 390, 1170], (110, 74, 44), 8)
-    for i in range(5):
-        x = 150 + i * 52
-        p.poly([x, 1010, x + 20, 1050, x, 1100, x - 20, 1050], fill=(170, 180, 190), out=INK, w=2.5)
+    p.line([60, 930, 470, 930], (110, 74, 44), 9); p.line([70, 930, 70, 1110], (110, 74, 44), 9); p.line([460, 930, 460, 1110], (110, 74, 44), 9)
+    for i in range(6):
+        x = 120 + i * 62
+        p.poly([x, 940, x + 20, 985, x, 1040, x - 20, 985], fill=(170, 180, 190), out=INK, w=2.5)
 
 
 def ember(p, t, c):
-    p.poly([450, 1100, 520, 1100, 510, 1160, 460, 1160], fill=(120, 140, 160), out=INK, w=3); p.arc([450, 1060, 520, 1130], 180, 360, INK, 3)
+    p.poly([620, 1160, 700, 1160, 690, 1225, 630, 1225], fill=(120, 140, 160), out=INK, w=3); p.arc([620, 1120, 700, 1200], 180, 360, INK, 3)
 
 
 def kapal_horizon(p, t, c):
@@ -81,16 +85,16 @@ def kapal_horizon(p, t, c):
     p.line([x + 36, y, x + 36, y - 34], (90, 58, 40), 3); p.poly([x + 38, y - 32, x + 60, y - 4, x + 38, y - 2], fill=(250, 240, 220), out=INK, w=2)
 
 
-def kapal_besar(p, t, c): ship(p, 480, 960, 480, t)
-def kapal_megah(p, t, c): ship(p, 300, 1000, 640, t, gold=True)
+def kapal_besar(p, t, c): ship(p, 280, 880, 800, t)
+def kapal_megah(p, t, c): ship(p, 160, 900, 760, t, gold=True)
 def kapal_menjauh(p, t, c):
     x = 560 + t * 70; ship(p, x, 860, 260 - t * 6, t)
 def peti(p, t, c):
-    for i, (x, y, w) in enumerate(((120, 1120, 150), (280, 1120, 130), (200, 1030, 130))):
+    for i, (x, y, w) in enumerate(((60, 1130, 150), (230, 1130, 130), (140, 1040, 130))):
         p.rect([x, y, x + w, y + 90], fill=(170, 116, 70), out=INK, w=3); p.line([x, y + 45, x + w, y + 45], (110, 70, 44), 4); p.line([x + w / 2, y, x + w / 2, y + 90], (110, 70, 44), 4)
 def koin(p, t, c):
     for i in range(9):
-        x = 640 + (i % 5) * 34 + (i // 5) * 17; y = 1140 - (i // 5) * 18
+        x = 640 + (i % 5) * 34 + (i // 5) * 17; y = 1170 - (i // 5) * 18
         p.ell([x, y, x + 34, y + 16], fill=(244, 196, 60), out=INK, w=2)
 def jangkar(p, t, c):
     y = 1060 - min(1.0, t / 2.0) * 120; x = 200
@@ -108,17 +112,18 @@ def petir_prop(p, t, c):
         p.poly([x, 330, x - 40, 560, x + 6, 560, x - 56, 840, x + 70, 520, x + 14, 520, x + 50, 330], fill=(255, 250, 200), out=(255, 255, 255), w=4)
 def kapal_hancur(p, t, c):
     k = min(1.0, t / 1.8)
-    ship(p, 330 - 30 * k, 980 + 20 * k, 330, t, rock=k)
-    p.poly([660 + 40 * k, 990 + 80 * k, 840 + 50 * k, 1000 + 100 * k, 800 + 50 * k, 1060 + 110 * k, 700 + 40 * k, 1060 + 100 * k], fill=(150, 60, 48), out=INK, w=3)
+    ship(p, 250 - 30 * k, 1040 + 20 * k, 520, t, rock=k)
+    p.poly([800 + 40 * k, 1070 + 80 * k, 960 + 50 * k, 1080 + 100 * k, 920 + 50 * k, 1140 + 110 * k, 820 + 40 * k, 1140 + 100 * k], fill=(150, 60, 48), out=INK, w=3)
 def serpihan(p, t, c):
     for i, (x, y) in enumerate(((220, 1120), (520, 1160), (820, 1110), (380, 1190))):
         yy = y + math.sin(t * 2 + i) * 6; a = math.sin(t + i) * 12
         p.poly([x - 50, yy - 8 + a, x + 50, yy - 8 - a, x + 50, yy + 8 - a, x - 50, yy + 8 + a], fill=(140, 92, 60), out=INK, w=2.5)
 def kapal_batu(p, t, c):
-    p.poly([700, 1150, 720, 1090, 800, 1060, 880, 1080, 960, 1040, 1010, 1100, 1000, 1150], fill=(120, 118, 126), out=INK, w=4)
-    p.poly([760, 1060, 780, 960, 800, 1060], fill=(110, 108, 116), out=INK, w=3)
+    o = 60
+    p.poly([700 + o, 1170, 720 + o, 1110, 800 + o, 1080, 880 + o, 1100, 960 + o, 1060, 1010 + o, 1120, 1000 + o, 1170], fill=(120, 118, 126), out=INK, w=4)
+    p.poly([760 + o, 1080, 780 + o, 980, 800 + o, 1080], fill=(110, 108, 116), out=INK, w=3)
 def plakat(p, t, c):
-    p.rect([300, 1000, 340, 1230], fill=(110, 72, 46), out=INK, w=3); p.rect([140, 850, 500, 1010], fill=(236, 214, 160), out=INK, w=4, r=10)
+    p.rect([300, 1000, 340, 1190], fill=(110, 72, 46), out=INK, w=3); p.rect([130, 850, 510, 1010], fill=(236, 214, 160), out=INK, w=4, r=10)
     text(p, 320, 902, "LEGENDA", 40, (84, 50, 34)); text(p, 320, 962, "CERITA RAKYAT", 28, (84, 50, 34))
 def pin_tanya(p, t, c):
     for i, (x, y) in enumerate(((330, 820), (700, 900), (840, 640), (260, 1130))):
@@ -210,7 +215,7 @@ def _base(d, p, pal, sea_=True, ground=True, house=True, palms=True, sunon=True,
     if horizon_hills: B.hills(p, pal)
     if sea_: B.sea(d, pal)
     if ground: B.beach(d, pal)
-    if house: B.gonjong(p, 20, 1170, 400)
+    if house: B.gonjong(p, -150, 1100, 500)
     if palms: B.palm(p, 980, 1280, 380, -30); B.palm(p, 470, 1300, 300, 24)
 
 @latar("pantai_air_manis_senja")
@@ -219,14 +224,34 @@ for _n in ("pantai_air_manis_pagi", "pantai_air_manis_siang"): LATAR[_n] = lambd
 LATAR["pantai_air_manis_senja"] = lambda d, p, pal, w: _base(d, p, pal)
 LATAR["tepi_pantai_siang"] = lambda d, p, pal, w: _base(d, p, pal, house=False, palms=False)
 LATAR["pantai_senja_ibu"] = lambda d, p, pal, w: _base(d, p, pal, house=True)
-LATAR["laut_menuju_pantai"] = lambda d, p, pal, w: (_base(d, p, pal, ground=False, house=False, palms=False), d.rectangle([0, 1189, W, H], fill=pal["sea2"]), B.palm(p, 920, 760, 120, -10))
-LATAR["kampung_nelayan_pagi"] = lambda d, p, pal, w: (_base(d, p, pal, house=False), B.hut(p, 40, 1150, 220), B.hut(p, 360, 1110, 160), B.hut(p, 740, 1140, 200))
-LATAR["rumah_gubuk_halaman"] = lambda d, p, pal, w: (B.sky(d, pal), B.sun(p, pal), B.clouds(p, pal, 2), B.hills(p, pal), d.polygon([(0, 760), (W, 760), (W, H), (0, H)], fill=mix(pal["gr"], (110, 150, 80), .45)), B.palm(p, 90, 1240, 420, 24), B.palm(p, 980, 1250, 340, -28),
-    [p.line([x, 1170, x, 1270], (110, 72, 46), 9) for x in range(0, 1100, 70)], p.line([0, 1195, W, 1195], (110, 72, 46), 9), p.line([0, 1240, W, 1240], (110, 72, 46), 9))
+LATAR["laut_menuju_pantai"] = lambda d, p, pal, w: (_base(d, p, pal, ground=False, house=False, palms=False), d.rectangle([0, 1099, W, H], fill=pal["sea2"]), B.palm(p, 920, 760, 120, -10))
+LATAR["kampung_nelayan_pagi"] = lambda d, p, pal, w: (_base(d, p, pal, house=False), B.hut(p, 380, 1045, 260), B.hut(p, -60, 1095, 420), B.hut(p, 700, 1085, 380))
+def _halaman(d, p, pal, w):
+    B.sky(d, pal); B.sun(p, pal); B.clouds(p, pal, 2); B.hills(p, pal)
+    d.polygon([(0, 760), (W, 760), (W, H), (0, H)], fill=mix(pal["gr"], (110, 150, 80), .45))
+    B.palm(p, 90, 1000, 420, 24); B.palm(p, 1000, 1010, 340, -28)
+    B.hut(p, 470, 985, 360)
+    for x in range(0, 1100, 70): p.line([x, 1020, x, 1120], (110, 72, 46), 9)
+    p.line([0, 1050, W, 1050], (110, 72, 46), 9); p.line([0, 1095, W, 1095], (110, 72, 46), 9)
+LATAR["rumah_gubuk_halaman"] = _halaman
+def _town(p):
+    for x in range(-30, 1100, 140):
+        top = 540 + (x * 37) % 120; c = mix((150, 120, 100), (190, 160, 130), (x % 3) / 3.0)
+        p.rect([x, top, x + 130, 745], fill=c, out=INK, w=3)
+        p.poly([x - 8, top, x + 65, top - 40, x + 138, top], fill=mix(c, (150, 70, 52), .6), out=INK, w=3)
+        for r in range(int((745 - top - 20) // 56)):
+            for q in range(3): p.rect([x + 16 + q * 38, top + 20 + r * 56, x + 40 + q * 38, top + 50 + r * 56], fill=(250, 226, 150), out=INK, w=2)
 def _pier(d, p, pal, w):
-    B.sky(d, pal); (B.stars(d) if pal["dark"] > .3 else None); B.sun(p, pal); B.clouds(p, pal, 2); B.hills(p, pal); B.sea(d, pal, 720, 1110); B.pier(p, pal)
-for _n in ("dermaga_siang", "dermaga_senja", "dermaga_kampung", "dermaga_kampung_ramai", "dermaga_dari_geladak"): LATAR[_n] = _pier
-LATAR["pelabuhan_kota_seberang"] = lambda d, p, pal, w: (_base(d, p, pal, ground=False, house=False, palms=False), [p.rect([x, 560 + (x * 37) % 120, x + 130, 740], fill=mix((150, 120, 100), (190, 160, 130), (x % 3) / 3.0), out=INK, w=3) for x in range(-30, 1100, 140)], B.sea(d, pal, 740, 1110), B.pier(p, pal))
+    B.sky(d, pal); (B.stars(d) if pal["dark"] > .3 else None); B.sun(p, pal); B.clouds(p, pal, 2); B.hills(p, pal); B.sea(d, pal, 720, 1095); B.pier(p, pal)
+for _n in ("dermaga_siang", "dermaga_senja", "dermaga_kampung", "dermaga_kampung_ramai"): LATAR[_n] = _pier
+def _dari_geladak(d, p, pal, w):
+    B.sky(d, pal); (B.stars(d) if pal["dark"] > .3 else None); B.sun(p, pal); B.clouds(p, pal, 2); B.hills(p, pal); B.sea(d, pal, 720, 930)
+    B.planks(p, 930, 1085, col=(124, 82, 54))
+    p.rect([-20, 850, 1100, 872], fill=(96, 62, 42))
+    for x in range(30, 1100, 140): p.rect([x, 872, x + 16, 940], fill=(96, 62, 42))
+    B.pier(p, pal, 1100)
+LATAR["dermaga_dari_geladak"] = _dari_geladak
+LATAR["pelabuhan_kota_seberang"] = lambda d, p, pal, w: (_base(d, p, pal, ground=False, house=False, palms=False), _town(p), B.sea(d, pal, 740, 1095), B.pier(p, pal))
 def _deck(d, p, pal, w):
     B.sky(d, pal); (B.stars(d) if pal["dark"] > .3 else None); B.sun(p, pal); B.clouds(p, pal, 2); B.sea(d, pal, 700, 1070); B.deck(p, pal)
 LATAR["geladak_kapal_megah"] = _deck
