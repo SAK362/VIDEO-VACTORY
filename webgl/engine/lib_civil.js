@@ -28,6 +28,8 @@ function drawRing(Rc, th, w, n, o = {}) { // cincin segmen beton: n segmen + 1 s
     if (s.k === o.skip && !s.key) return;
     const m = Math.max(2, Math.ceil((s.a1 - s.a0) / 0.14)), d = (s.a1 - s.a0) / m, mid = (s.a0 + s.a1) / 2, off = ex * (s.key ? 2.2 : 1.6), col = s.key ? '#e08a2c' : cols[s.k % 2];
     for (let i = 0; i < m; i++) { const am = s.a0 + (i + 0.5) * d; pushM(RX(am)); box(0, Rc + off, 0, w, th, Rc * d * 1.05, col); popM(); }
+    for (const e of [s.a0, s.a1]) { pushM(RX(e)); box(0, Rc + off, 0, w * 1.01, th * 1.04, 0.045, '#15181c'); popM(); }
+    if (s.k === 0) { pushM(RX(s.a1)); anc('gasket', [0, Rc + th / 2 + off, 0]); popM(); }
     pushM(RX(mid)); for (const e of [s.a0, s.a1]) { pushM(RX(e - mid)); sph(0, Rc + off - th * 0.5 - 0.01, 0, 0.07, '#2b2f34', {seg: 6, ns: 1}); sph(0, Rc + off + th * 0.5 + 0.01, 0, 0.07, '#2b2f34', {seg: 6, ns: 1}); popM(); } popM();
   });
 }
@@ -72,7 +74,7 @@ reg('erector', 'lengan robot erector merah di belakang perisai: berputar, memanj
   pushM(RX(a)); link([0, 0.3, 0], [0, 1.3, 0], 0.22, '#d9433a', {seg: 10}); link([0, 1.3, 0], [0, tip, 0], 0.15, '#ff8c80', {seg: 8}); box(0, tip + 0.1, 0, 0.9, 0.2, 1.2, '#d9433a'); anc('arm', [0, (1.3 + tip) / 2, 0]); popM();
 });
 
-reg('seg_ring', 'satu cincin terowongan dari segmen beton prefabrikasi (enam segmen abu + satu segmen kunci oranye di atas) berbaut. Sumbu x. param: rad(3.0 radius luar), th(0.45), w(1.4), n(6), ex (peledakan 0-1 atau [t0,t1] waktu adegan). jangkar: key, seg, ring', (o) => {
+reg('seg_ring', 'satu cincin terowongan dari segmen beton prefabrikasi (enam segmen abu + satu segmen kunci oranye di atas) berbaut. Sumbu x. param: rad(3.0 radius luar), th(0.45), w(1.4), n(6), ex (peledakan 0-1 atau [t0,t1] waktu adegan). jangkar: key, seg, ring, gasket (karet perapat di sambungan antar segmen)', (o) => {
   const Rc = (o.rad || 3.0) - (o.th || 0.45) / 2, th = o.th || 0.45; let ex = 0; if (Array.isArray(o.ex)) ex = sm((TS - o.ex[0]) / Math.max(0.3, o.ex[1] - o.ex[0])); else if (o.ex) ex = o.ex;
   drawRing(Rc, th, o.w || 1.4, o.n || 6, {ex});
   anc('key', [0, Rc + th / 2 + ex * 2.2, 0]); pushM(RX(2.6)); anc('seg', [0, Rc + th / 2 + ex * 1.6, 0]); popM(); anc('ring', [0, -(Rc + th / 2), 0]);

@@ -43,7 +43,7 @@
   {
    "sent": [
     2,
-    4
+    3
    ],
    "env": "underground",
    "kicker": "BEDAH",
@@ -102,7 +102,7 @@
   },
   {
    "sent": [
-    5,
+    4,
     6
    ],
    "env": "underground",
@@ -149,7 +149,7 @@
    ],
    "card": {
     "big": "43 cm",
-    "small": "diameter cakram"
+    "small": "diameter cakram yang umum"
    },
    "tag": "ILUSTRASI DISEDERHANAKAN"
   },
@@ -196,7 +196,7 @@
     },
     {
      "at": "d.groove",
-     "text": "dua alur"
+     "text": "alur"
     },
     {
      "at": "d.chip",
@@ -332,7 +332,7 @@
    ],
    "env": "underground",
    "kicker": "LANGKAH 4",
-   "heading": "Robot *memasang* segmen beton",
+   "heading": "Erector *memasang* segmen beton",
    "objs": [
     {
      "t": "ring_build",
@@ -376,11 +376,11 @@
   {
    "sent": [
     15,
-    15
+    16
    ],
    "env": "underground",
    "kicker": "LANGKAH 5",
-   "heading": "Satu cincin, *banyak segmen*",
+   "heading": "Satu cincin, *lima sampai tujuh* segmen",
    "objs": [
     {
      "t": "seg_ring",
@@ -402,7 +402,7 @@
      0,
      0
     ],
-    "r": 14,
+    "r": 23,
     "a": [
      -35,
      -52
@@ -420,19 +420,23 @@
     },
     {
      "at": "sr.key",
-     "text": "segmen kunci"
+     "text": "segmen kunci (baji)"
+    },
+    {
+     "at": "sr.gasket",
+     "text": "karet perapat"
     }
    ],
    "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
   },
   {
    "sent": [
-    16,
+    17,
     17
    ],
    "env": "underground",
    "kicker": "LANGKAH 6",
-   "heading": "Celah *diisi* perekat cair",
+   "heading": "Celah *diisi* grout",
    "objs": [
     {
      "t": "rockmass",
@@ -476,7 +480,7 @@
   {
    "sent": [
     18,
-    18
+    19
    ],
    "env": "underground",
    "kicker": "JADI...",
