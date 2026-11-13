@@ -1,0 +1,276 @@
+{
+ "title": "Mesin Bor Terowongan",
+ "engine": "rt",
+ "scenes": [
+  {
+   "sent": [
+    0,
+    1
+   ],
+   "kicker": "MESIN BOR TEROWONGAN",
+   "heading": "Tembus *gunung batu* tanpa ledakan",
+   "cam": [
+    "wide",
+    "wide"
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    2,
+    2
+   ],
+   "kicker": "BEDAH",
+   "heading": "Bedah mesin *bor terowongan*",
+   "cam": [
+    "wide",
+    "wide"
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL",
+   "labels": [
+    {
+     "at": "rim",
+     "text": "kepala pemotong",
+     "dx": -330,
+     "dy": -260
+    },
+    {
+     "at": "motor",
+     "text": "motor penggerak",
+     "dx": -430,
+     "dy": -170
+    },
+    {
+     "at": "jack",
+     "text": "dongkrak hidrolik",
+     "dx": -130,
+     "dy": 60
+    },
+    {
+     "at": "arm",
+     "text": "lengan erector",
+     "dx": -210,
+     "dy": -210
+    },
+    {
+     "at": "belt",
+     "text": "ban berjalan",
+     "dx": -100,
+     "dy": 70
+    }
+   ]
+  },
+  {
+   "sent": [
+    3,
+    5
+   ],
+   "kicker": "KEPALA POTONG",
+   "heading": "Penuh *cakram baja* di depan",
+   "cam": [
+    "head",
+    "front"
+   ],
+   "labels": [
+    {
+     "at": "disc",
+     "text": "disc cutter",
+     "dx": -300,
+     "dy": 120
+    },
+    {
+     "at": "rim",
+     "text": "kepala pemotong",
+     "dx": -330,
+     "dy": -120
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    6,
+    6
+   ],
+   "kicker": "DISC CUTTER",
+   "heading": "Satu cakram, *tekanan besar*",
+   "cam": [
+    "front",
+    "front2"
+   ],
+   "card": {
+    "big": "43 cm",
+    "small": "diameter cakram yang umum"
+   },
+   "labels": [
+    {
+     "at": "disc",
+     "text": "disc cutter",
+     "dx": -120,
+     "dy": -380
+    }
+   ]
+  },
+  {
+   "sent": [
+    7,
+    9
+   ],
+   "kicker": "CARA KERJA",
+   "heading": "Batu *dipecah*, bukan digerus",
+   "cam": [
+    "front2",
+    "front"
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    10,
+    11
+   ],
+   "kicker": "PEMBUANGAN",
+   "heading": "Serpihan *keluar* lewat ban berjalan",
+   "cam": [
+    "muck",
+    "wide"
+   ],
+   "labels": [
+    {
+     "at": "screw",
+     "text": "ulir pengangkut",
+     "dx": -250,
+     "dy": -170
+    },
+    {
+     "at": "belt",
+     "text": "ban berjalan",
+     "dx": -60,
+     "dy": 90
+    }
+   ]
+  },
+  {
+   "sent": [
+    12,
+    13
+   ],
+   "kicker": "DORONGAN",
+   "heading": "Maju didorong *dongkrak hidrolik*",
+   "cam": [
+    "head",
+    "head"
+   ],
+   "labels": [
+    {
+     "at": "jack",
+     "text": "dongkrak hidrolik",
+     "dx": -30,
+     "dy": -300
+    },
+    {
+     "at": "shield",
+     "text": "perisai baja",
+     "dx": 20,
+     "dy": 40
+    }
+   ]
+  },
+  {
+   "sent": [
+    14,
+    14
+   ],
+   "kicker": "PEMASANGAN",
+   "heading": "Lengan *erector* memasang segmen",
+   "cam": [
+    "erector",
+    "erector"
+   ],
+   "labels": [
+    {
+     "at": "arm",
+     "text": "lengan erector",
+     "dx": -250,
+     "dy": 160
+    },
+    {
+     "at": "seg",
+     "text": "segmen beton",
+     "dx": -60,
+     "dy": -30
+    }
+   ]
+  },
+  {
+   "sent": [
+    15,
+    16
+   ],
+   "kicker": "CINCIN BETON",
+   "heading": "Satu cincin, *beberapa segmen*",
+   "cam": [
+    "erector",
+    "erector"
+   ],
+   "card": {
+    "big": "5-7",
+    "small": "segmen per cincin"
+   },
+   "labels": [
+    {
+     "at": "seg",
+     "text": "segmen kunci",
+     "dx": -100,
+     "dy": 120
+    }
+   ]
+  },
+  {
+   "sent": [
+    17,
+    17
+   ],
+   "kicker": "PENGISIAN",
+   "heading": "Celah diisi *grout*",
+   "cam": [
+    "erector",
+    "erector"
+   ],
+   "labels": [
+    {
+     "at": "grout",
+     "text": "grout",
+     "dx": -100,
+     "dy": 120
+    }
+   ]
+  },
+  {
+   "sent": [
+    18,
+    18
+   ],
+   "kicker": "JADI...",
+   "heading": "Cincin demi *cincin*",
+   "cam": [
+    "erector",
+    "wide"
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    19,
+    19
+   ],
+   "kicker": "FAKTA UNIK",
+   "heading": "Topik *berikutnya*?",
+   "cam": [
+    "wide",
+    "wide"
+   ],
+   "ajak": "Follow & tulis topik berikutnya di komentar"
+  }
+ ]
+}

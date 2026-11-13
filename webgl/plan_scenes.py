@@ -79,6 +79,11 @@ def main():
             p = json.load(open(pj, encoding='utf-8')); title = title or p.get('title', '')
             if p.get('engine') == 'diesel':
                 open(os.path.join(HERE, 'engine.txt'), 'w').write('engine_diesel.html'); print('mesin lama (diesel) dipakai'); return
+            import glob
+            for sf in sorted(glob.glob(os.path.join(HERE, 'rt', 'specs', '*.json'))):
+                sp = json.load(open(sf, encoding='utf-8'))
+                if p.get('engine') == 'rt' and p.get('spec_id') == os.path.basename(sf)[:-5] or (title and sp.get('title', '').lower() == title.lower()) or str(p.get('no', p.get('project', ''))) == os.path.basename(sf)[:-5]:
+                    open(os.path.join(HERE, 'engine.txt'), 'w').write('rt/index.html'); print('mesin realistis (rt):', os.path.basename(sf)); return emit(sp, out)
             if p.get('spec'): d = p['spec']; print('spec dari props.json'); return emit(d, out)
             break
     sents = load_sents(); n = len(sents); d = None
