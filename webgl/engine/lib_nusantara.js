@@ -183,3 +183,18 @@ reg('rute_hsr', 'peta rute Jakarta-Bandung: garis rute dengan 4 stasiun dan titi
   path(pts, 0.18, '#3f7fd0', {seg: 6}); const nm = ['halim', 'karawang', 'padalarang', 'tegalluar']; pts.forEach((p, i) => { cyl(p[0], 0.5, p[2], 0.9, 0.6, '#ffffff', {seg: 14}); cyl(p[0], 0.82, p[2], 0.6, 0.12, i % 2 ? '#d94b3d' : '#f2c21c', {seg: 14}); anc(nm[i], [p[0], 1.0, p[2]]); });
   const k = fr(TT * 0.12); sph(...along(pts, k).map((v, i) => i === 1 ? 0.9 : v), 0.5, '#d94b3d', {e: 0.3}); anc('kereta', along(pts, k).map((v, i) => i === 1 ? 1.6 : v));
 });
+
+// ===== LINGKUNGAN: bukit jauh, pohon cincin, burung, sawah =====
+function palm(x, z, h, seed) { // pohon kelapa: batang melengkung + pelepah berayun
+  const R = rng(seed || 1), lean = (R() - 0.5) * 0.5; let px = x, py = 0, pz = z;
+  const n = 6; for (let i = 0; i < n; i++) { const nx = px + lean * h / n * 0.6, ny = py + h / n, nz = pz; link([px, py, pz], [nx, ny, nz], 0.28 - i * 0.025, i % 2 ? '#8a6a45' : '#7d5f3d', {seg: 6, ns: i < 3 ? 0 : 1}); px = nx; py = ny; pz = nz; }
+  for (let k = 0; k < 8; k++) { const a = k / 8 * 6.283 + R(), sw = Math.sin(TT * 1.3 + k + seed) * 0.12, L = h * 0.42; const m = [px + Math.cos(a) * L * 0.55, py + L * 0.18 - 0.1 + sw * L * 0.3, pz + Math.sin(a) * L * 0.55], e = [px + Math.cos(a) * L, py - L * 0.2 + sw * L * 0.4, pz + Math.sin(a) * L]; link([px, py, pz], m, 0.07, '#3f7a35', {seg: 4, ns: 1}); link(m, e, 0.05, '#4f9140', {seg: 4, ns: 1}); }
+}
+function broadTree(x, z, h, col) { cyl(x, h * 0.2, z, h * 0.05 + 0.1, h * 0.4, '#6b4c33', {seg: 6, ns: 1}); sph(x, h * 0.62, z, h * 0.32, col || '#3f8a45', {seg: 8, ns: 1}); sph(x + h * 0.18, h * 0.5, z + h * 0.08, h * 0.24, '#4c9a4c', {seg: 7, ns: 1}); }
+function farRing(seed, rmin, rmax, n, o = {}) {
+  const R = rng(seed); for (let i = 0; i < n; i++) { const a = R() * 6.283, r = rmin + R() * (rmax - rmin), x = Math.cos(a) * r, z = Math.sin(a) * r; if (o.palm && R() < o.palm) palm(x, z, 9 + R() * 5, i + seed); else broadTree(x, z, 6 + R() * 6, ['#3f8a45', '#4c9a4c', '#35783c'][i % 3]); }
+}
+function hillRing(seed, r, cols, o = {}) { const R = rng(seed); for (let i = 0; i < (o.n || 16); i++) { const a = i / (o.n || 16) * 6.283 + R() * 0.2, rr = r * (0.9 + R() * 0.3), w = 130 + R() * 90, h = (o.h || 40) * (0.35 + 0.5 * R()); cyl(Math.cos(a) * rr, h / 2 - 2, Math.sin(a) * rr, w * 0.5, h, cols[i % cols.length], {rt: 0.38, rb: 1, seg: 10, ns: 1}); } }
+function birds(n, seed, o = {}) { const R = rng(seed || 4); for (let i = 0; i < n; i++) { const sp = 6 + R() * 5, ph = R() * 200, x = ((TT * sp + ph * 7) % 240) - 120, z = -60 + R() * 120, y = (o.y || 22) + R() * 14 + Math.sin(TT * 0.6 + i) * 1.5, w = Math.sin(TT * 9 + i) * 0.6; for (const s of [-1, 1]) { pushM(T(x, y, z)); pushM(RX(s * w)); box(0, 0, s * 0.6, 0.35, 0.05, 1.2, '#2c2f33', {ns: 1}); popM(); popM(); } box(x, y, z, 0.5, 0.12, 0.14, '#2c2f33', {ns: 1}); } }
+function paddy(seed, x0, x1, z0, z1, step, o = {}) { const R = rng(seed); for (let x = x0; x < x1; x += step) for (let z = z0; z < z1; z += step) { if (o.hole && x + step > o.hole[0] && x < o.hole[1] && z + step > o.hole[2] && z < o.hole[3]) continue; const c = ['#86b255', '#7aa64d', '#93ba5a', '#6f9c49', '#a4c065'][Math.floor(R() * 5)]; box(x + step / 2, 0.015, z + step / 2, step * 0.94, 0.03, step * 0.94, c, {ns: 1}); } }
+function volcano(x, z, h, w) { cyl(x, h / 2 - 2, z, w * 0.5, h, '#6f7f93', {rt: 0.06, rb: 1, seg: 14, ns: 1}); cyl(x, h * 0.62, z, w * 0.2, h * 0.5, '#8795a6', {rt: 0.05, rb: 1, seg: 10, ns: 1}); for (let k = 0; k < 6; k++) { const f = fr(TT * 0.05 + k / 6); sph(x + f * 14, h + f * 22, z + 2, 5 + f * 9, '#e6ebf0', {seg: 8, ns: 1, glass: true}); } }

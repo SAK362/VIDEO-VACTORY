@@ -6,7 +6,7 @@
     0,
     2
    ],
-   "env": "outdoor",
+   "env": "kampung",
    "kicker": "RUMAH GADANG",
    "heading": "Berdiri saat gempa, *tanpa paku*",
    "objs": [
@@ -19,17 +19,17 @@
    "cam": {
     "c": [
      0,
-     3,
+     4,
      0
     ],
-    "r": 40,
+    "r": 52,
     "a": [
-     24,
-     14
+     22,
+     12
     ],
     "h": [
-     3,
-     5
+     4,
+     6
     ],
     "fov": 48
    },
@@ -40,7 +40,7 @@
     3,
     4
    ],
-   "env": "outdoor",
+   "env": "kampung",
    "kicker": "RUMAH PANGGUNG",
    "heading": "Rumah *panggung* berkolong",
    "objs": [
@@ -52,17 +52,17 @@
    "cam": {
     "c": [
      0,
-     2.5,
+     3,
      0
     ],
-    "r": 34,
+    "r": 44,
     "a": [
      30,
      20
     ],
     "h": [
-     1,
-     2
+     1.5,
+     2.5
     ],
     "fov": 48
    },
@@ -79,7 +79,7 @@
     5,
     6
    ],
-   "env": "outdoor",
+   "env": "kampung",
    "kicker": "FONDASI",
    "heading": "Tiang *tidak ditanam*",
    "objs": [
@@ -90,18 +90,18 @@
    ],
    "cam": {
     "c": [
-     0,
+     -2,
      1.2,
-     2.6
+     3
     ],
-    "r": 17,
+    "r": 20,
     "a": [
      22,
      10
     ],
     "h": [
-     0.5,
-     1
+     1,
+     1.5
     ],
     "fov": 48
    },
@@ -122,7 +122,7 @@
     7,
     9
    ],
-   "env": "outdoor",
+   "env": "kampung",
    "kicker": "SAAT GEMPA",
    "heading": "Tiang *bergeser*, bangunan selamat",
    "objs": [
@@ -138,14 +138,14 @@
      2.5,
      0
     ],
-    "r": 36,
+    "r": 42,
     "a": [
-     -35,
-     -28
+     -30,
+     -22
     ],
     "h": [
-     4,
-     6
+     3,
+     4
     ],
     "fov": 48
    },
@@ -162,7 +162,7 @@
     10,
     11
    ],
-   "env": "outdoor",
+   "env": "kampung",
    "kicker": "SAMBUNGAN",
    "heading": "Sambungan *pasak*, bukan paku",
    "objs": [
@@ -178,10 +178,10 @@
    "cam": {
     "c": [
      0,
-     3,
+     4,
      0
     ],
-    "r": 26,
+    "r": 34,
     "a": [
      28,
      18
@@ -209,7 +209,7 @@
     12,
     13
    ],
-   "env": "outdoor",
+   "env": "kampung",
    "kicker": "STRUKTUR",
    "heading": "Tiang *miring*, lentur",
    "objs": [
@@ -221,18 +221,18 @@
    ],
    "cam": {
     "c": [
-     0,
+     -3,
      2,
      1
     ],
-    "r": 24,
+    "r": 26,
     "a": [
      24,
      18
     ],
     "h": [
      1,
-     1
+     1.5
     ],
     "fov": 48
    },
@@ -249,7 +249,7 @@
     14,
     15
    ],
-   "env": "outdoor",
+   "env": "kampung",
    "kicker": "ATAP",
    "heading": "Atap *ijuk* yang ringan",
    "objs": [
@@ -265,24 +265,28 @@
    "cam": {
     "c": [
      0,
-     6,
+     8,
      0
     ],
-    "r": 30,
+    "r": 42,
     "a": [
      34,
      18
     ],
     "h": [
-     4,
-     6
+     5,
+     7
     ],
     "fov": 48
    },
    "labels": [
     {
      "at": "g.atap",
-     "text": "atap ijuk bergonjong"
+     "text": "atap ijuk"
+    },
+    {
+     "at": "g.gonjong",
+     "text": "gonjong (tanduk)"
     }
    ],
    "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
@@ -292,7 +296,7 @@
     16,
     17
    ],
-   "env": "outdoor",
+   "env": "kampung",
    "kicker": "KAYU",
    "heading": "Kayu *direndam* bertahun-tahun",
    "objs": [
@@ -303,18 +307,18 @@
    ],
    "cam": {
     "c": [
-     0,
+     2,
      1.6,
-     1
+     2
     ],
-    "r": 18,
+    "r": 22,
     "a": [
      -24,
      -12
     ],
     "h": [
-     0.5,
-     1
+     1,
+     1.5
     ],
     "fov": 48
    },
@@ -331,7 +335,7 @@
     18,
     19
    ],
-   "env": "outdoor",
+   "env": "kampung",
    "kicker": "JADI...",
    "heading": "Bertahan *ratusan* tahun",
    "objs": [
@@ -343,17 +347,17 @@
    "cam": {
     "c": [
      0,
-     3,
+     4,
      0
     ],
-    "r": 44,
+    "r": 56,
     "a": [
      -20,
      -8
     ],
     "h": [
-     3,
-     5
+     4,
+     6
     ],
     "fov": 48
    },

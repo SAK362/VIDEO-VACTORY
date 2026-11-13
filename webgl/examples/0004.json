@@ -6,7 +6,7 @@
     0,
     2
    ],
-   "env": "outdoor",
+   "env": "candi",
    "kicker": "CANDI BOROBUDUR",
    "heading": "Seribu tahun *diguyur hujan*",
    "objs": [
@@ -20,17 +20,17 @@
    "cam": {
     "c": [
      0,
-     8,
+     12,
      0
     ],
-    "r": 95,
+    "r": 175,
     "a": [
-     35,
-     25
+     30,
+     22
     ],
     "h": [
-     10,
-     14
+     46,
+     52
     ],
     "fov": 48
    },
@@ -84,7 +84,7 @@
     5,
     6
    ],
-   "env": "outdoor",
+   "env": "candi",
    "kicker": "BATU",
    "heading": "Batu *mengunci*, tanpa semen",
    "objs": [
@@ -95,25 +95,29 @@
    ],
    "cam": {
     "c": [
-     8,
-     6,
-     8
+     30,
+     16,
+     30
     ],
-    "r": 34,
+    "r": 60,
     "a": [
      40,
-     20
+     24
     ],
     "h": [
-     2,
-     4
+     10,
+     14
     ],
     "fov": 48
    },
    "labels": [
     {
-     "at": "b.tier",
-     "text": "batu saling mengunci"
+     "at": "b.relief",
+     "text": "panel relief"
+    },
+    {
+     "at": "b.niche",
+     "text": "relung arca"
     }
    ],
    "tag": "ILUSTRASI DISEDERHANAKAN"
@@ -123,7 +127,7 @@
     7,
     8
    ],
-   "env": "outdoor",
+   "env": "candi",
    "kicker": "MASALAH",
    "heading": "Hujan *merembes* ke sela batu",
    "objs": [
@@ -136,17 +140,17 @@
    "cam": {
     "c": [
      0,
-     8,
+     12,
      0
     ],
-    "r": 80,
+    "r": 160,
     "a": [
      -30,
      -20
     ],
     "h": [
-     8,
-     10
+     40,
+     44
     ],
     "fov": 48
    },
@@ -157,7 +161,7 @@
     9,
     11
    ],
-   "env": "outdoor",
+   "env": "candi",
    "kicker": "PANCURAN",
    "heading": "*Seratus* pancuran makara",
    "objs": [
@@ -170,18 +174,18 @@
    ],
    "cam": {
     "c": [
+     48,
      10,
-     6,
-     10
+     0
     ],
-    "r": 44,
+    "r": 52,
     "a": [
-     45,
-     25
+     60,
+     40
     ],
     "h": [
-     4,
-     6
+     6,
+     9
     ],
     "fov": 48
    },
@@ -339,7 +343,7 @@
     18,
     19
    ],
-   "env": "outdoor",
+   "env": "candi",
    "kicker": "JADI...",
    "heading": "Kokoh di tengah *hujan*",
    "objs": [
@@ -353,17 +357,17 @@
    "cam": {
     "c": [
      0,
-     8,
+     12,
      0
     ],
-    "r": 95,
+    "r": 175,
     "a": [
      -30,
      -18
     ],
     "h": [
-     10,
-     8
+     46,
+     40
     ],
     "fov": 48
    },

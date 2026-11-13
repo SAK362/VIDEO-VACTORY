@@ -2,7 +2,7 @@
 import json, os, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRIM = {'box', 'cyl', 'sph', 'link', 'path', 'flow', 'group'}
-ENVS = {'outdoor', 'rail', 'road', 'room', 'stage', 'studio', 'sea', 'space', 'night', 'underground'}
+ENVS = {'outdoor', 'rail', 'road', 'room', 'stage', 'studio', 'sea', 'space', 'night', 'underground', 'kampung', 'candi', 'hsr'}
 
 
 def comps():

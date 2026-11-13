@@ -6,13 +6,14 @@
     0,
     2
    ],
-   "env": "rail",
+   "env": "hsr",
    "kicker": "KERETA CEPAT WHOOSH",
    "heading": "Jakarta–Bandung cuma *45 menit*",
    "objs": [
     {
      "t": "whoosh",
-     "id": "w"
+     "id": "w",
+     "lines": 1
     }
    ],
    "cam": {
@@ -21,17 +22,19 @@
      1.5,
      0
     ],
-    "r": 85,
+    "r": 52,
     "a": [
-     18,
-     28
+     14,
+     24
     ],
     "h": [
-     22,
-     24
+     5,
+     7
     ],
     "fov": 48
    },
+   "move": 70,
+   "notrack": false,
    "tag": "ILUSTRASI DISEDERHANAKAN"
   },
   {
@@ -39,32 +42,34 @@
     3,
     4
    ],
-   "env": "rail",
+   "env": "hsr",
    "kicker": "KECEPATAN",
    "heading": "Melaju sampai *350 km/jam*",
    "objs": [
     {
      "t": "whoosh",
-     "id": "w"
+     "id": "w",
+     "lines": 1
     }
    ],
    "cam": {
     "c": [
-     14,
-     1.5,
+     12,
+     1.4,
      0
     ],
-    "r": 44,
+    "r": 36,
     "a": [
      -35,
      -22
     ],
     "h": [
-     10,
-     12
+     3,
+     4
     ],
     "fov": 48
    },
+   "move": 90,
    "card": {
     "big": "350 km/jam",
     "small": "kecepatan operasi"
@@ -123,7 +128,7 @@
     6,
     7
    ],
-   "env": "rail",
+   "env": "hsr",
    "kicker": "CR400AF",
    "heading": "Delapan gerbong, *empat bermotor*",
    "objs": [
@@ -142,17 +147,18 @@
      1,
      0
     ],
-    "r": 58,
+    "r": 40,
     "a": [
-     30,
+     18,
      24
     ],
     "h": [
-     12,
-     14
+     4,
+     6
     ],
     "fov": 48
    },
+   "move": 0,
    "labels": [
     {
      "at": "w.motor",
@@ -174,34 +180,25 @@
     8,
     8
    ],
-   "env": "outdoor",
+   "env": "hsr",
    "kicker": "LISTRIK",
    "heading": "Dari *kabel* ke pantograf",
    "objs": [
     {
-     "t": "viaduk",
-     "id": "v"
-    },
-    {
      "t": "whoosh",
-     "id": "w",
-     "p": [
-      0,
-      9,
-      0
-     ]
+     "id": "w"
     }
    ],
    "cam": {
     "c": [
-     -3,
-     12,
+     -8,
+     3.2,
      0
     ],
-    "r": 30,
+    "r": 20,
     "a": [
-     35,
-     20
+     -14,
+     -26
     ],
     "h": [
      2,
@@ -209,14 +206,15 @@
     ],
     "fov": 48
    },
+   "move": 60,
    "labels": [
     {
      "at": "w.pantograf",
      "text": "pantograf"
     },
     {
-     "at": "v.catenary",
-     "text": "kabel listrik di atas rel"
+     "at": "w.roof",
+     "text": "atap kereta"
     }
    ],
    "tag": "ILUSTRASI DISEDERHANAKAN"
@@ -263,9 +261,9 @@
   {
    "sent": [
     11,
-    12
+    11
    ],
-   "env": "outdoor",
+   "env": "hsr",
    "kicker": "JALUR LAYANG",
    "heading": "Lebih dari *80 km* dibangun layang",
    "objs": [
@@ -300,6 +298,8 @@
     ],
     "fov": 48
    },
+   "notrack": true,
+   "move": 0,
    "labels": [
     {
      "at": "v.deck",
@@ -311,8 +311,63 @@
     }
    ],
    "card": {
+    "big": "80+ km",
+    "small": "dibangun layang"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    12,
+    12
+   ],
+   "env": "hsr",
+   "kicker": "TEROWONGAN",
+   "heading": "*Tiga belas* terowongan",
+   "objs": [
+    {
+     "t": "terowongan_hsr",
+     "id": "t"
+    },
+    {
+     "t": "whoosh",
+     "id": "w",
+     "x0": -95,
+     "v": 14
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     5,
+     0
+    ],
+    "r": 44,
+    "a": [
+     -62,
+     -52
+    ],
+    "h": [
+     6,
+     7
+    ],
+    "fov": 48
+   },
+   "notrack": false,
+   "move": 0,
+   "labels": [
+    {
+     "at": "t.portal",
+     "text": "mulut terowongan"
+    },
+    {
+     "at": "t.lining",
+     "text": "lining beton"
+    }
+   ],
+   "card": {
     "big": "13",
-    "small": "terowongan di sisanya"
+    "small": "terowongan"
    },
    "tag": "ILUSTRASI DISEDERHANAKAN"
   },
@@ -321,7 +376,7 @@
     13,
     13
    ],
-   "env": "outdoor",
+   "env": "hsr",
    "kicker": "REL",
    "heading": "Pelat beton *atau* balas kerikil",
    "objs": [
@@ -336,17 +391,18 @@
      1,
      0
     ],
-    "r": 34,
+    "r": 30,
     "a": [
-     30,
+     28,
      22
     ],
     "h": [
-     6,
+     7,
      10
     ],
     "fov": 48
    },
+   "notrack": true,
    "labels": [
     {
      "at": "t.balas",
@@ -368,7 +424,7 @@
     14,
     14
    ],
-   "env": "outdoor",
+   "env": "hsr",
    "kicker": "SINYAL",
    "heading": "Menjaga *jarak aman*",
    "objs": [
@@ -383,7 +439,7 @@
      3,
      0
     ],
-    "r": 40,
+    "r": 38,
     "a": [
      28,
      20
@@ -394,6 +450,7 @@
     ],
     "fov": 48
    },
+   "notrack": true,
    "labels": [
     {
      "at": "s.balise",
@@ -415,13 +472,14 @@
     15,
     16
    ],
-   "env": "rail",
+   "env": "hsr",
    "kicker": "DESAIN",
    "heading": "Ramping, *tahan* iklim tropis",
    "objs": [
     {
      "t": "whoosh",
-     "id": "w"
+     "id": "w",
+     "lines": 1
     }
    ],
    "cam": {
@@ -430,10 +488,10 @@
      1.8,
      0
     ],
-    "r": 34,
+    "r": 30,
     "a": [
-     -55,
-     -40
+     -58,
+     -42
     ],
     "h": [
      3,
@@ -441,10 +499,11 @@
     ],
     "fov": 48
    },
+   "move": 80,
    "labels": [
     {
      "at": "w.nose",
-     "text": "hidung ramping"
+     "text": "hidung aerodinamis"
     }
    ],
    "tag": "ILUSTRASI DISEDERHANAKAN"
@@ -509,13 +568,14 @@
     19,
     20
    ],
-   "env": "rail",
+   "env": "hsr",
    "kicker": "JADI...",
    "heading": "Perjalanan jauh jadi *sekejap*",
    "objs": [
     {
      "t": "whoosh",
-     "id": "w"
+     "id": "w",
+     "lines": 1
     }
    ],
    "cam": {
@@ -524,17 +584,19 @@
      1.5,
      0
     ],
-    "r": 85,
+    "r": 52,
     "a": [
-     -25,
+     -24,
      -12
     ],
     "h": [
-     8,
-     6
+     6,
+     5
     ],
     "fov": 48
    },
+   "move": 80,
+   "notrack": false,
    "ajak": "Follow & tulis topik berikutnya di komentar"
   }
  ]
