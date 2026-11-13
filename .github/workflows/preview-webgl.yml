@@ -4,9 +4,12 @@ name: preview-webgl
 # Jalankan: tab Actions > preview-webgl > Run workflow > isi nomor (0001..0005).
 # Hasil: Artifacts "video-preview-NNNN" (MP4 1080x1920, 30 fps, senyap).
 on:
+  push:
+    branches: [tbm-components]
+    paths: ['webgl/preview/TOPIC']
   workflow_dispatch:
     inputs:
-      topic: {description: 'Nomor topik (0001-0005)', required: true, default: '0002'}
+      topic: {description: 'Nomor topik (0001-0005)', required: false, default: ''}
 
 permissions:
   contents: read
@@ -15,8 +18,14 @@ permissions:
 jobs:
   prep:
     runs-on: ubuntu-latest
+    outputs:
+      topic: ${{ steps.t.outputs.topic }}
     steps:
       - uses: actions/checkout@v4
+      - id: t
+        run: |
+          T='${{ inputs.topic }}'; [ -z "$T" ] && T=$(tr -d ' \r\n' < webgl/preview/TOPIC)
+          echo "topic=$T" >> $GITHUB_OUTPUT
       - name: Pasang ffmpeg bila belum ada
         run: |
           if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
@@ -25,7 +34,7 @@ jobs:
       - name: Siapkan timing perkiraan + spec
         run: |
           pip install --quiet numpy playwright
-          N=${{ inputs.topic }}
+          N=${{ steps.t.outputs.topic }}
           mkdir -p work public
           python3 - "$N" <<'PY'
           import json,sys
@@ -81,7 +90,7 @@ jobs:
         with: {name: 'seg${{ matrix.chunk }}', path: 'out/seg${{ matrix.chunk }}.mp4', retention-days: 1}
 
   final:
-    needs: render
+    needs: [prep, render]
     runs-on: ubuntu-latest
     steps:
       - name: Pasang ffmpeg
@@ -94,4 +103,4 @@ jobs:
           ffmpeg -v error -y -f concat -safe 0 -i list.txt -c copy video.mp4
           ls -lh video.mp4
       - uses: actions/upload-artifact@v4
-        with: {name: 'video-preview-${{ inputs.topic }}', path: video.mp4, retention-days: 5}
+        with: {name: 'video-preview-${{ needs.prep.outputs.topic }}', path: video.mp4, retention-days: 5}
