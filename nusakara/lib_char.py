@@ -1,6 +1,7 @@
 """Karakter stickman: tokoh cerita (pustaka) dan Pak Nusa (maskot). Semua dalam koordinat dunia 1080x1920."""
 import math
-from draw import INK, SKIN, mix
+from draw import INK, mix
+SKIN = (246, 202, 156)   # kulit kartun datar
 
 SAD = {"sedih", "menangis", "hancur", "rindu", "haru", "lelah", "berharap", "penuh_harap"}
 HAPPY = {"senang", "bahagia", "bangga", "tenang", "anggun", "kagum", "bertekad", "fokus"}
@@ -42,24 +43,27 @@ def expr(name):
 
 
 def face(p, hc, r, kind, f, mouth=0.0, blink=False, look=0.0):
-    ex = r * .42
+    s = r / 43.0; ex = r * .44; ey = hc[1] + r * .02
     for sx in (-1, 1):
-        x = hc[0] + sx * ex + look
-        if blink: p.line([x - 5, hc[1] + 2, x + 5, hc[1] + 2], INK, 2.5)
-        else: p.ell([x - 4, hc[1] - 3, x + 4, hc[1] + 8], fill=INK)
-    by = hc[1] - 10
+        x = hc[0] + sx * ex + look * s
+        if blink: p.line([x - 6 * s, ey + 3 * s, x + 6 * s, ey + 3 * s], INK, 3 * s)
+        else:
+            p.ell([x - 6 * s, ey - 6 * s, x + 6 * s, ey + 10 * s], fill=INK)
+            p.ell([x - 1 * s, ey - 3 * s, x + 3 * s, ey + 1 * s], fill=(255, 255, 255))
+    by = ey - 16 * s
+    for sx in (-1, 1): p.ell([hc[0] + sx * r * .66 - 8 * s, hc[1] + r * .28, hc[0] + sx * r * .66 + 8 * s, hc[1] + r * .28 + 9 * s], fill=(244, 150, 140))
     if kind == "sad":
-        for sx in (-1, 1): p.line([hc[0] + sx * ex - 8, by - (3 if sx < 0 else -3) * -1, hc[0] + sx * ex + 8, by - (-3 if sx < 0 else 3) * -1], INK, 2.5)
-        p.arc([hc[0] - r * .4, hc[1] + r * .38, hc[0] + r * .4, hc[1] + r * .85], 200, 340, INK, 3)
+        for sx in (-1, 1): p.line([hc[0] + sx * ex + sx * 8 * s, by - 5 * s, hc[0] + sx * ex - sx * 8 * s, by + 3 * s], INK, 3 * s)
+        p.arc([hc[0] - r * .3, hc[1] + r * .42, hc[0] + r * .3, hc[1] + r * .85], 200, 340, INK, 3.2 * s)
     elif kind == "happy":
-        p.arc([hc[0] - r * .45, hc[1] + r * .08, hc[0] + r * .45, hc[1] + r * .66], 20, 160, INK, 3)
+        p.arc([hc[0] - r * .38, hc[1] + r * .14, hc[0] + r * .38, hc[1] + r * .66], 20, 160, INK, 3.4 * s)
     elif kind == "angry":
-        for sx in (-1, 1): p.line([hc[0] + sx * ex - 9 * sx * -1, by + (4 if sx < 0 else -4) * 0 - 4, hc[0] + sx * ex + 9 * sx * -1, by + 5], INK, 3)
-        p.line([hc[0] - r * .3, hc[1] + r * .55, hc[0] + r * .3, hc[1] + r * .55], INK, 3)
+        for sx in (-1, 1): p.line([hc[0] + sx * ex + sx * 10 * s, by - 7 * s, hc[0] + sx * ex - sx * 8 * s, by + 4 * s], INK, 3.6 * s)
+        p.line([hc[0] - r * .26, hc[1] + r * .6, hc[0] + r * .26, hc[1] + r * .6], INK, 3.2 * s)
     elif kind == "shock":
-        p.ell([hc[0] - 6, hc[1] + r * .42, hc[0] + 6, hc[1] + r * .42 + 14], fill=(120, 30, 40), out=INK, w=2)
+        p.ell([hc[0] - 8 * s, hc[1] + r * .46, hc[0] + 8 * s, hc[1] + r * .46 + 18 * s], fill=(120, 30, 40))
     else:
-        p.line([hc[0] - r * .28, hc[1] + r * .5, hc[0] + r * .28, hc[1] + r * .5], INK, 2.5)
+        p.arc([hc[0] - r * .26, hc[1] + r * .3, hc[0] + r * .26, hc[1] + r * .62], 30, 150, INK, 3 * s)
 
 
 def head_gear(p, o, hc, r, f):
@@ -84,7 +88,7 @@ def head_gear(p, o, hc, r, f):
 
 
 def person(p, cx, fy, key, pose="berdiri", ekspresi="tenang", t=0.0, f=1, base_h=330, mouth=0.0, seed=0, bob=True):
-    """f=+1 menghadap kanan, -1 kiri. t detik adegan: napas, kedip, ayun langkah."""
+    """Kartun datar. f=+1 menghadap kanan, -1 kiri. t detik adegan: napas, kedip, ayun langkah."""
     o = dict(OUTFIT.get(key, OUTFIT["warga"]))
     if key == "warga":
         o["top"], o["hc"] = VAR[seed % len(VAR)]
@@ -93,48 +97,50 @@ def person(p, cx, fy, key, pose="berdiri", ekspresi="tenang", t=0.0, f=1, base_h
     walk = pose in ("berjalan", "berlari", "naik_kapal")
     sw = math.sin(t * (9 if pose == "berlari" else 5.5)) if walk else 0.0
     br = math.sin(t * 2.2 + seed) * 2.0 if bob else 0.0
-    p.ell([cx - h * .3, fy - 8, cx + h * .3, fy + 8], fill=(0, 0, 0, 0) if False else (90, 70, 56))
+    dark = mix(o["bot"], (30, 24, 36), .35); shoe = (86, 58, 46)
+    p.ell([cx - h * .26, fy - 9, cx + h * .26, fy + 9], fill=(0, 0, 0, 46))
     sit = pose == "duduk"
     bend = {"memeluk_kaki": 0.22, "menunduk": 0.06, "terhuyung": -0.08, "berlari": 0.08, "memohon": 0.05, "menengadah_berdoa": -0.05, "berteriak_minta_ampun": -0.03}.get(pose, 0) + o.get("hunch", 0)
-    hipy = fy - h * (0.30 if not sit else 0.14); hip = (cx, hipy)
+    hipy = fy - h * (0.32 if not sit else 0.15); lw = h * .07
     # kaki
-    col = INK
     if sit:
-        p.line([cx, hipy, cx + f * h * .30, hipy + 4, cx + f * h * .34, fy], col, 7)
+        p.line([cx, hipy, cx + f * h * .30, hipy + 4, cx + f * h * .34, fy - 6], dark, lw)
+        p.ell([cx + f * h * .34 - 14, fy - 14, cx + f * h * .34 + 20 * f, fy + 2], fill=shoe)
     else:
         for sgn in (-1, 1):
-            ph = sw * sgn
-            p.line([cx, hipy, cx + sgn * h * .07 + ph * h * .16, fy - 2], col, 7)
-            p.rect([cx + sgn * h * .07 + ph * h * .16 - 12, fy - 5, cx + sgn * h * .07 + ph * h * .16 + 12 * f, fy + 3], fill=(110, 72, 44), out=INK, w=1.6, r=3)
+            ph = sw * sgn; fx = cx + sgn * h * .075 + ph * h * .16
+            p.line([cx + sgn * h * .05, hipy, fx, fy - 12], dark, lw)
+            p.ell([fx - 14, fy - 16, fx + 14 + 12 * f, fy + 2], fill=shoe)
     # rok / celana
     if o.get("skirt"):
-        wb = h * .17; wt = h * .12
-        p.poly([cx - wt, hipy - h * .02, cx + wt, hipy - h * .02, cx + wb, fy - h * .06 if not sit else hipy + h * .16, cx - wb, fy - h * .06 if not sit else hipy + h * .16], fill=o["bot"], out=INK, w=2.5)
-        if o.get("gold"): p.line([cx - wb * .95, fy - h * .12, cx + wb * .95, fy - h * .12], (244, 208, 120), 2.5)
+        wb = h * .21; wt = h * .12
+        p.poly([cx - wt, hipy - h * .06, cx + wt, hipy - h * .06, cx + wb, fy - h * .05 if not sit else hipy + h * .18, cx - wb, fy - h * .05 if not sit else hipy + h * .18], fill=o["bot"])
+        if o.get("gold"): p.rect([cx - wb * .93, fy - h * .13, cx + wb * .93, fy - h * .10], fill=(244, 208, 120))
     else:
-        p.rect([cx - h * .09, hipy - h * .05, cx + h * .09, hipy + h * .09], fill=o["bot"], out=INK, w=2)
-    # badan
-    shy = hipy - h * .32 + br
-    sx0 = cx + f * bend * h
-    p.line([cx, hipy, sx0, shy], INK, 7)
-    p.ell([sx0 - h * .12, shy - 2, sx0 + h * .12, hipy + 4], fill=o["top"], out=INK, w=2.5)
-    if o.get("vest"): p.line([sx0, shy + 6, sx0, hipy], (60, 100, 70), 3)
-    if o.get("sash"): p.rect([sx0 - h * .12, hipy - h * .04, sx0 + h * .12, hipy + h * .02], fill=(220, 168, 56), out=INK, w=1.8, r=3)
+        p.rect([cx - h * .115, hipy - h * .08, cx + h * .115, hipy + h * .07], fill=o["bot"], r=h * .03)
+    # badan (bulat)
+    shy = hipy - h * .30 + br; sx0 = cx + f * bend * h
+    p.rect([sx0 - h * .14, shy, sx0 + h * .14, hipy + h * .02], fill=o["top"], r=h * .09)
+    if o.get("vest"): p.line([sx0, shy + 10, sx0, hipy - 4], (60, 100, 70), 5)
+    if o.get("sash"): p.rect([sx0 - h * .14, hipy - h * .06, sx0 + h * .14, hipy + h * .0], fill=(224, 170, 60))
     if o.get("stripe"):
-        for i in range(4): p.line([sx0 - h * .11, shy + 8 + i * 10, sx0 + h * .11, shy + 8 + i * 10], o["bot"], 2.5)
+        for i in range(4): p.rect([sx0 - h * .14, shy + 14 + i * 16, sx0 + h * .14, shy + 22 + i * 16], fill=o["bot"])
+    # leher
+    p.rect([sx0 - h * .035, shy - h * .05, sx0 + h * .035, shy + h * .02], fill=SKIN)
     # lengan
     wv = math.sin(t * 9) * 14 if pose == "melambai" else 0
+    aw = h * .06
     for side, (a1, a2) in ((-1, (a[0], a[1])), (1, (a[2], a[3] + wv))):
-        s_ = side * f if False else side
-        shp = (sx0 + side * h * .10, shy + 6)
-        e = vec(a1, side, h * .20); el = (shp[0] + e[0], shp[1] + e[1])
-        w_ = vec(a2, side, h * .19); hd = (el[0] + w_[0], el[1] + w_[1])
-        p.line([*shp, *el], o["top"], 7); p.line([*el, *hd], SKIN, 5.5)
-        p.ell([hd[0] - 4.5, hd[1] - 4.5, hd[0] + 4.5, hd[1] + 4.5], fill=SKIN, out=INK, w=1.6)
-        if o.get("stick") and side == 1: p.line([hd[0], hd[1] - 20, hd[0] + 3, fy], (110, 72, 40), 4.5)
-    # kepala
-    r = h * .13; hc = (sx0 + f * h * .015, shy - r * 1.05 - (4 if pose == "menengadah_berdoa" else 0))
-    p.ell([hc[0] - r, hc[1] - r, hc[0] + r, hc[1] + r], fill=SKIN, out=INK, w=2.8)
+        shp = (sx0 + side * h * .125, shy + h * .045)
+        e = vec(a1, side, h * .19); el = (shp[0] + e[0], shp[1] + e[1])
+        w_ = vec(a2, side, h * .18); hd = (el[0] + w_[0], el[1] + w_[1])
+        p.line([*shp, *el], o["top"], aw); p.line([*el, *hd], o["top"], aw * .92)
+        p.ell([hd[0] - h * .038, hd[1] - h * .038, hd[0] + h * .038, hd[1] + h * .038], fill=SKIN)
+        if o.get("stick") and side == 1: p.line([hd[0], hd[1] - 22, hd[0] + 3, fy], (110, 72, 40), 6)
+    # kepala besar
+    r = h * .175; hc = (sx0 + f * h * .015, shy - r * .98 - (4 if pose == "menengadah_berdoa" else 0))
+    for sx in (-1, 1): p.ell([hc[0] + sx * r * .98 - r * .16, hc[1] - r * .05, hc[0] + sx * r * .98 + r * .16, hc[1] + r * .32], fill=SKIN)
+    p.ell([hc[0] - r, hc[1] - r, hc[0] + r, hc[1] + r], fill=SKIN)
     head_gear(p, o, hc, r, f)
     blink = (t % 3.2) < 0.12
     face(p, hc, r, expr(ekspresi), f, blink=blink, look=f * 2)
@@ -156,52 +162,64 @@ def batik_trapezoid(p, cx, fy, u):
     p.line([cx - 58 * u, fy - 40 * u, cx + 58 * u, fy - 40 * u], (244, 208, 120), 3 * u)
 
 
-def pak_nusa(p, cx, fy, h, mouth=0.5, t=0.0, wave=False, shock=False, point=True):
+def pak_nusa(p, cx, fy, h, mouth=0.5, t=0.0, wave=False, shock=False, point=True, bust=False):
     u = h / 340.0
+    BR = (118, 70, 42); NAVY = (36, 56, 104); GOLD = (244, 208, 120)
     br = math.sin(t * 2.0) * 2.2 * u   # napas
-    p.ell([cx - 90 * u, fy - 9 * u, cx + 90 * u, fy + 9 * u], fill=(70, 50, 40))
-    for sx in (-1, 1):
-        p.line([cx + sx * 26 * u, fy - 100 * u, cx + sx * 30 * u, fy - 6 * u], INK, 8 * u)
-        p.rect([cx + sx * 30 * u - 22 * u, fy - 8 * u, cx + sx * 30 * u + 22 * u, fy + 2 * u], fill=(120, 72, 44), out=INK, w=2 * u, r=4 * u)
-    batik_trapezoid(p, cx, fy, u)
-    p.line([cx + 62 * u, fy - 190 * u, cx + 92 * u, fy - 262 * u], (90, 58, 40), 8 * u)
-    p.line([cx + 92 * u, fy - 262 * u, cx + 104 * u, fy - 290 * u], (190, 190, 200), 4 * u)
+    if not bust:
+        p.ell([cx - 90 * u, fy - 9 * u, cx + 90 * u, fy + 9 * u], fill=(0, 0, 0, 46))
+        for sx in (-1, 1):
+            p.line([cx + sx * 26 * u, fy - 100 * u, cx + sx * 30 * u, fy - 14 * u], (72, 52, 60), 16 * u)
+            p.ell([cx + sx * 30 * u - 24 * u, fy - 20 * u, cx + sx * 30 * u + 28 * u, fy + 2 * u], fill=(110, 70, 44))
+        batik_trapezoid(p, cx, fy, u)
+        p.line([cx + 62 * u, fy - 190 * u, cx + 92 * u, fy - 262 * u], (90, 58, 40), 8 * u)
+        p.line([cx + 92 * u, fy - 262 * u, cx + 104 * u, fy - 290 * u], (190, 190, 200), 4 * u)
     sh_l = (cx - 62 * u, fy - 245 * u + br); sh_r = (cx + 62 * u, fy - 245 * u + br)
-    el = (cx - 104 * u, fy - 196 * u); hl = (cx - 112 * u, fy - 232 * u + math.sin(t * 2.4) * 3 * u)
-    p.line([*sh_l, *el, *hl], (30, 48, 92), 9 * u); p.ell([hl[0] - 8 * u, hl[1] - 8 * u, hl[0] + 8 * u, hl[1] + 8 * u], fill=SKIN, out=INK, w=2 * u)
-    p.line([hl[0], hl[1] + 10 * u, hl[0], hl[1] - 70 * u], (120, 80, 48), 4 * u)
-    k = [hl[0], hl[1] - 150 * u, hl[0] + 28 * u, hl[1] - 112 * u, hl[0] + 34 * u, hl[1] - 70 * u, hl[0] + 16 * u, hl[1] - 40 * u, hl[0] - 16 * u, hl[1] - 40 * u, hl[0] - 34 * u, hl[1] - 70 * u, hl[0] - 28 * u, hl[1] - 112 * u]
-    p.poly(k, fill=(232, 178, 62), out=INK, w=2.5 * u)
-    p.poly([hl[0], hl[1] - 130 * u, hl[0] + 14 * u, hl[1] - 100 * u, hl[0] + 14 * u, hl[1] - 66 * u, hl[0], hl[1] - 52 * u, hl[0] - 14 * u, hl[1] - 66 * u, hl[0] - 14 * u, hl[1] - 100 * u], fill=(176, 40, 40), out=INK, w=2 * u)
-    p.line([hl[0], hl[1] - 120 * u, hl[0], hl[1] - 60 * u], (244, 208, 120), 2 * u)
-    if wave:
-        ang = 150 + math.sin(t * 9) * 16
-        r_ = math.radians(ang); e2 = (sh_r[0] + math.sin(r_) * 56 * u + 30 * u, sh_r[1] + math.cos(r_) * 40 * u); hr = (e2[0] + 10 * u, e2[1] - 50 * u)
-        er = (cx + 112 * u, fy - 262 * u)
-    else:
-        er = (cx + 100 * u, fy - 268 * u); hr = (cx + 112 * u, fy - 316 * u) if point else (cx + 104 * u, fy - 196 * u)
-        if shock: er = (cx + 110 * u, fy - 290 * u); hr = (cx + 100 * u, fy - 340 * u)
-    p.line([*sh_r, *er, *hr], (30, 48, 92), 9 * u); p.ell([hr[0] - 8 * u, hr[1] - 8 * u, hr[0] + 8 * u, hr[1] + 8 * u], fill=SKIN, out=INK, w=2 * u)
-    p.ell([cx - 70 * u, fy - 268 * u + br, cx + 70 * u, fy - 132 * u], fill=(30, 48, 92), out=INK, w=3.5 * u)
-    p.rect([cx - 66 * u, fy - 176 * u, cx + 66 * u, fy - 160 * u], fill=(220, 168, 56), out=INK, w=2 * u, r=6 * u)
-    for i in range(5): p.ell([cx - 3.5 * u, fy - 250 * u + i * 17 * u + br, cx + 3.5 * u, fy - 243 * u + i * 17 * u + br], fill=(244, 208, 120))
-    p.poly([cx - 18 * u, fy - 262 * u + br, cx + 18 * u, fy - 262 * u + br, cx, fy - 238 * u + br], fill=SKIN, out=INK, w=2 * u)
-    p.rect([cx - 9 * u, fy - 282 * u + br, cx + 9 * u, fy - 262 * u + br], fill=SKIN, out=INK, w=2 * u)
-    hc = (cx, fy - 306 * u + br); r = 36 * u
-    p.ell([hc[0] - r, hc[1] - r, hc[0] + r, hc[1] + r], fill=SKIN, out=INK, w=3.5 * u)
-    for sx in (-1, 1): p.ell([hc[0] + sx * r - 6 * u, hc[1] - 6 * u, hc[0] + sx * r + 6 * u, hc[1] + 10 * u], fill=SKIN, out=INK, w=2 * u)
-    p.pie([hc[0] - r * 1.04, hc[1] - r * 1.25, hc[0] + r * 1.04, hc[1] + r * .75], 180, 360, (112, 64, 34))
-    p.arc([hc[0] - r * 1.04, hc[1] - r * 1.25, hc[0] + r * 1.04, hc[1] + r * .75], 180, 360, INK, 3 * u)
-    p.line([hc[0] - r * 1.02, hc[1] - r * .26, hc[0] + r * 1.02, hc[1] - r * .26], INK, 3 * u)
-    p.ell([hc[0] + r * .55, hc[1] - r * 1.2, hc[0] + r * 1.2, hc[1] - r * .62], fill=(112, 64, 34), out=INK, w=2.5 * u)
-    for i in range(4): p.line([hc[0] - r * .7 + i * r * .45, hc[1] - r * 1.1, hc[0] - r * .7 + i * r * .45, hc[1] - r * .3], (244, 208, 120), 1.6 * u)
-    ex = r * .42; blink = (t % 3.0) < 0.13
+    if not bust:
+        el = (cx - 104 * u, fy - 196 * u); hl = (cx - 112 * u, fy - 232 * u + math.sin(t * 2.4) * 3 * u)
+        p.line([*sh_l, *el, *hl], NAVY, 20 * u); p.ell([hl[0] - 11 * u, hl[1] - 11 * u, hl[0] + 11 * u, hl[1] + 11 * u], fill=SKIN)
+        p.line([hl[0], hl[1] + 10 * u, hl[0], hl[1] - 70 * u], (120, 80, 48), 5 * u)
+        k = [hl[0], hl[1] - 150 * u, hl[0] + 28 * u, hl[1] - 112 * u, hl[0] + 34 * u, hl[1] - 70 * u, hl[0] + 16 * u, hl[1] - 40 * u, hl[0] - 16 * u, hl[1] - 40 * u, hl[0] - 34 * u, hl[1] - 70 * u, hl[0] - 28 * u, hl[1] - 112 * u]
+        p.poly(k, fill=(232, 178, 62))
+        p.poly([hl[0], hl[1] - 130 * u, hl[0] + 14 * u, hl[1] - 100 * u, hl[0] + 14 * u, hl[1] - 66 * u, hl[0], hl[1] - 52 * u, hl[0] - 14 * u, hl[1] - 66 * u, hl[0] - 14 * u, hl[1] - 100 * u], fill=(176, 40, 40))
+        p.line([hl[0], hl[1] - 120 * u, hl[0], hl[1] - 60 * u], GOLD, 3 * u)
+        if wave:
+            ang = 150 + math.sin(t * 9) * 16
+            r_ = math.radians(ang); e2 = (sh_r[0] + math.sin(r_) * 56 * u + 30 * u, sh_r[1] + math.cos(r_) * 40 * u); hr = (e2[0] + 10 * u, e2[1] - 50 * u)
+            er = (cx + 112 * u, fy - 262 * u)
+        else:
+            er = (cx + 100 * u, fy - 268 * u); hr = (cx + 112 * u, fy - 316 * u) if point else (cx + 104 * u, fy - 196 * u)
+            if shock: er = (cx + 110 * u, fy - 290 * u); hr = (cx + 100 * u, fy - 340 * u)
+        p.line([*sh_r, *er, *hr], NAVY, 20 * u); p.ell([hr[0] - 11 * u, hr[1] - 11 * u, hr[0] + 11 * u, hr[1] + 11 * u], fill=SKIN)
+    # badan beskap
+    p.ell([cx - 74 * u, fy - 270 * u + br, cx + 74 * u, fy - 124 * u], fill=NAVY)
+    if not bust: p.rect([cx - 68 * u, fy - 176 * u, cx + 68 * u, fy - 158 * u], fill=(224, 170, 60), r=7 * u)
+    p.poly([cx - 20 * u, fy - 264 * u + br, cx + 20 * u, fy - 264 * u + br, cx, fy - 232 * u + br], fill=(255, 244, 226))
+    for i in range(4): p.ell([cx - 4 * u, fy - 232 * u + i * 17 * u + br, cx + 4 * u, fy - 224 * u + i * 17 * u + br], fill=GOLD)
+    p.rect([cx - 11 * u, fy - 284 * u + br, cx + 11 * u, fy - 262 * u + br], fill=SKIN)
+    # kepala
+    hc = (cx, fy - 300 * u + br); r = 52 * u
+    for sx in (-1, 1): p.ell([hc[0] + sx * r - 7 * u, hc[1] - 4 * u, hc[0] + sx * r + 7 * u, hc[1] + 14 * u], fill=SKIN)
+    p.ell([hc[0] - r, hc[1] - r, hc[0] + r, hc[1] + r], fill=SKIN)
+    # blangkon
+    dome = [(-.93, -.53), (-.95, -.91), (-.75, -1.28), (0, -1.5), (.75, -1.28), (.95, -.91), (.93, -.53), (0, -.68)]
+    p.poly([v for x, y in dome for v in (hc[0] + x * r, hc[1] + y * r)], fill=BR)
+    p.ell([hc[0] - .3 * r, hc[1] - 1.55 * r, hc[0] + .3 * r, hc[1] - 1.22 * r], fill=BR)
+    p.rect([hc[0] - .94 * r, hc[1] - .71 * r, hc[0] + .94 * r, hc[1] - .52 * r], fill=(232, 190, 92))
+    for i in range(6):
+        x = hc[0] + (-.75 + i * .3) * r; y = hc[1] - .9 * r; q = .09 * r
+        p.poly([x, y - q, x + q, y, x, y + q, x - q, y], fill=GOLD)
+    q = 1.22 * u; ex = r * .42; blink = (t % 3.0) < 0.13
     for sx in (-1, 1):
-        if blink: p.line([hc[0] + sx * ex - 4.5 * u, hc[1] + r * .08, hc[0] + sx * ex + 4.5 * u, hc[1] + r * .08], INK, 2.5 * u)
-        else: p.ell([hc[0] + sx * ex - 4.5 * u, hc[1] + r * .02, hc[0] + sx * ex + 4.5 * u, hc[1] + r * .02 + 11 * u], fill=INK)
-        p.line([hc[0] + sx * ex - 9 * u, hc[1] - 8 * u + (2 * u * sx), hc[0] + sx * ex + 9 * u, hc[1] - 10 * u - (2 * u * sx)], INK, 3 * u)
-    for sx in (-1, 1): p.ell([hc[0] + sx * r * .62 - 7 * u, hc[1] + r * .28, hc[0] + sx * r * .62 + 7 * u, hc[1] + r * .28 + 8 * u], fill=(255, 190, 170))
-    p.arc([hc[0] - r * .55, hc[1] + r * .2, hc[0] + r * .02, hc[1] + r * .62], 190, 350, INK, 4 * u)
-    p.arc([hc[0] - r * .02, hc[1] + r * .2, hc[0] + r * .55, hc[1] + r * .62], 190, 350, INK, 4 * u)
-    mh = (4 + 17 * mouth) * u
-    p.ell([hc[0] - 10 * u, hc[1] + r * .5, hc[0] + 10 * u, hc[1] + r * .5 + mh], fill=(130, 34, 44), out=INK, w=2.5 * u)
+        if blink: p.line([hc[0] + sx * ex - 5 * q, hc[1] + r * .1, hc[0] + sx * ex + 5 * q, hc[1] + r * .1], INK, 3 * q)
+        else:
+            p.ell([hc[0] + sx * ex - 5.5 * q, hc[1] - r * .06, hc[0] + sx * ex + 5.5 * q, hc[1] - r * .06 + 14 * q], fill=INK)
+            p.ell([hc[0] + sx * ex - 1.5 * q, hc[1] - r * .02, hc[0] + sx * ex + 2.5 * q, hc[1] - r * .02 + 4 * q], fill=(255, 255, 255))
+        p.line([hc[0] + sx * ex - sx * 11 * q, hc[1] - 16 * q, hc[0] + sx * ex + sx * 9 * q, hc[1] - 15 * q], INK, 3.4 * q)
+    for sx in (-1, 1): p.ell([hc[0] + sx * r * .64 - 8 * q, hc[1] + r * .3, hc[0] + sx * r * .64 + 8 * q, hc[1] + r * .3 + 9 * q], fill=(246, 154, 142))
+    p.arc([hc[0] - r * .55, hc[1] + r * .36, hc[0] + r * .02, hc[1] + r * .74], 190, 350, INK, 4.4 * q)
+    p.arc([hc[0] - r * .02, hc[1] + r * .36, hc[0] + r * .55, hc[1] + r * .74], 190, 350, INK, 4.4 * q)
+    mh = (4 + 17 * mouth) * q
+    if mouth < 0.12: p.arc([hc[0] - r * .3, hc[1] + r * .42, hc[0] + r * .3, hc[1] + r * .88], 25, 155, INK, 4 * q)
+    else: p.ell([hc[0] - 10 * q, hc[1] + r * .66, hc[0] + 10 * q, hc[1] + r * .66 + mh], fill=(150, 44, 54))
+    return dict(head=hc)

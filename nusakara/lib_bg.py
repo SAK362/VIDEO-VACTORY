@@ -17,7 +17,7 @@ def sky(d, pal):
         d.line([(0, y), (W, y)], fill=mix(pal["st"], pal["sb"], t))
 
 
-def sea(d, pal, y0=720, y1=1190, seed=7):
+def sea(d, pal, y0=720, y1=1100, seed=7):
     for y in range(y0, y1):
         t = (y - y0) / float(y1 - y0)
         d.line([(0, y), (W, y)], fill=mix(pal["sea2"], pal["sea"], 1 - t if False else t * 0.0 + (1 - t)))
@@ -33,7 +33,7 @@ def hills(p, pal):
     p.poly([380, 590, 340, 640, 380, 626, 420, 650, 450, 620], fill=mix(c, (255, 244, 236), 0.6))
 
 
-def beach(d, pal, y0=1180):
+def beach(d, pal, y0=1060):
     d.polygon([(0, y0), (W, y0 - 40), (W, H), (0, H)], fill=pal["gr"])
     d.polygon([(0, y0), (W, y0 - 40), (W, y0 - 10), (0, y0 + 30)], fill=mix(pal["gr"], (255, 252, 240), 0.7))
     rnd = random.Random(3)
@@ -73,22 +73,25 @@ def palm(p, x, y, h, lean):
 
 
 def gonjong(p, x, y, w):
-    u = w / 380.0
-    p.rect([x + 20 * u, y - 120 * u, x + w - 20 * u, y], fill=(138, 84, 56), out=INK, w=4 * u)
-    for i in range(1, 8): p.line([x + 20 * u + i * (w - 40 * u) / 8, y - 120 * u, x + 20 * u + i * (w - 40 * u) / 8, y], (100, 60, 40), 3 * u)
+    u = w / 380.0; wh = 165
+    p.rect([x + 20 * u, y - wh * u, x + w - 20 * u, y], fill=(138, 84, 56), out=INK, w=4 * u)
+    for i in range(1, 8): p.line([x + 20 * u + i * (w - 40 * u) / 8, y - wh * u, x + 20 * u + i * (w - 40 * u) / 8, y], (100, 60, 40), 3 * u)
     for i in range(5): p.line([x + 40 * u + i * (w - 80 * u) / 4, y, x + 40 * u + i * (w - 80 * u) / 4, y + 24 * u], (90, 58, 40), 8 * u)
-    pts = [x - 10 * u, y - 120 * u, x + 30 * u, y - 210 * u, x + 70 * u, y - 290 * u, x + 110 * u, y - 230 * u, x + 170 * u, y - 170 * u, x + 210 * u, y - 230 * u, x + 250 * u, y - 290 * u, x + 290 * u, y - 210 * u, x + w + 10 * u, y - 120 * u]
+    d = wh - 120
+    pts = [x - 10 * u, y - (120 + d) * u, x + 30 * u, y - (210 + d) * u, x + 70 * u, y - (290 + d) * u, x + 110 * u, y - (230 + d) * u, x + 170 * u, y - (170 + d) * u, x + 210 * u, y - (230 + d) * u, x + 250 * u, y - (290 + d) * u, x + 290 * u, y - (210 + d) * u, x + w + 10 * u, y - (120 + d) * u]
     p.poly(pts, fill=(60, 56, 64), out=INK, w=4 * u)
-    p.rect([x + w / 2 - 26 * u, y - 86 * u, x + w / 2 + 26 * u, y], fill=(60, 36, 30), out=INK, w=3 * u)
-    for i in range(3): p.rect([x + 50 * u + i * 70 * u, y - 96 * u, x + 84 * u + i * 70 * u, y - 60 * u], fill=(244, 208, 120), out=INK, w=2 * u)
+    p.rect([x + w / 2 - 30 * u, y - 125 * u, x + w / 2 + 30 * u, y], fill=(60, 36, 30), out=INK, w=3 * u)
+    for i in range(3): p.rect([x + 50 * u + i * 70 * u, y - 135 * u, x + 84 * u + i * 70 * u, y - 90 * u], fill=(244, 208, 120), out=INK, w=2 * u)
 
 
 def hut(p, x, y, w, col=(150, 100, 66)):
-    p.rect([x, y - w * .5, x + w, y], fill=col, out=INK, w=3)
-    for i in range(1, 6): p.line([x + i * w / 6, y - w * .5, x + i * w / 6, y], mix(col, INK, .3), 2)
-    p.poly([x - 14, y - w * .5, x + w / 2, y - w * .95, x + w + 14, y - w * .5], fill=(190, 150, 80), out=INK, w=3)
-    p.rect([x + w * .4, y - w * .3, x + w * .6, y], fill=(70, 44, 34), out=INK, w=2)
-    for i in range(3): p.line([x + 6 + i * w * .35, y, x + 6 + i * w * .35, y + 22], (90, 58, 40), 6)
+    wh = w * .55
+    p.rect([x, y - wh, x + w, y], fill=col, out=INK, w=3)
+    for i in range(1, 6): p.line([x + i * w / 6, y - wh, x + i * w / 6, y], mix(col, INK, .3), 2)
+    p.poly([x - w * .05, y - wh, x + w / 2, y - w * 1.05, x + w * 1.05, y - wh], fill=(190, 150, 80), out=INK, w=3)
+    p.rect([x + w * .4, y - w * .42, x + w * .6, y], fill=(70, 44, 34), out=INK, w=2)
+    p.rect([x + w * .1, y - w * .42, x + w * .26, y - w * .26], fill=(244, 208, 120), out=INK, w=2)
+    for i in range(3): p.line([x + 6 + i * w * .35, y, x + 6 + i * w * .35, y + w * .08], (90, 58, 40), 6)
 
 
 def planks(p, y0, y1, col=(150, 100, 66), x0=-100, x1=1180):
@@ -103,7 +106,7 @@ def planks(p, y0, y1, col=(150, 100, 66), x0=-100, x1=1180):
         p.line([x, yy, x, yy + (y1 - y0) / n], mix(col, INK, .4), 2)
 
 
-def pier(p, pal, y=1110):
+def pier(p, pal, y=1090):
     planks(p, y, y + 820)
     p.rect([-100, y - 8, 1180, y + 6], fill=(110, 70, 44), out=INK, w=3)
     for x in (80, 330, 580, 830, 1060):
