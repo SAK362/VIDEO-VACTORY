@@ -1,0 +1,944 @@
+{
+ "title": "Kereta Cepat Whoosh",
+ "scenes": [
+  {
+   "sent": [
+    0,
+    1
+   ],
+   "env": "hsr",
+   "kicker": "KERETA CEPAT WHOOSH",
+   "heading": "Jakarta–Bandung cuma *45 menit*",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w",
+     "lines": 1
+    },
+    {
+     "t": "jam",
+     "id": "j",
+     "p": [
+      -4,
+      9,
+      -16
+     ],
+     "sz": 4
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     3,
+     -4
+    ],
+    "r": 54,
+    "a": [
+     14,
+     24
+    ],
+    "h": [
+     5,
+     7
+    ],
+    "fov": 48
+   },
+   "move": 70,
+   "notrack": false,
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    2,
+    2
+   ],
+   "env": "hsr",
+   "kicker": "BEDAH",
+   "heading": "Kita *bedah* kereta ini",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w",
+     "ex": [
+      0.4,
+      3.5
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     2,
+     1,
+     0
+    ],
+    "r": 42,
+    "a": [
+     18,
+     26
+    ],
+    "h": [
+     4,
+     6
+    ],
+    "fov": 48
+   },
+   "move": 0,
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    3,
+    3
+   ],
+   "env": "hsr",
+   "kicker": "KECEPATAN",
+   "heading": "Melaju sampai *350 km/jam*",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w",
+     "lines": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     12,
+     1.4,
+     0
+    ],
+    "r": 36,
+    "a": [
+     -35,
+     -22
+    ],
+    "h": [
+     3,
+     4
+    ],
+    "fov": 48
+   },
+   "move": 90,
+   "card": {
+    "big": "350 km/jam",
+    "small": "kecepatan operasi"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    4,
+    4
+   ],
+   "env": "hsr",
+   "kicker": "PERTAMA",
+   "heading": "Pertama di *Asia Tenggara*",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w",
+     "lines": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     30,
+     1.6,
+     0
+    ],
+    "r": 30,
+    "a": [
+     -52,
+     -40
+    ],
+    "h": [
+     2.5,
+     3.5
+    ],
+    "fov": 48
+   },
+   "move": 70,
+   "card": {
+    "big": "#1",
+    "small": "kereta cepat di Asia Tenggara"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    5,
+    5
+   ],
+   "env": "studio",
+   "kicker": "LINTASAN",
+   "heading": "Sepanjang *142 km*",
+   "objs": [
+    {
+     "t": "rute_hsr",
+     "id": "r"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     0,
+     0
+    ],
+    "r": 64,
+    "a": [
+     40,
+     28
+    ],
+    "h": [
+     26,
+     26
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "r.halim",
+     "text": "Halim"
+    },
+    {
+     "at": "r.tegalluar",
+     "text": "Tegalluar"
+    }
+   ],
+   "card": {
+    "big": "142 km",
+    "small": "panjang lintasan"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    6,
+    6
+   ],
+   "env": "hsr",
+   "kicker": "CR400AF",
+   "heading": "Delapan *gerbong*",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w",
+     "lines": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     2,
+     0
+    ],
+    "r": 62,
+    "a": [
+     10,
+     16
+    ],
+    "h": [
+     5,
+     6
+    ],
+    "fov": 48
+   },
+   "move": 40,
+   "card": {
+    "big": "8 gerbong",
+    "small": "rangkaian listrik CR400AF"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    7,
+    7
+   ],
+   "env": "hsr",
+   "kicker": "PENGGERAK",
+   "heading": "Empat *bermotor*, empat tidak",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w",
+     "ex": [
+      0.8,
+      3.2
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     2,
+     1,
+     0
+    ],
+    "r": 40,
+    "a": [
+     18,
+     24
+    ],
+    "h": [
+     4,
+     6
+    ],
+    "fov": 48
+   },
+   "move": 0,
+   "labels": [
+    {
+     "at": "w.motor",
+     "text": "gerbong bermotor (4)"
+    },
+    {
+     "at": "w.trailer",
+     "text": "gerbong tanpa motor (4)"
+    },
+    {
+     "at": "w.bogie",
+     "text": "bogie"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    8,
+    8
+   ],
+   "env": "hsr",
+   "kicker": "LISTRIK",
+   "heading": "Dari *kabel* ke pantograf",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w"
+    }
+   ],
+   "cam": {
+    "c": [
+     -8,
+     3.2,
+     0
+    ],
+    "r": 20,
+    "a": [
+     -14,
+     -26
+    ],
+    "h": [
+     2,
+     3
+    ],
+    "fov": 48
+   },
+   "move": 60,
+   "labels": [
+    {
+     "at": "w.pantograf",
+     "text": "pantograf"
+    },
+    {
+     "at": "w.roof",
+     "text": "atap kereta"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    9,
+    9
+   ],
+   "env": "studio",
+   "kicker": "LINTASAN",
+   "heading": "Tikungan harus *landai*",
+   "objs": [
+    {
+     "t": "rute_hsr",
+     "id": "r"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     0,
+     0
+    ],
+    "r": 58,
+    "a": [
+     -20,
+     0
+    ],
+    "h": [
+     30,
+     22
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "r.karawang",
+     "text": "tikungan sangat landai"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    10,
+    10
+   ],
+   "env": "studio",
+   "kicker": "LINTASAN",
+   "heading": "Jalur dibuat *selurus* mungkin",
+   "objs": [
+    {
+     "t": "rute_hsr",
+     "id": "r"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     0,
+     0
+    ],
+    "r": 44,
+    "a": [
+     8,
+     24
+    ],
+    "h": [
+     40,
+     30
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "r.halim",
+     "text": "Halim"
+    },
+    {
+     "at": "r.tegalluar",
+     "text": "Tegalluar"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    11,
+    11
+   ],
+   "env": "hsr",
+   "kicker": "JALUR LAYANG",
+   "heading": "Lebih dari *80 km* dibangun layang",
+   "objs": [
+    {
+     "t": "viaduk",
+     "id": "v"
+    },
+    {
+     "t": "whoosh",
+     "id": "w",
+     "p": [
+      0,
+      9,
+      0
+     ]
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     6,
+     0
+    ],
+    "r": 72,
+    "a": [
+     40,
+     18
+    ],
+    "h": [
+     10,
+     14
+    ],
+    "fov": 48
+   },
+   "notrack": true,
+   "move": 0,
+   "labels": [
+    {
+     "at": "v.deck",
+     "text": "jalur layang"
+    },
+    {
+     "at": "v.pier",
+     "text": "pilar beton"
+    }
+   ],
+   "card": {
+    "big": "80+ km",
+    "small": "dibangun layang"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    12,
+    12
+   ],
+   "env": "hsr",
+   "kicker": "TIMBUNAN",
+   "heading": "Sisanya *timbunan*",
+   "objs": [
+    {
+     "t": "timbunan",
+     "id": "tb"
+    },
+    {
+     "t": "whoosh",
+     "id": "w",
+     "p": [
+      0,
+      4.75,
+      0
+     ],
+     "x0": -70,
+     "v": 16
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     2,
+     0
+    ],
+    "r": 56,
+    "a": [
+     -50,
+     -38
+    ],
+    "h": [
+     12,
+     9
+    ],
+    "fov": 48
+   },
+   "notrack": true,
+   "move": 0,
+   "labels": [
+    {
+     "at": "tb.balas",
+     "text": "balas kerikil"
+    },
+    {
+     "at": "tb.timbunan",
+     "text": "lapisan tanah padat"
+    },
+    {
+     "at": "tb.tanahdasar",
+     "text": "tanah dasar"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    12,
+    12
+   ],
+   "env": "hsr",
+   "kicker": "TEROWONGAN",
+   "heading": "*Tiga belas* terowongan",
+   "objs": [
+    {
+     "t": "terowongan_hsr",
+     "id": "t"
+    },
+    {
+     "t": "whoosh",
+     "id": "w",
+     "x0": -95,
+     "v": 14
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     5,
+     0
+    ],
+    "r": 44,
+    "a": [
+     -62,
+     -52
+    ],
+    "h": [
+     6,
+     7
+    ],
+    "fov": 48
+   },
+   "notrack": false,
+   "move": 0,
+   "labels": [
+    {
+     "at": "t.portal",
+     "text": "mulut terowongan"
+    },
+    {
+     "at": "t.lining",
+     "text": "lining beton"
+    }
+   ],
+   "card": {
+    "big": "13",
+    "small": "terowongan"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN",
+   "start": {
+    "sent": 12,
+    "off": 2.2
+   }
+  },
+  {
+   "sent": [
+    13,
+    13
+   ],
+   "env": "hsr",
+   "kicker": "REL",
+   "heading": "Pelat beton *atau* balas kerikil",
+   "objs": [
+    {
+     "t": "rel_dua_jenis",
+     "id": "t"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     1,
+     0
+    ],
+    "r": 30,
+    "a": [
+     28,
+     22
+    ],
+    "h": [
+     7,
+     10
+    ],
+    "fov": 48
+   },
+   "notrack": true,
+   "labels": [
+    {
+     "at": "t.balas",
+     "text": "balas kerikil"
+    },
+    {
+     "at": "t.pelat",
+     "text": "pelat beton"
+    },
+    {
+     "at": "t.rel",
+     "text": "rel"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    14,
+    14
+   ],
+   "env": "hsr",
+   "kicker": "SINYAL",
+   "heading": "Menjaga *jarak aman*",
+   "objs": [
+    {
+     "t": "sinyal_ka",
+     "id": "s"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     3,
+     0
+    ],
+    "r": 38,
+    "a": [
+     28,
+     20
+    ],
+    "h": [
+     6,
+     8
+    ],
+    "fov": 48
+   },
+   "notrack": true,
+   "labels": [
+    {
+     "at": "s.balise",
+     "text": "balise"
+    },
+    {
+     "at": "s.rbc",
+     "text": "Radio Block Center"
+    },
+    {
+     "at": "s.blok",
+     "text": "sirkuit rel"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    15,
+    15
+   ],
+   "env": "hsr",
+   "kicker": "BOGIE",
+   "heading": "Bogie *meredam* getaran",
+   "objs": [
+    {
+     "t": "bogie_detail",
+     "id": "bg"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     2.3,
+     0
+    ],
+    "r": 17,
+    "a": [
+     20,
+     32
+    ],
+    "h": [
+     5,
+     7
+    ],
+    "fov": 48
+   },
+   "notrack": true,
+   "labels": [
+    {
+     "at": "bg.rangka",
+     "text": "rangka bogie"
+    },
+    {
+     "at": "bg.pegas",
+     "text": "pegas"
+    },
+    {
+     "at": "bg.motor",
+     "text": "motor traksi"
+    },
+    {
+     "at": "bg.damper",
+     "text": "peredam"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    16,
+    16
+   ],
+   "env": "hsr",
+   "kicker": "IKLIM TROPIS",
+   "heading": "Tahan *panas* dan lembap",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w",
+     "lines": 1
+    },
+    {
+     "t": "iklim",
+     "id": "k"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     6,
+     0
+    ],
+    "r": 52,
+    "a": [
+     16,
+     26
+    ],
+    "h": [
+     6,
+     8
+    ],
+    "fov": 48
+   },
+   "move": 50,
+   "labels": [
+    {
+     "at": "k.matahari",
+     "text": "panas matahari"
+    },
+    {
+     "at": "k.hujan",
+     "text": "hujan deras"
+    },
+    {
+     "at": "k.termometer",
+     "text": "suhu tinggi"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    17,
+    17
+   ],
+   "env": "studio",
+   "kicker": "STASIUN",
+   "heading": "Hanya *empat* stasiun",
+   "objs": [
+    {
+     "t": "rute_hsr",
+     "id": "r"
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     0,
+     0
+    ],
+    "r": 62,
+    "a": [
+     10,
+     30
+    ],
+    "h": [
+     26,
+     24
+    ],
+    "fov": 48
+   },
+   "labels": [
+    {
+     "at": "r.halim",
+     "text": "Halim"
+    },
+    {
+     "at": "r.karawang",
+     "text": "Karawang"
+    },
+    {
+     "at": "r.padalarang",
+     "text": "Padalarang"
+    },
+    {
+     "at": "r.tegalluar",
+     "text": "Tegalluar"
+    }
+   ],
+   "card": {
+    "big": "4",
+    "small": "stasiun"
+   },
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    18,
+    18
+   ],
+   "env": "hsr",
+   "kicker": "WAKTU TEMPUH",
+   "heading": "Waktu tempuh *tetap singkat*",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w",
+     "lines": 1
+    },
+    {
+     "t": "jam",
+     "id": "j",
+     "p": [
+      -4,
+      9,
+      -16
+     ],
+     "sz": 4
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     3,
+     -4
+    ],
+    "r": 54,
+    "a": [
+     -20,
+     -10
+    ],
+    "h": [
+     5,
+     6
+    ],
+    "fov": 48
+   },
+   "move": 80,
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    19,
+    20
+   ],
+   "env": "hsr",
+   "kicker": "JADI...",
+   "heading": "Perjalanan jauh jadi *sekejap*",
+   "objs": [
+    {
+     "t": "whoosh",
+     "id": "w",
+     "lines": 1
+    }
+   ],
+   "cam": {
+    "c": [
+     0,
+     1.5,
+     0
+    ],
+    "r": 52,
+    "a": [
+     -24,
+     -12
+    ],
+    "h": [
+     6,
+     5
+    ],
+    "fov": 48
+   },
+   "move": 80,
+   "ajak": "Follow & tulis topik berikutnya di komentar"
+  }
+ ]
+}

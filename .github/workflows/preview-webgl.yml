@@ -1,0 +1,106 @@
+name: preview-webgl
+
+# Pratinjau video TANPA voiceover (waktu subtitle diperkirakan dari naskah). Untuk QC visual.
+# Jalankan: tab Actions > preview-webgl > Run workflow > isi nomor (0001..0005).
+# Hasil: Artifacts "video-preview-NNNN" (MP4 1080x1920, 30 fps, senyap).
+on:
+  push:
+    branches: [tbm-components]
+    paths: ['webgl/preview/TOPIC']
+  workflow_dispatch:
+    inputs:
+      topic: {description: 'Nomor topik (0001-0005)', required: false, default: ''}
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prep:
+    runs-on: ubuntu-latest
+    outputs:
+      topic: ${{ steps.t.outputs.topic }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: t
+        run: |
+          T='${{ inputs.topic }}'; [ -z "$T" ] && T=$(tr -d ' \r\n' < webgl/preview/TOPIC)
+          echo "topic=$T" >> $GITHUB_OUTPUT
+      - name: Pasang ffmpeg bila belum ada
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Siapkan timing perkiraan + spec
+        run: |
+          pip install --quiet numpy playwright
+          N=${{ steps.t.outputs.topic }}
+          mkdir -p work public
+          python3 - "$N" <<'PY'
+          import json,sys
+          n=sys.argv[1]
+          s=[l.strip() for l in open(f'webgl/preview/{n}.txt',encoding='utf-8').read().split("\n\n") if l.strip()]
+          json.dump({"title":n,"scenes":[{"narration":x} for x in s]},open('work/props.json','w'),ensure_ascii=False)
+          PY
+          ffmpeg -v error -y -f lavfi -i anullsrc=r=24000:cl=mono -t 100 public/voiceover.wav
+          PROPS_FILE=work/props.json WAV_FILE=public/voiceover.wav python webgl/make_timing.py
+          cp webgl/examples/$N.json work/spec_in.json
+          python webgl/make_spec.py work/spec_in.json
+          cp curio.png webgl/curio.png
+          python webgl/validate_spec.py work/spec_in.json || true
+          python webgl/render_webgl.py meta
+      - uses: actions/upload-artifact@v4
+        with:
+          name: work
+          path: |
+            webgl/timing.js
+            webgl/spec.js
+            webgl/spec.json
+            webgl/engine.txt
+            webgl/curio.png
+          retention-days: 1
+
+  render:
+    needs: prep
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: true
+      matrix:
+        chunk: [0, 1, 2, 3, 4, 5, 6, 7]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with: {name: work, path: .}
+      - name: Pasang ffmpeg dan Chrome bila belum ada
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
+          if [ ! -x /usr/bin/google-chrome ]; then
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            sudo apt-get install -y -qq ./google-chrome-stable_current_amd64.deb
+          fi
+      - name: Render potongan ${{ matrix.chunk }}
+        run: |
+          pip install --quiet playwright
+          mkdir -p out
+          python webgl/render_webgl.py chunk ${{ matrix.chunk }} 8 out/seg${{ matrix.chunk }}.mp4
+      - uses: actions/upload-artifact@v4
+        with: {name: 'seg${{ matrix.chunk }}', path: 'out/seg${{ matrix.chunk }}.mp4', retention-days: 1}
+
+  final:
+    needs: [prep, render]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pasang ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - uses: actions/download-artifact@v4
+        with: {path: parts, merge-multiple: true}
+      - name: Gabung
+        run: |
+          for i in 0 1 2 3 4 5 6 7; do echo "file '$PWD/parts/seg$i.mp4'" >> list.txt; done
+          ffmpeg -v error -y -f concat -safe 0 -i list.txt -c copy video.mp4
+          ls -lh video.mp4
+      - uses: actions/upload-artifact@v4
+        with: {name: 'video-preview-${{ needs.prep.outputs.topic }}', path: video.mp4, retention-days: 5}

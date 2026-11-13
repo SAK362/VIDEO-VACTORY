@@ -2,11 +2,12 @@
 import json, os, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 PRIM = {'box', 'cyl', 'sph', 'link', 'path', 'flow', 'group'}
-ENVS = {'outdoor', 'rail', 'road', 'room', 'stage', 'studio', 'sea', 'space', 'night'}
+ENVS = {'outdoor', 'rail', 'road', 'room', 'stage', 'studio', 'sea', 'space', 'night', 'underground', 'kampung','pantai', 'candi', 'hsr'}
 
 
 def comps():
-    return set(re.findall(r"^reg\('([a-z_]+)'", open(os.path.join(HERE, 'engine', 'lib.js'), encoding='utf-8').read(), re.M))
+    import glob
+    return set(n for f in glob.glob(os.path.join(HERE, 'engine', 'lib*.js')) for n in re.findall(r"^reg\('([a-z_]+)'", open(f, encoding='utf-8').read(), re.M))
 
 
 def check(d, nsent=None):
@@ -18,7 +19,7 @@ def check(d, nsent=None):
         w = lambda m: err.append('adegan %d: %s' % (i, m))
         se = s.get('sent'); se = [se, se] if isinstance(se, int) else se
         if not (isinstance(se, list) and len(se) == 2 and all(isinstance(x, int) for x in se) and se[0] <= se[1]): w('sent harus [a,b]'); continue
-        if se[0] <= prev: w('sent tumpang tindih / tidak berurut')
+        if se[0] <= prev and not (s.get('start') and se[0] == prev): w('sent tumpang tindih / tidak berurut')
         prev = se[1]
         if nsent and se[1] >= nsent: w('sent melebihi jumlah kalimat %d' % nsent)
         if s.get('env', 'outdoor') not in ENVS: w('env tidak dikenal: %s' % s.get('env'))
