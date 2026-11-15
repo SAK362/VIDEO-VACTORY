@@ -9,3 +9,5 @@ Alur per video (lihat ATURAN_BEYOURBEST.txt):
 6. Thumbnail: `thumb.py`. Push mp4 + narasi + thumbnail ke `beyourbest/outbox/`.
 
 Catatan: path di skrip memakai /home/claude/beyourbest/v2; sesuaikan bila folder kerja berbeda. Butuh rsvg-convert, ffmpeg, Poppins, python3 pillow numpy.
+
+Pemeran bebas: `actors.py` (`actor(x,y,t,kind,...)`) menggantikan `boy()` di adegan; preset pria, wanita, anak, remaja, kakek, nenek, hijab, berjenggot. Tata letak maskot/watermark/subtitle tidak berubah.
