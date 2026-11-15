@@ -44,3 +44,12 @@ Claude = riset, narasi, thumbnail, render. Gemini (n8n) = deskripsi. Upload = Re
 
 == QC ==
 Naskah beda dari buku + contoh sendiri; tanpa logo/merek; tata letak sesuai; subtitle sinkron Whisper; ada gerak; durasi 85-95 dtk; 4 file di folder; status sheet diperbarui; pemeran sesuai ide scene.
+
+== MODE CEPAT (nomor + voiceover) ==
+Bila user hanya menulis nomor project (mis. "0052") dan/atau mengirim NNNN.wav, JANGAN bertanya apa pun. Langsung:
+1 Buka spreadsheet BEYOURBEST - TOPIK, baris n+1: ambil topik, NARASI (kolom G), SUMBER RISET (kolom H). Bila narasi kosong, riset dan tulis dulu, simpan ke sheet, lalu lanjut.
+2 Ubah STATUS ke DIPROSES. Bila wav belum ada, minta wav SATU kali (singkat), lalu lanjut otomatis begitu diterima.
+3 Whisper (align-beyourbest) -> wal.py -> audio3.py -> scene (pemeran bebas via actors.py) -> render 2 potongan -> QC frame awal/tengah/akhir + ffprobe.
+4 Thumbnail, push mp4+narasi+thumbnail ke beyourbest/outbox (izin tetap). Status RENDER_SELESAI; SELESAI setelah terjadwal oleh n8n.
+5 Lapor singkat: channel BeYourBest, nomor project, durasi, status.
+Satu pesan bisa berisi beberapa nomor: kerjakan berurutan, satu wav per nomor.
