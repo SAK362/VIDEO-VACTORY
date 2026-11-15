@@ -1,0 +1,46 @@
+ATURAN BEYOURBEST (dipakai semua akun Claude). Diperbarui 2026-11-15: PEMERAN BEBAS.
+
+== RINGKAS ==
+Channel BeYourBest. Portrait 1080x1920, 30 fps, ±90 dtk. Platform: IG Reels, YouTube Shorts, FB Reels, TikTok, Threads.
+Buku sumber aktif: Mindset (Carol S. Dweck); bisa berganti, pakai yang terakhir disebut user.
+Laporan ke user: minimal, selalu sebut channel BeYourBest.
+
+== PEMERAN (BARU) ==
+Pemeran BEBAS: jenis, jumlah, usia, gender dipilih Claude sesuai ide scene (pria, wanita, anak, remaja, dewasa, kakek, nenek, berhijab, berjenggot, dll). Satu atau banyak orang per scene, boleh beda tiap scene dan tiap video. Gambar dengan kit/actors.py: actor(x,y,t,kind,...) menggantikan boy().
+Preset kind: anak_laki, anak_perempuan, remaja_laki, remaja_perempuan, pria, wanita, ibu_hijab, kakek, nenek, pria_berjenggot. Warna, rambut (short/long/pigtails/bun/bald/hijab), kacamata, jenggot, tongkat bisa diubah lewat parameter. Pakaian polos tanpa logo.
+TIDAK BOLEH DIUBAH: tata letak maskot, watermark, subtitle (lihat bawah). Maskot psikiater berhijab tetap sama di semua scene.
+
+== HAK CIPTA (WAJIB) ==
+- Sumber = inspirasi. Konsep boleh, kalimat buku tidak. Tulis ulang dengan kata sendiri, jangan ikuti urutan bab, tambah contoh buatan sendiri.
+- Jangan pakai cover, diagram, ilustrasi buku. Jangan klaim resmi/berafiliasi.
+- Deskripsi memuat: "Terinspirasi dari buku [judul], [penulis]."
+- Kutipan langsung sangat pendek dan jarang.
+- Tanpa logo merek, emblem, karakter milik orang. Musik hanya bebas royalti/berlisensi jelas.
+- Edukasi umum, tanpa klaim medis/terapi.
+
+== PENAMAAN & DRIVE ==
+NNNN_TOPIK mengikuti spreadsheet BEYOURBEST - TOPIK (ID 16rVtR42ZoaZWE-GpT45fZw-x8lFbQhvGi8J79PQ186g, tab Topik). Folder induk Drive 0001_BEYOURBEST (ID 1ujiv3oE2nNPchsshKJxCDury8oZnElGl). 1 topik = 1 folder NNNN_TOPIK berisi: NNNN_TOPIK.mp4, _narasi.txt, _deskripsi.txt (Gemini via n8n), _thumbnail.png.
+Claude = riset, narasi, thumbnail, render. Gemini (n8n) = deskripsi. Upload = Repliz via n8n. 5 konten/hari, 1 konten untuk semua platform.
+
+== ALUR ==
+1 Topik dari buku aktif, satu video = satu ide.
+2 Riset min. 3 sumber, catat di kolom SUMBER RISET. Topik "Luar buku"/"Kisah" wajib verifikasi.
+3 Narasi Indonesia santai 190-220 kata, kalimat pendek, baris kosong antar kalimat. Jangan template. Penutup tetap: ajakan follow & komentar topik berikutnya. Kirim .txt, tunggu persetujuan kecuali user bilang "langsung buat".
+4 Deskripsi: Gemini via n8n.
+5 Scene 14-16 ±6 dtk: judul panel, label mono, SVG, gerak. Pemeran bebas (lihat atas).
+6 Voiceover dari user. Terima -> LANGSUNG kerjakan. Penyelarasan wajib Whisper di GitHub (lihat README.md kit).
+7 Render, cek frame awal/tengah/akhir, ffprobe (1080x1920, 30fps, H.264+AAC).
+8 Thumbnail: scene terkuat + judul besar.
+9 Push mp4+narasi+thumbnail ke SAK362/VIDEO-VACTORY beyourbest/outbox (izin tetap, langsung push). n8n workflow "BEYOURBEST - Gabung Video & Jadwalkan Repliz" (ID ZDi00HwcsurMF8NG) mengambilnya. Claude tidak menjalankan workflow n8n kecuali diminta. Notifikasi Telegram berawalan [BeYourBest].
+10 Perbarui status di spreadsheet: BELUM -> NARASI_SIAP -> DIPROSES -> RENDER_SELESAI -> SELESAI / GAGAL.
+
+== TATA LETAK (TETAP, 1080x1920) ==
+- Panel judul atas 0-380 px: latar krem #EDEBDD memudar. Label mono KAPITAL (y≈178, 26 px, #55594c). Judul 2 baris sans tebal 58 px (y≈246, 312), kata kunci hijau #1F7A63, lain #1d2a26.
+- Watermark BeYourBest: kapsul #1E3A34 tengah atas (x 350-730, y 42-106), ikon daun mint #8ff0c8, teks 36 px. Tampil sejak detik 0,3.
+- Area scene y 380-1400. Label mono kecil putih y≈1430 "ILUSTRASI DISEDERHANAKAN".
+- Subtitle pusat y≈1522: kapsul #1E3A34 90%, x 80-1000, y 1456-1590, rx 40; 2-7 kata per frasa, maks 2 baris, putih tebal 52 px; arsir diagonal mint pada kata yang sedang dibaca (satu kata).
+- Maskot psikiater berhijab kanan bawah DI BAWAH subtitle (kaki y≈1860, kepala y≈1595, tinggi ≈265 px, pusat x≈850), tidak menutupi subtitle. Pop-in 0,15 dtk; mengedip tiap ≈3 dtk; mulut ikut envelope suara; melambai di hook dan penutup.
+- Gerak wajib: zoom/pan pelan, parallax, debu cahaya, pemeran bernapas/bergerak. Ganti scene tiap 3-6 dtk. Lokasi variatif (dalam dan luar ruangan). Hook dan penutup menyambung.
+
+== QC ==
+Naskah beda dari buku + contoh sendiri; tanpa logo/merek; tata letak sesuai; subtitle sinkron Whisper; ada gerak; durasi 85-95 dtk; 4 file di folder; status sheet diperbarui; pemeran sesuai ide scene.
