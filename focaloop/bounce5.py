@@ -9,8 +9,8 @@ import bounce4 as b4
 import patterns as P
 from bounce3 import W, H, FPS, CX, CY, SR, SCALES, INSTR, hsv_bgr, pos_at, draw_ball, text_layer, pal
 
-HOLD = 0.9
-KINDS = [("ellipse", .22), ("circle", .06), ("sunburst", .20), ("spiral", .10), ("drop", .14), ("nested", .14), ("wavy", .14)]
+HOLD = 0.7
+KINDS = [("ellipse", .30), ("circle", .06), ("sunburst", .22), ("spiral", .12), ("nested", .16), ("wavy", .14)]
 RMAX = 335.0
 
 
@@ -50,11 +50,11 @@ def gen_params(seed):
     kind = pick(r, KINDS)
     radial = kind in ("circle", "sunburst", "spiral", "wavy")
     Tm0 = r.uniform(1.15, 2.0)
-    T0 = (Tm0 + HOLD) if radial else 2 * Tm0
+    T0 = (Tm0 + HOLD) if radial else 2 * Tm0 + HOLD
     nst = max(3, int(round(dur / T0)))
     if radial: Tm = max(dur / nst - HOLD, 0.8)
-    else: Tm = dur / nst / 2
-    T = (Tm + HOLD) if radial else 2 * Tm
+    else: Tm = max((dur / nst - HOLD) / 2, 0.6)
+    T = (Tm + HOLD) if radial else 2 * Tm + HOLD
     counts, cmode, maxn = gen_counts(r, nst)
     morph = r.random() < 0.55 and kind != "circle"
     p.update(kind=kind, radial=radial, dur=dur, nst=nst, tmeet=Tm, T=T, counts=counts, count_mode=cmode, maxn=maxn,
@@ -142,53 +142,56 @@ def drop_wall(ak, bk, sec, steps, phi, col, th):
     return fn
 
 
-def build_stage(p, st, n, Tend):
-    """-> paths, wall_fn(col,th), meets[(t,(x,y))], start(x,y). Semua jenis menjaga: kecepatan tetap v, bertemu di satu titik."""
-    A = p["A"]; Tm = p["tmeet"]; v = 2 * A / Tm; kind = p["kind"]; shp = st["shape"]
-    col = hsv_bgr(p["wall_hue"] + st["hue"], 0.75, 1.0); th = p["wall_th"]
-    if kind == "ellipse":
-        e, phi = shp["e"], shp["phi"]; c = A * e; B = math.sqrt(A * A - c * c)
-        paths, f1 = P.paths_ellipse(A, phi, e, n, v, Tend, st["sector"], st["rot"])
-        f2 = (2 * CX - f1[0], 2 * CY - f1[1])
-        return paths, P.wall_ellipses([(A, B, phi)], col, th), [(Tm, f2), (2 * Tm, f1)], f1
-    if kind == "nested":
-        e, phi, odds = shp["e"], shp["phi"], shp["odds"]; c = A * e
-        ag = [A / o for o in odds]
-        paths, f1 = P.paths_ellipse(A, phi, e, n, v, Tend, st["sector"], st["rot"], groups=ag)
-        f2 = (2 * CX - f1[0], 2 * CY - f1[1])
-        items = [(a, math.sqrt(a * a - c * c), phi) for a in ag]
-        return paths, P.wall_ellipses(items, col, th), [(Tm, f2), (2 * Tm, f1)], f1
-    if kind == "drop":
-        e, phi, u = shp["e"], shp["phi"], shp["u"]
-        paths, f1, ak, bk, steps, sec, c, amax = P.paths_petal(A, phi, e, [1, u], 2, phi, n, v, Tend)
-        f2 = (2 * CX - f1[0], 2 * CY - f1[1])
-        return paths, drop_wall(ak, bk, sec, steps, phi, col, th), [(Tm, f2)], f1
-    # radial
-    if kind == "circle": radii = [A]
-    else: radii = shp["radii"]
-    ns = len(radii); rmax = max(radii)
-    def rad(a): return radii[int(((a % (2 * math.pi)) / (2 * math.pi)) * ns) % ns]
-    paths = P.paths_radial(rad, n, v * rmax / A if False else 2 * rmax / Tm, Tend, lambda t_: 2 * (rmax - rad(t_)) / (2 * rmax / Tm))
-    wf = P.wall_ellipses([(A, A, 0.0), (A - 14, A - 14, 0.0)], col, th) if kind == "circle" else P.wall_sectors(radii, col, th)
-    return paths, wf, [(Tm, (CX, CY))], (CX, CY)
-
-
-def hits_of(paths, start, Tend):
+def freeze(paths, t_end):
+    """Setelah kembali ke titik awal (t_end), bola diam di titik itu selama jeda lalu tahap berikutnya mulai."""
     out = []
-    sx, sy = start
     for pa in paths:
-        for j in range(1, len(pa) - 1):
-            t, x, y = pa[j]
-            if t <= Tend and (x - sx) ** 2 + (y - sy) ** 2 > 25: out.append((t, x, y))
+        keep = pa[pa[:, 0] < t_end - 1e-6]; sx, sy = pa[0, 1], pa[0, 2]
+        out.append(np.vstack([keep, [[t_end, sx, sy], [t_end + 10, sx, sy]]]))
     return out
 
 
-def check_meet(paths, meets, tol=1.5):
+def build_stage(p, st, n, Tend):
+    """-> paths, wall_fn, meets[(t,[(x,y),..])] untuk riak, worst(px). Alur: bola keluar dari titik awal, kena dinding,
+    kembali ke titik awal (semua serempak), lalu tahap baru. Kecepatan tetap."""
+    A = p["A"]; Tm = p["tmeet"]; v = 2 * A / Tm; kind = p["kind"]; shp = st["shape"]
+    col = hsv_bgr(p["wall_hue"] + st["hue"], 0.75, 1.0); th = p["wall_th"]
     worst = 0.0
-    for tm, (fx, fy) in meets:
-        for pa in paths[:: max(1, len(paths) // 40)]:
-            x, y, _ = pos_at(pa, tm); worst = max(worst, math.hypot(x - fx, y - fy))
-    return worst
+    if kind in ("ellipse", "nested"):
+        e, phi = shp["e"], shp["phi"]; c = A * e
+        if kind == "ellipse":
+            B = math.sqrt(A * A - c * c); ag = None; wf = P.wall_ellipses([(A, B, phi)], col, th)
+        else:
+            ag = [A / o for o in shp["odds"]]
+            wf = P.wall_ellipses([(a, math.sqrt(a * a - c * c), phi) for a in ag], col, th)
+        paths, f1 = P.paths_ellipse(A, phi, e, n, v, Tend, st["sector"], st["rot"], groups=ag, both=True)
+        f2 = (2 * CX - f1[0], 2 * CY - f1[1])
+        for pa in paths:   # cek: di Tm di fokus seberang, di 2Tm di titik awal
+            ox, oy = pa[0, 1], pa[0, 2]
+            x, y, _ = pos_at(pa, Tm); worst = max(worst, math.hypot(x - (2 * CX - ox), y - (2 * CY - oy)))
+            x, y, _ = pos_at(pa, 2 * Tm); worst = max(worst, math.hypot(x - ox, y - oy))
+        paths = freeze(paths, 2 * Tm)
+        return paths, wf, [(Tm, [f1, f2]), (2 * Tm, [f1, f2])], worst
+    if kind == "circle": radii = [A]
+    else: radii = shp["radii"]
+    ns = len(radii); rmax = max(radii); vv = 2 * rmax / Tm
+    def rad(a): return radii[int(((a % (2 * math.pi)) / (2 * math.pi)) * ns) % ns]
+    paths = P.paths_radial(rad, n, vv, Tend, lambda t_: 2 * (rmax - rad(t_)) / vv)
+    for pa in paths[:: max(1, len(paths) // 40)]:
+        x, y, _ = pos_at(pa, Tm); worst = max(worst, math.hypot(x - CX, y - CY))
+    paths = freeze(paths, Tm)
+    wf = P.wall_ellipses([(A, A, 0.0), (A - 14, A - 14, 0.0)], col, th) if kind == "circle" else P.wall_sectors(radii, col, th)
+    return paths, wf, [(Tm, [(CX, CY)])], worst
+
+
+def hits_of(paths, Tend):
+    out = []
+    for pa in paths:
+        sx, sy = pa[0, 1], pa[0, 2]
+        for j in range(1, len(pa) - 2):
+            t, x, y = pa[j]
+            if t <= Tend and (x - sx) ** 2 + (y - sy) ** 2 > 25: out.append((t, x, y))
+    return out
 
 
 def build_audio(stage_hits, stage_meets, p, total):
@@ -262,10 +265,10 @@ def main(seed, out_path):
     stage_hits, stage_meets = [], []; worst_all = 0.0
     for s, st in enumerate(p["stages"]):
         n = st["n"]
-        paths, wall_fn, meets, start = build_stage(p, st, n, T + 0.25)
-        worst = check_meet(paths, meets); worst_all = max(worst_all, worst)
+        paths, wall_fn, meets, worst = build_stage(p, st, n, T + 0.25)
+        worst_all = max(worst_all, worst)
         if worst > 2.0: raise RuntimeError(f"aturan titik temu dilanggar: stage {s} selisih {worst:.2f}px kind={p['kind']}")
-        hits = hits_of(paths, start, T + 0.25); stage_hits.append(hits); stage_meets.append([m[0] for m in meets])
+        hits = hits_of(paths, T + 0.25); stage_hits.append(hits); stage_meets.append([m[0] for m in meets])
         hits_a = np.array(sorted(hits)) if hits else np.zeros((0, 3))
         wall = np.zeros((H, W, 3), np.uint8); wall_fn(wall)
         gs = {5: 11, 2: 4}.get(p["wall_th"], 7)
@@ -296,12 +299,13 @@ def main(seed, out_path):
                     for th_, hx, hy in sel:
                         k_ = 1 - (t - th_) / 0.12
                         cv2.circle(heads, (int(hx), int(hy)), 3, tuple(int(q * k_) for q in wallcol), -1, cv2.LINE_AA)
-            for tmt, (fx, fy) in meets:
+            for tmt, pts_ in meets:
                 dtm = t - tmt
                 if 0 <= dtm < 0.9:
                     k_ = 1 - dtm / 0.9
-                    cv2.circle(heads, (int(fx), int(fy)), int(8 + dtm * 260), tuple(int(q * k_ * 0.9) for q in (255, 255, 255)), 2, cv2.LINE_AA)
-                    cv2.circle(heads, (int(fx), int(fy)), int(6 + dtm * 120), tuple(int(q * k_) for q in cols[0]), 2, cv2.LINE_AA)
+                    for (fx, fy) in pts_:
+                        cv2.circle(heads, (int(fx), int(fy)), int(8 + dtm * 260), tuple(int(q * k_ * 0.9) for q in (255, 255, 255)), 2, cv2.LINE_AA)
+                        cv2.circle(heads, (int(fx), int(fy)), int(6 + dtm * 120), tuple(int(q * k_) for q in cols[0]), 2, cv2.LINE_AA)
             g1 = cv2.GaussianBlur(heads, (0, 0), 6); g2 = cv2.GaussianBlur(heads, (0, 0), 2)
             f = cv2.add(cv2.add(b3.bg_frame(sbase, p, s * T + t), lines), heads)
             f = cv2.add(f, (g1 * 1.8 * p["glow"]).clip(0, 255).astype(np.uint8)); f = cv2.add(f, (g2 * .8).clip(0, 255).astype(np.uint8))

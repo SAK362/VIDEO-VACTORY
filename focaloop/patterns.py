@@ -40,18 +40,18 @@ def reflect(vx, vy, nx, ny):
 
 
 # ---------------- generator jalur ----------------
-def paths_ellipse(A, phi, e, n, v, Tend, sector=360.0, rot=0.0, groups=None):
+def paths_ellipse(A, phi, e, n, v, Tend, sector=360.0, rot=0.0, groups=None, both=False):
     """groups: daftar (a_k) -> bola i memakai elips confocal a_k (i % len). Fokus sama."""
     c = A * e
     cs, sn = math.cos(phi), math.sin(phi)
-    f1 = (CX + c * cs, CY + c * sn)
+    f1 = (CX + c * cs, CY + c * sn); f2 = (CX - c * cs, CY - c * sn)
     out = []
     ellipses = [(a, math.sqrt(a * a - c * c)) for a in (groups or [A])]
     for i in range(n):
         a, b = ellipses[i % len(ellipses)]
         ang = rot + 0.1234 + math.radians(sector) * (i + 0.5) / n
         vx, vy = v * math.cos(ang), v * math.sin(ang)
-        px, py = f1; t = 0.0; pts = [(0.0, px, py)]; g = 0
+        px, py = (f2 if (both and (i // len(ellipses)) % 2 == 1) else f1); t = 0.0; pts = [(0.0, px, py)]; g = 0
         while t < Tend and g < 200:
             r = ell_roots(a, b, phi, px, py, vx, vy)
             if not r: break
