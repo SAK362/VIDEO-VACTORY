@@ -1,9 +1,10 @@
 name: focaloop-render
+run-name: "Focaloop #${{ github.event.inputs.nomor }}"
 on:
   workflow_dispatch:
     inputs:
       nomor:
-        description: "Nomor video (1..1825)"
+        description: "Nomor video (1..5475)"
         required: true
 permissions:
   contents: write
