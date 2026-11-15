@@ -2,13 +2,13 @@ name: focaloop-render
 on:
   workflow_dispatch:
     inputs:
-      no:
+      nomor:
         description: "Nomor video (1..1825)"
         required: true
 permissions:
   contents: write
 concurrency:
-  group: focaloop-${{ github.event.inputs.no }}
+  group: focaloop-${{ github.event.inputs.nomor }}
 jobs:
   render:
     runs-on: ubuntu-latest
@@ -28,12 +28,12 @@ jobs:
         working-directory: focaloop
         env:
           WATERMARK: Focaloop
-        run: python render.py "${{ github.event.inputs.no }}" "$RUNNER_TEMP/out"
+        run: python render.py "${{ github.event.inputs.nomor }}" "$RUNNER_TEMP/out"
       - name: Publish as temporary release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG="focaloop-$(printf '%04d' '${{ github.event.inputs.no }}')"
+          TAG="focaloop-$(printf '%04d' '${{ github.event.inputs.nomor }}')"
           gh release delete "$TAG" --cleanup-tag --yes || true
           gh release create "$TAG" "$RUNNER_TEMP/out/"*.mp4 "$RUNNER_TEMP/out/"*.png \
             --title "$TAG" --notes "$(cat "$RUNNER_TEMP/out/meta.json")" --target "${{ github.sha }}"
