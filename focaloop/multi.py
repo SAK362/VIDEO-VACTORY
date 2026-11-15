@@ -80,15 +80,12 @@ def make_reuleaux(r, n, multi):
 
 
 def gen_systems(r, k):
-    opts = {1: [("R",)],
-            2: [("E",), ("E",), ("R", "R")],
-            3: [("U3",), ("U3",), ("E", "R"), ("R", "R", "R")],
-            4: [("E", "E"), ("U3", "R"), ("E", "R", "R")],
-            5: [("U5",), ("U5",), ("E", "U3"), ("E", "E", "R"), ("U3", "E")]}[k]
+    # 1 dinding saja per tahap
+    opts = {1: [("R",)], 2: [("E",)], 3: [("U3",)], 5: [("U5",)]}[k]
     plan = r.choice(opts); multi = len(plan) > 1; out = []
     for t in plan:
         if t == "R": out.append(make_radial(r, multi))
-        elif t == "E": out.append(make_ellipse(r, multi))
+        elif t == "E": out.append(make_ellipse(r, multi, False))
         elif t == "U3": out.append(make_reuleaux(r, 3, multi))
         else: out.append(make_reuleaux(r, 5, multi))
     return out

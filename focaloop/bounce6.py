@@ -20,7 +20,7 @@ def gen_params(seed):
     r = random.Random(seed * 2654435761 % (2 ** 32))
     dur = float(os.environ.get("DURATION", 0)) or round(r.uniform(30, 90), 1)
     dur = min(max(dur, 30.0), 90.0) if not os.environ.get("DURATION") else dur
-    k0 = r.randint(1, 5); vary = r.random() < 0.3; morph = vary or r.random() < 0.5
+    k0 = r.choice([1, 2, 3, 5]); vary = r.random() < 0.3; morph = vary or r.random() < 0.5
     tavg = r.uniform(1.6, 3.4)
     nst = max(3, int(round(dur / (tavg + HOLD))))
     maxtot = r.choice([8, 12, 16, 24, 32, 48, 64, 100, 160, 256, 400, 640, 1000, 1500])
@@ -29,7 +29,7 @@ def gen_params(seed):
     for s in range(nst):
         f = s / max(nst - 1, 1)
         if morph or vary:
-            rs = random.Random(seed * 131 + s); k = rs.randint(1, 5) if vary else k0
+            rs = random.Random(seed * 131 + s); k = rs.choice([1, 2, 3, 5]) if vary else k0
             systems = M.gen_systems(rs, k)
         else: systems = fixed
         k = sum(sy["sources"] for sy in systems)
