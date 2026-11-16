@@ -31,10 +31,34 @@ def roots(cx, cy, A, B, phi, px, py, vx, vy):
 
 
 # ---------------- pembuat sistem ----------------
-def radial_radii(r):
-    kind = r.choice(["circle", "circle", "sunburst", "sunburst", "spiral", "wavy"])
+def radial_radii(r, level=0.5):
+    """level 0..1 = sederhana -> advance. Semua bentuk = busur lingkaran berpusat di titik awal, jadi bola selalu tegak lurus dinding dan pulang."""
+    if level < 0.25: pool = ["circle", "circle", "sunburst", "gear"]
+    elif level < 0.55: pool = ["sunburst", "gear", "spiral", "star", "random", "stair"]
+    else: pool = ["wavy", "petal", "star", "random", "stair", "spiral", "gear", "sunburst", "petal"]
+    kind = r.choice(pool)
     if kind == "circle": return kind, [1.0]
-    ns = r.choice([3, 4, 5, 6, 8, 10, 12, 16, 24, 36]); lo = r.uniform(0.38, 0.85)
+    lo = r.uniform(0.38, 0.85)
+    if kind == "gear":
+        w = r.choice([1, 1, 2, 3]); ns = 2 * w * r.choice([4, 5, 6, 8, 10, 12])
+        rad = [1.0 if (s // w) % 2 == 0 else lo for s in range(ns)]
+        m = max(rad); return kind, [x / m for x in rad]
+    if kind == "petal":
+        ns = r.choice([72, 96, 120]); kk = r.choice([2, 3, 4, 5, 6, 7, 8])
+        rad = [lo + (1 - lo) * abs(math.cos(kk * math.pi * s / ns)) for s in range(ns)]
+        m = max(rad); return kind, [x / m for x in rad]
+    if kind == "star":
+        ns = r.choice([72, 96, 120]); kk = r.choice([3, 4, 5, 6, 7, 8, 9, 12])
+        rad = [lo + (1 - lo) * abs(((kk * s / ns) % 1.0) * 2 - 1) for s in range(ns)]
+        m = max(rad); return kind, [x / m for x in rad]
+    if kind == "random":
+        ns = r.choice([5, 6, 7, 9, 11, 13, 16]); rad = [r.uniform(lo, 1.0) for _ in range(ns)]
+        m = max(rad); return kind, [x / m for x in rad]
+    if kind == "stair":
+        half = r.choice([4, 5, 6, 8]); rad = [lo + (1 - lo) * (s % half) / (half - 1) for s in range(2 * half)]
+        if r.random() < .5: rad = rad[::-1]
+        m = max(rad); return kind, [x / m for x in rad]
+    ns = r.choice([3, 4, 5, 6, 8, 10, 12, 16, 24, 36])
     if kind == "sunburst":
         ch = [1.0, lo, (1 + lo) / 2]
         if r.random() < 0.5 and ns % 2 == 0:
@@ -55,9 +79,9 @@ def place(r, extent, multi):
     return (CX + d * math.cos(ang), CY + d * math.sin(ang))
 
 
-def make_radial(r, multi):
+def make_radial(r, multi, level=0.5):
     u = r.uniform(0.5, 0.85) if multi else r.uniform(0.75, 1.0)
-    R = RMAX * u; kind, rel = radial_radii(r)
+    R = RMAX * u; kind, rel = radial_radii(r, level)
     return dict(type="radial", name=kind, c=place(r, R, multi), radii=[R * x for x in rel], sources=1, Lmax=2 * R, phase=r.uniform(0, 6.28))
 
 
@@ -79,12 +103,12 @@ def make_reuleaux(r, n, multi):
                 sources=n, Lmax=2 * R, phase=0.0)
 
 
-def gen_systems(r, k):
-    # 1 dinding saja per tahap
+def gen_systems(r, k, level=0.5):
+    # 1 dinding saja per video
     opts = {1: [("R",)], 2: [("E",)], 3: [("U3",)], 5: [("U5",)]}[k]
     plan = r.choice(opts); multi = len(plan) > 1; out = []
     for t in plan:
-        if t == "R": out.append(make_radial(r, multi))
+        if t == "R": out.append(make_radial(r, multi, level))
         elif t == "E": out.append(make_ellipse(r, multi, False))
         elif t == "U3": out.append(make_reuleaux(r, 3, multi))
         else: out.append(make_reuleaux(r, 5, multi))

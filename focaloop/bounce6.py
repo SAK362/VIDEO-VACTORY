@@ -20,22 +20,25 @@ def gen_params(seed):
     r = random.Random(seed * 2654435761 % (2 ** 32))
     dur = float(os.environ.get("DURATION", 0)) or round(r.uniform(30, 90), 1)
     dur = min(max(dur, 30.0), 90.0) if not os.environ.get("DURATION") else dur
-    k0 = r.choice([1, 2, 3, 5]); vary = r.random() < 0.3; morph = vary or r.random() < 0.5
+    level = r.random()  # 0 = sederhana, 1 = advance (acak per video)
+    k0 = r.choice([1, 1, 2] if level < 0.25 else ([1, 1, 2, 3] if level < 0.6 else [1, 2, 3, 5, 5]))
+    vary = r.random() < 0.3; morph = vary or r.random() < 0.5
+    vary = False; morph = False  # dinding pantul TETAP sepanjang video (bentuk, posisi, rotasi, titik awal tidak berubah)
     tavg = r.uniform(1.6, 3.4)
     nst = max(3, int(round(dur / (tavg + HOLD))))
     maxtot = r.choice([8, 12, 16, 24, 32, 48, 64, 100, 160, 256, 400, 640, 1000, 1500])
-    lg = math.log(maxtot); rate = r.choice([1.0, 1.0, 1.3, 1.7])
-    stages = []; fixed = M.gen_systems(random.Random(seed * 7 + 1), k0); prev = 0
+    gam = r.choice([1.0, 1.0, 1.3, 0.8])
+    stages = []; fixed = M.gen_systems(random.Random(seed * 7 + 1), k0, level); prev = 0
+    nper_max = max(maxtot / sum(sy["sources"] for sy in fixed), nst * 1.3)
     for s in range(nst):
         f = s / max(nst - 1, 1)
         if morph or vary:
             rs = random.Random(seed * 131 + s); k = rs.choice([1, 2, 3, 5]) if vary else k0
-            systems = M.gen_systems(rs, k)
+            systems = M.gen_systems(rs, k, level)
         else: systems = fixed
         k = sum(sy["sources"] for sy in systems)
-        target = 1.0 if s == 0 else math.exp(lg * min(1.0, f * rate))
-        nper = max(1, int(round(target / k)))
-        if nper * k < prev: nper = int(math.ceil(prev / k))
+        nper = max(1, int(round(nper_max ** (f ** gam))))  # naik mulus sampai tahap terakhir, tanpa dataran
+        nper = max(nper, prev // k + 1)  # SETIAP tahap jumlah bola harus LEBIH BANYAK dari sebelumnya, tidak ada jumlah yang diulang
         prev = nper * k
         Lmax = max(sy["Lmax"] for sy in systems)
         stages.append(dict(nper=nper, k=k, n=nper * k, systems=systems, Lmax=Lmax, hue=0.012 * s))
@@ -43,7 +46,7 @@ def gen_params(seed):
     off = 0.0
     for st in stages:
         st["Tret"] = st["Lmax"] / v; st["T"] = st["Tret"] + HOLD; st["off"] = off; off += st["T"]
-    p.update(dur=dur, nst=nst, v=v, stages=stages, total=off, morph=morph, vary=vary, k0=k0, maxtot=maxtot,
+    p.update(level=level, dur=dur, nst=nst, v=v, stages=stages, total=off, morph=morph, vary=vary, k0=k0, maxtot=maxtot,
              counts=[st["n"] for st in stages], kinds=sorted({sy["name"] for st in stages for sy in st["systems"]}),
              chords=r.choice([[0, 4, 5, 3], [0, 5, 3, 4], [5, 3, 0, 4], [0, 3, 4, 3], [0, 2, 5, 4]]),
              wall_th=r.choice([2, 3, 3, 5]), A=M.RMAX)
@@ -140,7 +143,7 @@ def main(seed, out_path):
         hits_a = np.array(sorted(hits)) if hits else np.zeros((0, 3))
         wall = np.zeros((H, W, 3), np.uint8)
         for si, sy in enumerate(st["systems"]):
-            M.draw_system(sy, wall, hsv_bgr(p["wall_hue"] + st["hue"] + 0.11 * si, 0.75, 1.0), p["wall_th"])
+            M.draw_system(sy, wall, hsv_bgr(p["wall_hue"] + 0.11 * si, 0.75, 1.0), p["wall_th"])
         gl = cv2.GaussianBlur(wall, (0, 0), gs)
         sbase = cv2.add(bg, cv2.add(wall, (gl * 1.2).clip(0, 255).astype(np.uint8)))
         ps = dict(p); ps["hue0"] = p["hue0"] + st["hue"]
@@ -149,7 +152,7 @@ def main(seed, out_path):
         lines = np.zeros((H, W, 3), np.uint8)
         gain = 0.55 if n < 100 else (0.22 if n < 800 else 0.10); hr = 4 if n < 100 else (3 if n < 800 else 2)
         ls = p["line_style"]; gain = min(gain * (1.8 if ls == "bright" else (2.2 if ls == "fade" else 1.0)), 0.85)
-        wallcol = hsv_bgr(p["wall_hue"] + st["hue"], 0.75, 1.0)
+        wallcol = hsv_bgr(p["wall_hue"], 0.75, 1.0)
         last = [(pa[0, 1], pa[0, 2], 0) for pa in paths]
         for fr in range(fpp):
             t = fr / FPS; heads = np.zeros((H, W, 3), np.uint8)
