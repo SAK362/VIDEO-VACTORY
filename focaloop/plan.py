@@ -5,8 +5,8 @@ START = 1000
 PER_DAY = 5
 YEARS = 5
 TOTAL = 365 * YEARS * PER_DAY + 0   # 9125
-THEMES = ["bounce", "curves", "survive", "escape"]
-WEIGHTS = {"bounce": 0.28, "curves": 0.26, "survive": 0.20, "escape": 0.26}  # ubah bobot di sini untuk atur proporsi tema
+THEMES = ["bounce", "curves", "escape"]
+WEIGHTS = {"bounce": 0.40, "curves": 0.30, "escape": 0.30}  # ubah bobot di sini untuk atur proporsi tema
 
 
 def seed_for(no):
