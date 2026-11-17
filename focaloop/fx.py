@@ -1,4 +1,4 @@
-"""Utilitas bersama untuk tema Focaloop tambahan (curves, survive, escape): video, teks, bloom, audio."""
+"""Utilitas bersama untuk tema Focaloop tambahan (curves, escape): video, teks, bloom, audio."""
 import os, math, wave, subprocess, colorsys
 import numpy as np, cv2
 from PIL import Image, ImageDraw, ImageFont
