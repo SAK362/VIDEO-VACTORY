@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       nomor:
-        description: "Nomor video (1..5475)"
+        description: "Nomor video (1..9125)"
         required: true
 permissions:
   contents: write
