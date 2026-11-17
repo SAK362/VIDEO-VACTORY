@@ -1,0 +1,92 @@
+{
+ "kit": "diesel",
+ "engine": "webgl",
+ "lang": "id",
+ "project": "0008",
+ "scenes": [
+  {
+   "shot": "s1",
+   "kicker": "Mesin kereta api diesel",
+   "heading": "",
+   "narration": "Pernah kepikiran, kenapa mesin diesel kereta api nggak langsung memutar rodanya?"
+  },
+  {
+   "shot": "s2",
+   "kicker": "Lokomotif CC201 & CC206",
+   "heading": "",
+   "narration": "Ternyata lokomotif di Indonesia, seperti CC dua nol satu dan CC dua nol enam, memakai sistem diesel-elektrik."
+  },
+  {
+   "shot": "s3",
+   "kicker": "Mari bedah",
+   "heading": "",
+   "narration": "Yuk, kita bedah mesinnya secara detail!"
+  },
+  {
+   "shot": "s4",
+   "kicker": "Langkah 1",
+   "heading": "",
+   "narration": "Pertama, mesin diesel."
+  },
+  {
+   "shot": "s5",
+   "kicker": "Langkah 1",
+   "heading": "",
+   "narration": "Di CC dua nol satu, mesinnya punya delapan silinder yang tersusun membentuk huruf V, dan bekerja dengan empat langkah."
+  },
+  {
+   "shot": "s6",
+   "kicker": "Langkah 1",
+   "heading": "",
+   "narration": "Solar dibakar di dalam silinder, mendorong piston naik turun, lalu piston memutar poros engkol."
+  },
+  {
+   "shot": "s7",
+   "kicker": "Langkah 1",
+   "heading": "",
+   "narration": "Tapi poros engkol ini tidak tersambung ke roda."
+  },
+  {
+   "shot": "s8",
+   "kicker": "Langkah 2",
+   "heading": "",
+   "narration": "Ia memutar generator utama, yang mengubah putaran jadi listrik."
+  },
+  {
+   "shot": "s9",
+   "kicker": "Langkah 2",
+   "heading": "",
+   "narration": "Listrik itu mengalir lewat kabel menuju bogie."
+  },
+  {
+   "shot": "s10",
+   "kicker": "Langkah 3",
+   "heading": "",
+   "narration": "Di setiap bogie ada tiga gandar, dan tiap gandar diputar oleh satu motor traksi."
+  },
+  {
+   "shot": "s11",
+   "kicker": "Langkah 3",
+   "heading": "",
+   "narration": "Dua bogie berarti enam motor traksi."
+  },
+  {
+   "shot": "s12",
+   "kicker": "Langkah 3",
+   "heading": "",
+   "narration": "Motor traksi inilah yang memutar roda, lalu kereta pun berjalan di atas rel."
+  },
+  {
+   "shot": "s13",
+   "kicker": "Jadi urutannya",
+   "heading": "",
+   "narration": "Jadi urutannya: solar jadi putaran mesin, putaran mesin jadi listrik, listrik jadi putaran roda."
+  },
+  {
+   "shot": "s14",
+   "kicker": "Sampai jumpa",
+   "heading": "",
+   "narration": "Ikuti FAKTA UNIK, dan tulis di komentar, topik apa lagi yang mau kita bedah berikutnya!"
+  }
+ ]
+}

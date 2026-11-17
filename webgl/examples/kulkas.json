@@ -1,0 +1,249 @@
+{
+ "title": "Kulkas",
+ "scenes": [
+  {
+   "sent": [
+    0,
+    1
+   ],
+   "env": "room",
+   "kicker": "KULKAS",
+   "heading": "Kok bisa *dingin* di dalam?",
+   "objs": [
+    {
+     "t": "box",
+     "p": [
+      0,
+      -0.02,
+      0
+     ],
+     "s": [
+      7,
+      0.04,
+      6
+     ],
+     "c": "#d9c3a0"
+    },
+    {
+     "t": "box",
+     "p": [
+      0,
+      2.2,
+      0
+     ],
+     "s": [
+      2.4,
+      4.4,
+      2.2
+     ],
+     "c": "#e8eef0"
+    },
+    {
+     "t": "box",
+     "p": [
+      0,
+      3.2,
+      1.12
+     ],
+     "s": [
+      2.2,
+      0.08,
+      0.05
+     ],
+     "c": "#9fb0b6"
+    },
+    {
+     "t": "box",
+     "p": [
+      0.9,
+      3.3,
+      1.2
+     ],
+     "s": [
+      0.12,
+      1.6,
+      0.12
+     ],
+     "c": "#8d9aa4"
+    }
+   ],
+   "tag": "ILUSTRASI DISEDERHANAKAN"
+  },
+  {
+   "sent": [
+    2,
+    5
+   ],
+   "env": "room",
+   "kicker": "BEDAH",
+   "heading": "Mari bedah *isinya* secara detail",
+   "objs": [
+    {
+     "t": "shell",
+     "p": [
+      0,
+      0,
+      0
+     ],
+     "size": [
+      3.2,
+      5,
+      3
+     ],
+     "col": "#e8eef0",
+     "open": [
+      0.6,
+      3.0
+     ]
+    },
+    {
+     "t": "radiator",
+     "id": "evap",
+     "p": [
+      0,
+      3.6,
+      -0.6
+     ],
+     "size": [
+      2.2,
+      1.2
+     ],
+     "hot": false
+    },
+    {
+     "t": "compressor",
+     "id": "comp",
+     "p": [
+      1.9,
+      0.6,
+      -0.4
+     ],
+     "w": 6
+    },
+    {
+     "t": "radiator",
+     "id": "cond",
+     "p": [
+      -3.4,
+      1.4,
+      -0.9
+     ],
+     "size": [
+      2.0,
+      2.6
+     ],
+     "hot": true
+    },
+    {
+     "t": "pipe",
+     "pts": [
+      [
+       0,
+       3.6,
+       -1
+      ],
+      [
+       1.9,
+       1.6,
+       -1
+      ],
+      [
+       1.9,
+       1.2,
+       -0.4
+      ]
+     ],
+     "r": 0.07,
+     "c": "#5aa0d0",
+     "fc": "#9fd8ff"
+    },
+    {
+     "t": "pipe",
+     "pts": [
+      [
+       1.9,
+       0.3,
+       -0.4
+      ],
+      [
+       -1.4,
+       0.3,
+       -0.9
+      ],
+      [
+       -2.4,
+       1.4,
+       -0.9
+      ]
+     ],
+     "r": 0.07,
+     "c": "#d05a3a",
+     "fc": "#ffb070"
+    },
+    {
+     "t": "fan",
+     "p": [
+      0.9,
+      3.0,
+      0.4
+     ],
+     "rad": 0.5,
+     "w": 10
+    }
+   ],
+   "labels": [
+    {
+     "at": "evap",
+     "text": "evaporator (dingin)"
+    },
+    {
+     "at": "comp",
+     "text": "kompresor"
+    },
+    {
+     "at": "cond",
+     "text": "kondensor (panas)"
+    }
+   ],
+   "tag": "TAMPAK TERURAI · SETIAP BAGIAN DIBERI LABEL"
+  },
+  {
+   "sent": [
+    6,
+    13
+   ],
+   "env": "studio",
+   "kicker": "JADI...",
+   "heading": "Panas *dibuang* ke belakang",
+   "card": {
+    "big": "-18°C",
+    "small": "suhu freezer"
+   },
+   "objs": [
+    {
+     "t": "compressor",
+     "p": [
+      0,
+      0.5,
+      0
+     ],
+     "w": 6
+    },
+    {
+     "t": "radiator",
+     "p": [
+      0,
+      2,
+      -2
+     ],
+     "size": [
+      2.4,
+      2.4
+     ],
+     "hot": true
+    }
+   ],
+   "ajak": "Follow & tulis topik berikutnya di komentar"
+  }
+ ]
+}

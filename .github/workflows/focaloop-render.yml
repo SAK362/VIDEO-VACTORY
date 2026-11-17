@@ -1,0 +1,40 @@
+name: focaloop-render
+run-name: "Focaloop #${{ github.event.inputs.nomor }}"
+on:
+  workflow_dispatch:
+    inputs:
+      nomor:
+        description: "Nomor video (1..5475)"
+        required: true
+permissions:
+  contents: write
+concurrency:
+  group: focaloop-${{ github.event.inputs.nomor }}
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: focaloop/requirements.txt
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -r focaloop/requirements.txt
+      - name: Render
+        working-directory: focaloop
+        env:
+          WATERMARK: Focaloop
+        run: python render.py "${{ github.event.inputs.nomor }}" "$RUNNER_TEMP/out"
+      - name: Publish as temporary release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="focaloop-$(printf '%04d' '${{ github.event.inputs.nomor }}')"
+          gh release delete "$TAG" --cleanup-tag --yes || true
+          gh release create "$TAG" "$RUNNER_TEMP/out/"*.mp4 "$RUNNER_TEMP/out/"*.png \
+            --title "$TAG" --notes "$(cat "$RUNNER_TEMP/out/meta.json")" --target "${{ github.sha }}"

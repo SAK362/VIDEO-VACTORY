@@ -1,0 +1,185 @@
+name: render-nusakara
+
+# NUSAKARA (cerita rakyat, stickman 2D, Pillow): 1080x1920, 30 fps. Dipicu n8n (workflow_dispatch), input sama dengan "render-webgl".
+# props_id = file spec JSON 'NNNN_Spec_Judul.json' (tiap scene wajib punya "narration"); audio_id = voiceover.wav.
+# Alur: prep (unduh, rapikan suara, Whisper, timing.js, validasi spec) -> render 8 potongan PARALEL -> gabung + suara -> unggah Drive -> lapor n8n.
+on:
+  workflow_dispatch:
+    inputs:
+      project: {description: 'Nomor project', required: true}
+      row_no: {description: 'Nomor baris (NOMOR PROJECT)', required: true}
+      lang: {description: 'en atau id', required: true, default: id}
+      folder_id: {description: 'ID folder project di Drive', required: true}
+      props_id: {description: 'ID file props.json di Drive', required: true}
+      audio_id: {description: 'ID file voiceover.wav di Drive', required: true}
+      upload_url: {description: 'URL sesi unggah Drive (dibuat n8n)', required: true}
+      callback_url: {description: 'URL webhook n8n', required: true}
+      quality: {description: 'dipakai untuk kompatibilitas (diabaikan)', required: false, default: standard}
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Sembunyikan URL dari log
+        env: {UPLOAD_URL: '${{ inputs.upload_url }}', CALLBACK_URL: '${{ inputs.callback_url }}'}
+        run: |
+          echo "::add-mask::$UPLOAD_URL"
+          echo "::add-mask::$CALLBACK_URL"
+      - uses: actions/checkout@v4
+      - name: Pasang ffmpeg bila belum ada
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
+      - uses: actions/setup-node@v4
+        with: {node-version: 20}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Unduh props dan suara
+        env:
+          PROPS_ID: ${{ inputs.props_id }}
+          AUDIO_ID: ${{ inputs.audio_id }}
+          LANG_CODE: ${{ inputs.lang }}
+          PROJECT: ${{ inputs.project }}
+        run: node prepare.mjs
+      - name: Rapikan suara (jeda panjang, -14 LUFS)
+        run: |
+          pip install --quiet numpy
+          python webgl/clean_audio.py
+      - name: Cache model pengenal ucapan
+        uses: actions/cache@v4
+        with: {path: ~/.cache/huggingface, key: whisper-medium-v1}
+      - name: Validasi spec NUSAKARA
+        run: |
+          pip install --quiet pillow
+          python nusakara/validate_spec.py work/props.json
+      - name: Selaraskan waktu kata dengan suara (Whisper)
+        timeout-minutes: 15
+        env: {PROPS_FILE: work/props.json, WAV_FILE: public/voiceover.wav}
+        run: |
+          pip install --quiet faster-whisper
+          python webgl/align_whisper.py
+      - name: Buat timing.js
+        env: {PROPS_FILE: work/props.json, WAV_FILE: public/voiceover.wav, TIMING_OUT: nusakara/timing.js}
+        run: |
+          pip install --quiet numpy pillow
+          python webgl/make_timing.py
+      - name: Hitung frame
+        run: python nusakara/render_nusakara.py meta
+      - uses: actions/upload-artifact@v4
+        with:
+          name: work
+          path: |
+            nusakara/timing.js
+            work/props.json
+            public/voiceover.wav
+          retention-days: 1
+
+  render:
+    needs: prep
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: true
+      matrix:
+        chunk: [0, 1, 2, 3, 4, 5, 6, 7]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with: {name: work, path: .}
+      - name: Pasang ffmpeg bila belum ada
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
+          ffmpeg -version | head -1
+      - name: Render potongan ${{ matrix.chunk }}
+        run: |
+          pip install --quiet numpy pillow
+          mkdir -p out
+          START=$(date +%s)
+          python nusakara/render_nusakara.py chunk ${{ matrix.chunk }} 8 out/seg${{ matrix.chunk }}.mp4
+          echo "Potongan selesai dalam $(( $(date +%s) - START )) detik"
+      - uses: actions/upload-artifact@v4
+        with: {name: 'seg${{ matrix.chunk }}', path: 'out/seg${{ matrix.chunk }}.mp4', retention-days: 1}
+
+  final:
+    needs: [prep, render]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PROJECT: ${{ inputs.project }}
+      ROW_NO: ${{ inputs.row_no }}
+      FOLDER_ID: ${{ inputs.folder_id }}
+      UPLOAD_URL: ${{ inputs.upload_url }}
+      CALLBACK_URL: ${{ inputs.callback_url }}
+    steps:
+      - name: Sembunyikan URL dari log
+        run: |
+          echo "::add-mask::$UPLOAD_URL"
+          echo "::add-mask::$CALLBACK_URL"
+      - uses: actions/download-artifact@v4
+        if: needs.render.result == 'success'
+        with: {path: parts, merge-multiple: true}
+      - name: Pasang ffmpeg bila belum ada
+        if: needs.render.result == 'success'
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ffmpeg
+          fi
+          ffmpeg -version | head -1
+      - name: Gabung potongan + suara
+        id: concat
+        if: needs.render.result == 'success'
+        run: |
+          mkdir -p out
+          ls -l parts
+          for i in 0 1 2 3 4 5 6 7; do echo "file '$PWD/parts/seg$i.mp4'" >> list.txt; done
+          ffmpeg -v error -y -f concat -safe 0 -i list.txt -c copy out/silent.mp4
+          ffmpeg -v error -y -i out/silent.mp4 -i parts/public/voiceover.wav -c:v copy -c:a aac -b:a 192k -movflags +faststart out/video.mp4
+          ls -lh out/video.mp4
+      - name: Unggah MP4 ke Drive
+        id: upload
+        if: steps.concat.outcome == 'success'
+        run: |
+          curl -sS --fail --retry 3 --retry-delay 5 -X PUT -H "Content-Type: video/mp4" \
+            --data-binary @out/video.mp4 "$UPLOAD_URL" -o upload.json
+          FILE_ID=$(jq -r '.id // empty' upload.json)
+          if [ -z "$FILE_ID" ]; then cat upload.json; echo "Drive tidak mengembalikan ID file"; exit 1; fi
+          echo "VIDEO_ID=$FILE_ID" >> "$GITHUB_ENV"
+      - name: Simpan MP4 sebagai artefak cadangan
+        if: failure() && steps.concat.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with: {name: 'video-${{ inputs.project }}', path: out/video.mp4, retention-days: 3}
+      - name: Lapor hasil ke n8n
+        if: always()
+        env:
+          CALLBACK_KEY: ${{ secrets.CALLBACK_KEY }}
+          R_PREP: ${{ needs.prep.result }}
+          R_RENDER: ${{ needs.render.result }}
+          R_CONCAT: ${{ steps.concat.outcome }}
+          R_UPLOAD: ${{ steps.upload.outcome }}
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ "$R_UPLOAD" = "success" ]; then
+            STATUS=success; MESSAGE="Render dan unggah selesai"; VIDEO_URL="https://drive.google.com/file/d/${VIDEO_ID}/view"
+          else
+            STATUS=failure; VIDEO_URL=""
+            if [ "$R_PREP" != "success" ]; then MESSAGE="Gagal menyiapkan props/suara (cek kit & adegan)"
+            elif [ "$R_RENDER" != "success" ]; then MESSAGE="Render potongan gagal, lihat log run"
+            elif [ "$R_CONCAT" != "success" ]; then MESSAGE="Gagal menggabung video dan suara"
+            else MESSAGE="Unggah MP4 ke Drive gagal (MP4 disimpan sebagai artefak 3 hari)"; fi
+          fi
+          SECS=$(( $(date +%s) - $(date -d "$(gh api repos/${{ github.repository }}/actions/runs/${{ github.run_id }} --jq .run_started_at 2>/dev/null || date -Iseconds)" +%s) ))
+          jq -n --arg status "$STATUS" --arg project "$PROJECT" --arg row_no "$ROW_NO" --arg folder_id "$FOLDER_ID" \
+            --arg video_url "$VIDEO_URL" --arg render_seconds "$SECS" --arg message "$MESSAGE" --arg run_url "$RUN_URL" \
+            '{status:$status, project:$project, row_no:$row_no, folder_id:$folder_id, video_url:$video_url, render_seconds:$render_seconds, message:$message, run_url:$run_url}' > callback.json
+          cat callback.json
+          curl -sS --retry 3 --retry-delay 5 -X POST -H "Content-Type: application/json" -H "X-Curio-Key: ${CALLBACK_KEY}" \
+            --data @callback.json "$CALLBACK_URL"

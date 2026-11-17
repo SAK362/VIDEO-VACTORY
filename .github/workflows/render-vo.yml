@@ -1,0 +1,134 @@
+name: render-vo
+
+# Render video BER-SUARA untuk QC: voiceover diunduh dari Drive (dibagikan "siapa saja yang punya tautan"),
+# subtitle diselaraskan dengan Whisper, adegan dari webgl/examples/NNNN.json. Hasil: Artifacts "video-NNNN".
+# Dipicu push webgl/preview/audio_ids.json di branch tbm-components atau manual (Run workflow).
+on:
+  push:
+    branches: [tbm-components]
+    paths: ['webgl/preview/audio_ids.json']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        topic: ['0001', '0002', '0003', '0004', '0005']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pasang ffmpeg bila belum ada
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Unduh suara + siapkan props
+        run: |
+          pip install --quiet numpy
+          N=${{ matrix.topic }}
+          mkdir -p work public
+          ID=$(python3 -c "import json;print(json.load(open('webgl/preview/audio_ids.json'))['$N'])")
+          curl -sSL --retry 3 -o raw_audio "https://drive.usercontent.google.com/download?id=$ID&export=download&confirm=t"
+          head -c 12 raw_audio | xxd | head -1
+          ffmpeg -v error -y -i raw_audio -ar 24000 -ac 1 public/voiceover.wav
+          python3 - "$N" <<'PY'
+          import json,sys,subprocess
+          n=sys.argv[1]
+          s=[l.strip() for l in open(f'webgl/preview/{n}.txt',encoding='utf-8').read().split("\n\n") if l.strip()]
+          d=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0','public/voiceover.wav']).decode().strip())
+          json.dump({"title":n,"audioSeconds":d,"scenes":[{"narration":x} for x in s]},open('work/props.json','w'),ensure_ascii=False)
+          print('durasi suara',d)
+          PY
+      - name: Rapikan suara (jeda panjang, -14 LUFS)
+        run: python webgl/clean_audio.py
+      - name: Cache model pengenal ucapan
+        uses: actions/cache@v4
+        with: {path: ~/.cache/huggingface, key: whisper-medium-v1}
+      - name: Selaraskan waktu kata dengan suara (Whisper)
+        timeout-minutes: 20
+        env: {PROPS_FILE: work/props.json, WAV_FILE: public/voiceover.wav}
+        run: |
+          pip install --quiet faster-whisper
+          python webgl/align_whisper.py
+      - name: Timing + spec
+        run: |
+          pip install --quiet numpy playwright
+          python webgl/make_timing.py
+          cp webgl/examples/${{ matrix.topic }}.json work/spec_in.json
+          python webgl/make_spec.py work/spec_in.json
+          cp curio.png webgl/curio.png
+          python webgl/validate_spec.py work/spec_in.json || true
+          python webgl/render_webgl.py meta
+      - uses: actions/upload-artifact@v4
+        with:
+          name: work-${{ matrix.topic }}
+          path: |
+            webgl/timing.js
+            webgl/spec.js
+            webgl/spec.json
+            webgl/engine.txt
+            webgl/curio.png
+            public/voiceover.wav
+          retention-days: 1
+
+  render:
+    needs: prep
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        topic: ['0001', '0002', '0003', '0004', '0005']
+        chunk: [0, 1, 2, 3, 4, 5, 6, 7]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with: {name: 'work-${{ matrix.topic }}', path: .}
+      - name: Pasang ffmpeg dan Chrome bila belum ada
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
+          if [ ! -x /usr/bin/google-chrome ]; then
+            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+            sudo apt-get install -y -qq ./google-chrome-stable_current_amd64.deb
+          fi
+      - name: Render potongan
+        run: |
+          pip install --quiet playwright
+          mkdir -p out
+          python webgl/render_webgl.py chunk ${{ matrix.chunk }} 8 out/seg${{ matrix.chunk }}.mp4
+      - uses: actions/upload-artifact@v4
+        with: {name: 'seg-${{ matrix.topic }}-${{ matrix.chunk }}', path: 'out/seg${{ matrix.chunk }}.mp4', retention-days: 1}
+
+  final:
+    needs: render
+    if: always() && needs.render.result != 'cancelled'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        topic: ['0001', '0002', '0003', '0004', '0005']
+    steps:
+      - name: Pasang ffmpeg bila belum ada
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
+      - uses: actions/download-artifact@v4
+        with: {pattern: 'seg-${{ matrix.topic }}-*', path: parts, merge-multiple: true}
+      - uses: actions/download-artifact@v4
+        with: {name: 'work-${{ matrix.topic }}', path: w}
+      - name: Gabung + suara
+        run: |
+          for i in 0 1 2 3 4 5 6 7; do echo "file '$PWD/parts/seg$i.mp4'" >> list.txt; done
+          ffmpeg -v error -y -f concat -safe 0 -i list.txt -c copy silent.mp4
+          ffmpeg -v error -y -i silent.mp4 -i w/public/voiceover.wav -c:v copy -c:a aac -b:a 192k -movflags +faststart video.mp4
+          ls -lh video.mp4
+          ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,duration -of csv video.mp4
+      - uses: actions/upload-artifact@v4
+        with: {name: 'video-${{ matrix.topic }}', path: video.mp4, retention-days: 5}

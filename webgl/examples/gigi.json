@@ -1,0 +1,10 @@
+{"title":"Roda gigi & sel","scenes":[
+{"sent":[0,3],"env":"studio","kicker":"RODA GIGI","heading":"Gigi *saling mengunci*","objs":[
+ {"t":"gear","id":"a","p":[-1.6,2,0],"n":12,"rad":1.5,"w":1.5,"col":"#d97a1c"},
+ {"t":"gear","id":"b","p":[1.15,2,0],"n":10,"rad":1.25,"w":-1.8,"col":"#2f8fbf","ry":0},
+ {"t":"spring","p":[5,0,0],"h":2}],
+ "labels":[{"at":"a","text":"gigi besar"},{"at":"b","text":"gigi kecil"}]},
+{"sent":[4,8],"env":"stage","kicker":"SEL","heading":"Di dalam *sel* hidup","objs":[{"t":"cell","id":"c","p":[0,2.2,0],"rad":2.2},{"t":"heart","p":[7,1.5,0]}],
+ "labels":[{"at":"c","text":"sel"}],"card":{"big":"37 T","small":"jumlah sel manusia"}},
+{"sent":[9,13],"env":"space","kicker":"JADI...","heading":"Semua *bergerak* bersama","objs":[{"t":"planet","p":[0,2,0],"rad":2,"col":"#4a8fd0","ring":true},{"t":"atom","p":[6,3,-2],"e":3},{"t":"sun","p":[-9,6,-6],"rad":1.6}],"ajak":"Follow & tulis topik berikutnya di komentar"}
+]}
