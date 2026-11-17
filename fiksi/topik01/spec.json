@@ -1,0 +1,71 @@
+{
+  "nomor": "0001",
+  "judul": "Orderan Jam 11 Malam",
+  "genre": "horor",
+  "audio": "voice/topik01_voice.wav",
+  "cover": "img/cover.png",
+  "deskripsi": "Cerita fiksi. Malam itu Budi menerima orderan ke sebuah rumah tua di ujung kampung. Semua tokoh dan kejadian dalam video ini adalah rekaan.",
+  "hashtag": "#ceritahoror #ceritafiksi #ojol #driverojol #horor #misteri #kisahmalam #ceritaindonesia #animasi3d #fyp",
+  "scenes": [
+    {
+      "id": 1,
+      "img": "img/scene_01.png",
+      "emotion": "netral",
+      "text": "Budi sudah enam tahun jadi driver ojek online. Malam itu, lewat jam sebelas, hujan baru reda. Ia duduk di warung kopi, menghitung pendapatan hari ini. Belum cukup untuk bayar kontrakan."
+    },
+    {
+      "id": 2,
+      "img": "img/scene_02.png",
+      "emotion": "berpikir",
+      "text": "Tiba-tiba ponselnya bergetar. Ada satu orderan masuk. Jemput di ujung kampung, jaraknya dua kilometer. Tarifnya kecil, tapi Budi tidak bisa memilih. Ia menerimanya."
+    },
+    {
+      "id": 3,
+      "img": "img/scene_03.png",
+      "emotion": "takut ringan",
+      "text": "Jalan menuju titik jemput sepi sekali. Banyak lampu jalan yang mati. Hanya suara motor Budi yang terdengar di antara rumah-rumah gelap."
+    },
+    {
+      "id": 4,
+      "img": "img/scene_04.png",
+      "emotion": "takut ringan",
+      "text": "Titik jemput ada di depan sebuah rumah tua. Catnya mengelupas, pagarnya berkarat, tak ada lampu menyala. Budi mencoba menelepon penumpangnya. Tidak ada jawaban."
+    },
+    {
+      "id": 5,
+      "img": "img/scene_05.png",
+      "emotion": "kaget",
+      "text": "Lalu ia melihat seorang ibu tua duduk diam di teras. Memeluk tas kain, kepalanya menunduk. Di aplikasi, namanya Ibu Sari."
+    },
+    {
+      "id": 6,
+      "img": "img/scene_06.png",
+      "emotion": "takut",
+      "text": "\"Ibu Sari?\" sapa Budi pelan. Perempuan itu mengangguk, lalu naik ke motor. Anehnya, tidak terasa ada beban sama sekali. Ia hanya berkata, \"Antar saya ke rumah anak saya, Nak.\""
+    },
+    {
+      "id": 7,
+      "img": "img/scene_07.png",
+      "emotion": "netral",
+      "text": "Mereka tiba di sebuah rumah sederhana. Lampu terasnya menyala. Seorang pria paruh baya membuka pintu, lalu terpaku melihat Budi."
+    },
+    {
+      "id": 8,
+      "img": "img/scene_08.png",
+      "emotion": "kaget",
+      "text": "Budi menoleh ke belakang untuk memberi tahu penumpangnya. Kursi itu kosong. Hanya tas kain yang tertinggal di sana."
+    },
+    {
+      "id": 9,
+      "img": "img/scene_09.png",
+      "emotion": "sedih",
+      "text": "Pria itu mengambil tas tersebut dengan tangan gemetar. \"Ini tas ibu saya,\" katanya lirih. \"Hari ini tepat setahun beliau meninggal.\" Ia menangis, dan Budi hanya bisa diam."
+    },
+    {
+      "id": 10,
+      "img": "img/scene_10.png",
+      "emotion": "hangat",
+      "text": "Budi pulang saat fajar. Sejak malam itu, tiap kali ada orderan ke gang yang sepi, ia selalu menjawab salam lebih dulu. Sebab tidak semua penumpang butuh ongkos. Ada yang hanya ingin diantar pulang."
+    }
+  ]
+}
