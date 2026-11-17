@@ -28,7 +28,7 @@ Claude = riset, narasi, thumbnail, render. Gemini (n8n) = deskripsi. Upload = Re
 3 Narasi Indonesia santai 190-220 kata, kalimat pendek, baris kosong antar kalimat. Jangan template. Penutup tetap: ajakan follow & komentar topik berikutnya. Kirim .txt, tunggu persetujuan kecuali user bilang "langsung buat".
 4 Deskripsi: Gemini via n8n.
 5 Scene 14-16 ±6 dtk: judul panel, label mono, SVG, gerak. Pemeran bebas (lihat atas).
-6 Voiceover dari user. Terima -> LANGSUNG kerjakan. Penyelarasan wajib Whisper di GitHub (lihat README.md kit).
+6 Voiceover otomatis: panggil workflow n8n "BEYOURBEST - Suara Otomatis (Gemini Sulafat)" (ID na5XUz1hQLMTnabs; mcp__n8n__execute_workflow, production, triggerNodeName "Minta Voice", inputs.webhookData.body.nomor="NNNN") -> beyourbest/voice/NNNN_voice.wav di repo. Bila user mengirim wav sendiri, pakai itu. Wav ada -> LANGSUNG kerjakan. Penyelarasan wajib Whisper di GitHub (lihat README.md kit).
 7 Render, cek frame awal/tengah/akhir, ffprobe (1080x1920, 30fps, H.264+AAC).
 8 Thumbnail: scene terkuat + judul besar.
 9 Push mp4+narasi+thumbnail ke SAK362/VIDEO-VACTORY beyourbest/outbox (izin tetap, langsung push). n8n workflow "BEYOURBEST - Gabung Video & Jadwalkan Repliz" (ID ZDi00HwcsurMF8NG) mengambilnya. Claude tidak menjalankan workflow n8n kecuali diminta. Notifikasi Telegram berawalan [BeYourBest].
@@ -48,8 +48,8 @@ Naskah beda dari buku + contoh sendiri; tanpa logo/merek; tata letak sesuai; sub
 == MODE CEPAT (nomor + voiceover) ==
 Bila user hanya menulis nomor project (mis. "0052") dan/atau mengirim NNNN.wav, JANGAN bertanya apa pun. Langsung:
 1 Buka spreadsheet BEYOURBEST - TOPIK, baris n+1: ambil topik, NARASI (kolom G), SUMBER RISET (kolom H). Bila narasi kosong, riset dan tulis dulu, simpan ke sheet, lalu lanjut.
-2 Ubah STATUS ke DIPROSES. Bila wav belum ada, minta wav SATU kali (singkat), lalu lanjut otomatis begitu diterima.
+2 Ubah STATUS ke DIPROSES. Bila wav belum ada, JANGAN minta ke user: buat lewat workflow n8n voice (lihat butir 6). Salin ke beyourbest/align/NNNN.wav, lanjut Whisper. Hapus beyourbest/voice/NNNN_voice.wav dari repo setelah video jadi.
 3 Whisper (align-beyourbest) -> wal.py -> audio3.py -> scene (pemeran bebas via actors.py) -> render 2 potongan -> QC frame awal/tengah/akhir + ffprobe.
 4 Thumbnail, push mp4+narasi+thumbnail ke beyourbest/outbox (izin tetap). Status RENDER_SELESAI; SELESAI setelah terjadwal oleh n8n.
 5 Lapor singkat: channel BeYourBest, nomor project, durasi, status.
-Satu pesan bisa berisi beberapa nomor: kerjakan berurutan, satu wav per nomor.
+Satu pesan bisa berisi beberapa nomor: kerjakan berurutan, satu voice per nomor.

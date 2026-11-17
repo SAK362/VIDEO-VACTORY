@@ -11,3 +11,5 @@ Alur per video (lihat ATURAN_BEYOURBEST.txt):
 Catatan: path di skrip memakai /home/claude/beyourbest/v2; sesuaikan bila folder kerja berbeda. Butuh rsvg-convert, ffmpeg, Poppins, python3 pillow numpy.
 
 Pemeran bebas: `actors.py` (`actor(x,y,t,kind,...)`) menggantikan `boy()` di adegan; preset pria, wanita, anak, remaja, kakek, nenek, hijab, berjenggot. Tata letak maskot/watermark/subtitle tidak berubah.
+
+0. Voice otomatis (bila user hanya menyebut nomor): panggil workflow n8n `BEYOURBEST - Suara Otomatis (Gemini Sulafat)` (ID na5XUz1hQLMTnabs) via `mcp__n8n__execute_workflow` (production, triggerNodeName `Minta Voice`, `inputs.webhookData.body.nomor` = `NNNN`, maks 5 nomor dipisah koma). Hasil: `beyourbest/voice/NNNN_voice.wav` (git pull). Salin ke `align/NNNN.wav` untuk langkah 1. Hapus file voice dari repo setelah video jadi. Hasil eksekusi besar: simpan ke file, baca dengan python.
