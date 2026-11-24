@@ -96,6 +96,7 @@ jobs:
           echo "Render selesai dalam $(( $(date +%s) - START )) detik"
       - name: Gambar diam untuk pemeriksaan visual
         run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then sudo apt-get update -qq; sudo apt-get install -y -qq ffmpeg; fi
           ffmpeg -y -loglevel error -i out.mp4 -vf "select='not(mod(n,10))'" -fps_mode vfr -q:v 3 still_%02d.jpg || true
           ls -la still_*.jpg || true
       - uses: actions/upload-artifact@v4
