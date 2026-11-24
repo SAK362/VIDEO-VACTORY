@@ -94,8 +94,14 @@ jobs:
           if [ -n "$FRAMES" ]; then ARGS="--frames=$FRAMES"; fi
           npx remotion render src/index.ts "$EPID" out.mp4 --gl=swangle --concurrency=2 --crf=18 --muted --timeout=600000 $ARGS
           echo "Render selesai dalam $(( $(date +%s) - START )) detik"
+      - name: Gambar diam untuk pemeriksaan visual
+        run: |
+          ffmpeg -y -loglevel error -i out.mp4 -vf "select='not(mod(n,10))'" -fps_mode vfr -q:v 3 still_%02d.jpg || true
+          ls -la still_*.jpg || true
       - uses: actions/upload-artifact@v4
         with:
           name: hasil-${{ inputs.episode }}
-          path: kupas-teknik/out.mp4
+          path: |
+            kupas-teknik/out.mp4
+            kupas-teknik/still_*.jpg
           retention-days: 3
