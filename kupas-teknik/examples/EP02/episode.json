@@ -1,0 +1,106 @@
+{
+ "episode": "EP02",
+ "slug": "TolBaliMandara",
+ "title": "Kok nggak karatan?! Tol Bali Mandara",
+ "whisper_prompt": "Tol Bali Mandara, Teluk Benoa, Nusa Dua, Ngurah Rai, KTT APEC, spun pile, baja prategang, selimut beton, klorida, HDPE, coating, anemometer, Kupas Teknik",
+ "key_terms": {
+  "S01": [
+   "pagar",
+   "karat"
+  ],
+  "S02": [
+   "Bali Mandara",
+   "Teluk Benoa",
+   "Ngurah Rai",
+   "APEC"
+  ],
+  "S03": [
+   "spun pile",
+   "prategang",
+   "spiral",
+   "selimut beton"
+  ],
+  "S04": [
+   "klorida",
+   "selimut beton",
+   "berkarat",
+   "terkelupas"
+  ],
+  "S05": [
+   "pasang surut",
+   "sambungan",
+   "pelat baja",
+   "selimut beton"
+  ],
+  "S06": [
+   "HDPE",
+   "coating"
+  ],
+  "S07": [
+   "sepeda motor",
+   "anemometer"
+  ],
+  "S08": [
+   "Teluk Benoa",
+   "kupas"
+  ]
+ },
+ "spoken_to_digits": {
+  "dua belas koma tujuh": "12,7",
+  "dua puluh tiga": "23",
+  "dua ribu tiga belas": "2013",
+  "empat puluh": "40",
+  "delapan puluh": "80"
+ },
+ "digits_to_spoken": {
+  "12,7": "dua belas koma tujuh",
+  "12.7": "dua belas koma tujuh",
+  "12": "dua belas",
+  "7": "tujuh",
+  "23": "dua puluh tiga",
+  "2013": "dua ribu tiga belas",
+  "40": "empat puluh",
+  "80": "delapan puluh",
+  "km": "kilometer"
+ },
+ "subtitle_display": {
+  "dua belas koma tujuh kilometer": "12,7 kilometer",
+  "dua puluh tiga September dua ribu tiga belas": "23 September 2013",
+  "empat puluh kilometer per jam": "40 km/jam",
+  "delapan puluh kilometer per jam": "80 km/jam"
+ },
+ "subtitle_atomic": [
+  "12,7 kilometer",
+  "23 September 2013",
+  "40 km/jam",
+  "80 km/jam",
+  "Tol Bali Mandara",
+  "Jalan Tol Bali Mandara",
+  "Teluk Benoa",
+  "Nusa Dua",
+  "Bandara Ngurah Rai",
+  "KTT APEC",
+  "ion klorida",
+  "tulangan baja",
+  "zona pasang surut",
+  "jaket plastik HDPE",
+  "tiang pancang",
+  "spun pile",
+  "baja prategang",
+  "kawat spiral",
+  "selimut beton",
+  "pelat baja",
+  "sepeda motor",
+  "jalur motor",
+  "jalur mobil",
+  "Bali Mandara",
+  "air laut"
+ ],
+ "tempo": 1.035,
+ "tempo_per_shot": {
+  "S08": 0.95
+ },
+ "gap_s": 0.3,
+ "clip_lufs": -17,
+ "end_card_s": 2.5
+}
