@@ -1,0 +1,101 @@
+name: render-kupas-teknik
+
+# KUPAS TEKNIK: render Remotion + Three.js (1080x1920, 30 fps) tanpa GPU (swangle).
+# Dipicu n8n (workflow_dispatch). Tahap uji: render sebagian frame lalu ukur kecepatannya.
+on:
+  workflow_dispatch:
+    inputs:
+      episode:
+        description: 'ID episode, mis. EP02'
+        required: true
+        default: EP02
+      frames:
+        description: 'Rentang frame mis. 0-29. Kosongkan untuk semua frame'
+        required: false
+        default: '0-29'
+      test_stub:
+        description: 'true = buat timeline dan subtitle contoh (hanya uji teknis)'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        working-directory: kupas-teknik
+    env:
+      EPID: ${{ inputs.episode }}
+      FRAMES: ${{ inputs.frames }}
+      TEST_STUB: ${{ inputs.test_stub }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Siapkan folder episode
+        run: |
+          EP=$(echo "$EPID" | tr 'A-Z' 'a-z')
+          mkdir -p "src/$EP" "public/$EP"
+          cp examples/$EPID/*.ts examples/$EPID/*.tsx "src/$EP/" || true
+          cp examples/$EPID/*.json "src/$EP/" || true
+          cp public/brand/* "public/$EP/"
+          ls "src/$EP"
+      - name: Unduh tekstur dari Drive
+        run: |
+          mkdir -p public/tex
+          while read -r id name; do
+            curl -sL -o "public/tex/$name" "https://drive.google.com/uc?export=download&id=$id"
+          done <<'EOF'
+          1egnK3WEnOfjHhvoRVL1Mu01NELrIsX1M asphalt_02_diff_2k.jpg
+          1B3Ke_Y27cImkXadmHfNaGTShsDP_f0u6 asphalt_02_nor_gl_2k.jpg
+          1_DK2ck6x_LGzaFae8d2I9ELdZzuHdfAs asphalt_02_rough_2k.jpg
+          14u8pqMc3UGAiVct-5OIY16C1rIBBF4oo brushed_concrete_diff_2k.jpg
+          1wbm8hGTgf0CAp1dbDv_BKFozcBKs_HPi brushed_concrete_nor_gl_2k.jpg
+          1eYMtVFcSOC-En_Z3ntdDVedtb6_Pyk0K brushed_concrete_rough_2k.jpg
+          1K4jD_O398NzrhmzPkX3fAaUkR-2TrtWZ concrete_pavement_diff_2k.jpg
+          1d9uc3u4wXtutGuONioOlfP88ExGfHexj concrete_pavement_nor_gl_2k.jpg
+          1jZfEiqXF6kAdzWLMsHX5ogWfOWFs20BY concrete_pavement_rough_2k.jpg
+          11XOuFqO54Dzejlfic-st31t0uK_FxB8M concrete_wall_008_diff_2k.jpg
+          1-5u3oQ8Kik9UsZpb0WJB8XiCNJBzXof5 concrete_wall_008_nor_gl_2k.jpg
+          1mXi7iQ5Hnetir-Jw8_eX9lKDqPVW2zUg concrete_wall_008_rough_2k.jpg
+          1QpENCkKyr-axtOXSlAaRdcOO9iFxAOT4 rusty_metal_02_diff_2k.jpg
+          10ji212GZBCm_h9-YvN47J7QBBzUb-BRA rusty_metal_02_nor_gl_2k.jpg
+          1YBx66Y3mbjY3d0V4fhzdfVj-3dwRg5dy rusty_metal_02_rough_2k.jpg
+          EOF
+          ls -la public/tex
+          file public/tex/* | head -20
+      - name: Timeline dan subtitle contoh (uji teknis)
+        if: env.TEST_STUB == 'true'
+        run: |
+          python3 - <<'PY'
+          import json, os
+          ep = os.environ["EPID"].lower()
+          shots = []; t = 0.35
+          for i in range(8):
+              shots.append({"id": "S0%d" % (i + 1), "start": round(t, 2), "end": round(t + 17, 2)}); t += 18
+          json.dump({"shots": shots}, open("src/%s/timeline.json" % ep, "w"))
+          subs = []
+          for s in shots:
+              a = s["start"]
+              subs.append({"start": a, "end": s["end"], "shot": s["id"], "lines": [[{"t": "Uji", "s": a, "e": a + 1}, {"t": "render", "s": a + 1, "e": a + 2}]]})
+          json.dump(subs, open("src/%s/subs.json" % ep, "w"))
+          PY
+      - name: Pasang dependensi
+        run: npm install --no-audit --no-fund
+      - name: Render
+        run: |
+          START=$(date +%s)
+          ARGS=""
+          if [ -n "$FRAMES" ]; then ARGS="--frames=$FRAMES"; fi
+          npx remotion render src/index.ts "$EPID" out.mp4 --gl=swangle --concurrency=2 --crf=18 --muted --timeout=600000 $ARGS
+          echo "Render selesai dalam $(( $(date +%s) - START )) detik"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hasil-${{ inputs.episode }}
+          path: kupas-teknik/out.mp4
+          retention-days: 3
